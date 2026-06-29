@@ -5,10 +5,17 @@ namespace Data
 {
     public class AppDbContext : DbContext
     {
+        public DbSet<Usuario> Usuarios { get; set; }
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-
+            this.Database.EnsureCreated();
+           // SeedInitialData();
         }
-        public DbSet<Usuario> Usuarios { get; set; }
+        internal AppDbContext()
+        {
+            this.Database.EnsureCreated();
+           // SeedInitialData();
+        }
     }
 }

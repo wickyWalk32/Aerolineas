@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Domain.Model;
+﻿using Domain.Model;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Data
 {
@@ -12,9 +13,11 @@ namespace Data
             _context = context;
         }
 
-
         public async Task<List<Usuario>> GetAllAsync()
-            => await _context.Usuarios.ToListAsync();
+        {
+            return await _context.Usuarios.ToListAsync();
+        }
+
 
         public async Task<Usuario?> GetByIdAsync(int id)
             => await _context.Usuarios.FindAsync(id);

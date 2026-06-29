@@ -1,6 +1,6 @@
 ﻿using Domain.Model;
 using Microsoft.EntityFrameworkCore;
-
+/*
 namespace WebApi.Context
 {
     public class AppDbContext:DbContext
@@ -12,3 +12,4 @@ namespace WebApi.Context
         public DbSet<Usuario> Usuarios {  get; set; }
     }
 }
+*/

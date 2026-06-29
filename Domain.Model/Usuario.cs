@@ -12,11 +12,12 @@ namespace Domain.Model
     public Usuario()
         {
         }
-    public Usuario(string email, string contrasenia) {
+    public Usuario( string email, string contrasenia) {
         SetEmail(email);
         SetContraseniaHash(contrasenia);
     }
 
+    public void SetId(int id) {  Id = id; }
     public void SetEmail(string email)
         {
             if (!EsEmailValido(email))
