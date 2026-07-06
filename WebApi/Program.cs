@@ -12,7 +12,6 @@ using WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -20,16 +19,19 @@ builder.Services.AddHttpLogging(o => { });
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-
-
 // Add Entity Framework Context
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer( builder.Configuration.GetConnectionString("DefaultConnection") ) );
+
+
+
 
 // Add Dependency Injection
 //builder.Services.AddScoped<UsuariosController, UsuariosController>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddScoped<IReservaRepository, ReservaRepository>();
+builder.Services.AddScoped<ReservaService>();
 //builder.Services.AddControllers();
 
 // Add Dependency Injection
@@ -38,6 +40,21 @@ builder.Services.AddScoped<UsuarioService>();
 
 
 var app = builder.Build();
+
+
+
+
+/*
+ // Para testear la creacion del contexto
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureCreated();
+}
+*/
+
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -58,6 +75,8 @@ app.UseStaticFiles();
 // Map endpoints
 app.MapSwagger().RequireAuthorization();
 app.MapUsuarioEndpoints();
+app.MapReservaEndpoints();
+
 app.MapGet("/", () => "Hello, World!");
 app.MapControllers();
 app.UseRouting();
