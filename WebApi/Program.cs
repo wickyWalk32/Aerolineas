@@ -32,6 +32,8 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<IReservaRepository, ReservaRepository>();
 builder.Services.AddScoped<ReservaService>();
+builder.Services.AddScoped<IPasajeroRepository, PasajeroRepository>();
+builder.Services.AddScoped<PasajeroService>();
 //builder.Services.AddControllers();
 
 // Add Dependency Injection
@@ -76,6 +78,7 @@ app.UseStaticFiles();
 app.MapSwagger().RequireAuthorization();
 app.MapUsuarioEndpoints();
 app.MapReservaEndpoints();
+app.MapPasajeroEndpoints();
 
 app.MapGet("/", () => "Hello, World!");
 app.MapControllers();

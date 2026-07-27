@@ -28,6 +28,7 @@ namespace Application.Services
         public async Task<UsuarioDTO?> GetByIdAsync(int id)
         {
             var usuario = await _repo.GetByIdAsync(id);
+            if (usuario == null) return null;
             return  new UsuarioDTO
                 {
                     Id = usuario.Id,

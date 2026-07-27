@@ -20,7 +20,7 @@ namespace Domain.Model
 
 
         private readonly List<Pasaje> _pasajes = new();
-        public IReadOnlyList<Pasaje> Pasajes => _pasajes.AsReadOnly();
+        public IReadOnlyCollection<Pasaje> Pasajes => _pasajes.AsReadOnly();
 
         public Reserva(DateTime fechaHoraReserva, int usuarioId)
         {
@@ -36,7 +36,6 @@ namespace Domain.Model
         public void setUsuarioId(int usuarioId)
         {
             UsuarioId = usuarioId;
-
         }
 
         public void AddPasaje(Pasaje pasaje)

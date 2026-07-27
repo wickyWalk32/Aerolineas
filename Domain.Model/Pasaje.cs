@@ -12,13 +12,14 @@ namespace Domain.Model
         public string Estado { get; private set; }
 
         private Reserva _reserva;
-        private int _reserveId;
+        private int _reservaId;
 
         public Reserva Reserva { get; set; }
         public int ReservaId { get; set; }
 
 
-        // private Pasajero _pasajero;
+        private Pasajero _pasajero;
+        public Pasajero Pasajero { get; set; }
         private int _pasajeroId;      
 
         // public Pasajero Pasajero { get; set; }
