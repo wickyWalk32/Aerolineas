@@ -10,11 +10,18 @@ namespace Data
         public DbSet<Reserva> Reservas { get; set; }
         public DbSet<Pasaje> Pasajes { get; set; }
         public DbSet<Pasajero> Pasajeros { get; set; }
+        //public DbSet<Vuelo> Vuelos { get; set; }
+        //public DbSet<Avion> Aviones { get; set; }
+        //public DbSet<Asiento> Asientos { get; set; }
+        public DbSet<Pais> Paises { get; set; }
+        public DbSet<Ciudad> Ciudades { get; set; }
+
+
 
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            //this.Database.EnsureDeleted();
+            this.Database.EnsureDeleted();
             this.Database.EnsureCreated();
             // SeedInitialData();
         }
@@ -92,7 +99,7 @@ namespace Data
 
                 entity.HasMany(e => e.Pasajes)
                     .WithOne(p => p.Reserva)
-                    .HasForeignKey(p => p.ReservaId);
+                    .HasForeignKey(e => e.ReservaId);
             });
 
             modelBuilder.Entity<Pasaje>(entity =>
@@ -142,6 +149,36 @@ namespace Data
                 entity.Property(e => e.Tipo)
                     .IsRequired();
 
+            });
+
+            modelBuilder.Entity<Pais>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Navigation(e=>e.Ciudades)
+                    .HasField("_ciudades");
+            });
+
+            modelBuilder.Entity<Ciudad>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.HasOne(e => e.Pais)
+                    .WithMany(p => p.Ciudades)
+                    .HasForeignKey(e => e.PaisId);
+
+                entity.Navigation(e => e.Pais)
+                    .HasField("_pais");
             });
         }
 
