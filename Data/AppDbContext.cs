@@ -4,13 +4,17 @@ using Microsoft.Extensions.Configuration;
 
 namespace Data
 {
+    // Esta clase representa la conexion con la base de datos en SQL Server
+
     public class AppDbContext : DbContext
     {
+        //DbSets
         public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<Reserva> Reservas { get; set; }
-        public DbSet<Pasaje> Pasajes { get; set; }
+        public DbSet<Pais> Paises { get; set; }
+        public DbSet<Ciudad> Cuidades { get; set; }
         public DbSet<Pasajero> Pasajeros { get; set; }
-
+        public DbSet<Pasaje> Pasajes { get; set; }
+        public DbSet<Reserva> Reservas { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -18,13 +22,13 @@ namespace Data
             this.Database.EnsureCreated();
             // SeedInitialData();
         }
+
         internal AppDbContext()
         {
             this.Database.EnsureCreated();
             // SeedInitialData();
         }
 
-        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -47,6 +51,14 @@ namespace Data
             {
                 entity.HasKey(e => e.Id);
 
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Apellido)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd();
 
@@ -61,7 +73,10 @@ namespace Data
                 // Restricción única para Email
                 entity.HasIndex(e => e.Email)
                     .IsUnique();
-
+                
+                entity.Property(e => e.Rol)
+                    .IsRequired()
+                    .HasMaxLength(20);
 
                 entity.Navigation(e => e.Reservas)
                     .HasField("_reservas");
@@ -143,7 +158,25 @@ namespace Data
                     .IsRequired();
 
             });
-        }
+
+            modelBuilder.Entity<Pais>(entity =>
+            {
+                // Primary Key
+                entity.HasKey(e => e.Id);
+            });
+
+            modelBuilder.Entity<Ciudad>(entityCiudad =>
+            {
+                // Primary Key
+                entityCiudad.HasKey(ciudad => ciudad.Id);
+
+                // Relación Pais -> Ciudades (1 a muchos)
+                entityCiudad.HasOne(ciudad => ciudad.Pais)
+                            .WithMany(pais => pais.Ciudades)
+                            .HasForeignKey(ciudad => ciudad.IdPais);
+
+            });
 
         }
+    }
 }

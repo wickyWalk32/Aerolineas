@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Services", "App
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{C9FB5026-F5C4-430A-B06D-965FF17C374B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsForms", "WindowsForms\WindowsForms.csproj", "{F79053DF-2874-4161-856F-00F3A9B0F041}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C9FB5026-F5C4-430A-B06D-965FF17C374B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9FB5026-F5C4-430A-B06D-965FF17C374B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9FB5026-F5C4-430A-B06D-965FF17C374B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F79053DF-2874-4161-856F-00F3A9B0F041}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F79053DF-2874-4161-856F-00F3A9B0F041}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F79053DF-2874-4161-856F-00F3A9B0F041}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F79053DF-2874-4161-856F-00F3A9B0F041}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

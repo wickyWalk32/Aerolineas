@@ -1,11 +1,96 @@
-﻿
+﻿using Application.Services;
+using Domain.Model;
+using DTOs;
+using Microsoft.AspNetCore.Mvc;
 
+namespace WebApi
+{
+    [ApiController]
+    [Route("api/usuarios")]
+    public class UsuariosController : ControllerBase
+    {
+        /*
+         Maneja el login y el CRUD de Usuarios
+         */
+
+        private readonly UsuarioService _usuarioService;
+
+        public UsuariosController()
+        {
+            _usuarioService = new UsuarioService();
+        }
+
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginRequestDTO request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Contrasenia))
+            {
+                return BadRequest(new LoginResultDTO { Exitoso = false, Mensaje = "Debe ingresar email y contraseña." });
+            }
+
+            var resultado = _usuarioService.ValidarLoginAdmin(request);
+
+            if (!resultado.Exitoso)
+            {
+                // Retorna HTTP 401 Unauthorized si falla el login o el rol
+                return Unauthorized(resultado);
+            }
+
+            return Ok(resultado);
+        }
+
+        [HttpGet]
+        public ActionResult<List<Usuario>> Get()
+        {
+            var usuarios = _usuarioService.ObtenerTodosLosUsuarios();
+            return Ok(usuarios); // Retorna HTTP 200 con la lista formateada en JSON
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] Usuario usuario)
+        {
+            if (usuario == null)
+            {
+                return BadRequest("Los datos del usuario son inválidos.");
+            }
+
+            _usuarioService.CrearUsuario(usuario);
+
+            // Retorna HTTP 200 OK
+            return Ok(new { mensaje = "Usuario creado exitosamente" });
+        }
+
+        // PUT: api/usuarios/5
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] Usuario usuario)
+        {
+            if (usuario == null || usuario.Id != id)
+            {
+                return BadRequest("Datos incoherentes o inválidos.");
+            }
+
+            _usuarioService.ActualizarUsuario(usuario);
+            return Ok(new { mensaje = "Usuario actualizado correctamente" });
+        }
+
+        // DELETE: api/usuarios/5
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _usuarioService.EliminarUsuario(id);
+            return Ok(new { mensaje = "Usuario eliminado correctamente" });
+        }
+
+    }
+}
+
+/*
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Domain.Model;
 using Data;
-/*
+
 namespace WebApi.Controller
 {
     [Route("api/[controller]")]

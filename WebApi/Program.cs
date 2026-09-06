@@ -1,8 +1,3 @@
-
-
-
-
-
 using Application.Services;
 using Data;
 // using WebApi.Controller;
@@ -76,7 +71,7 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles();
 // Map endpoints
 app.MapSwagger().RequireAuthorization();
-app.MapUsuarioEndpoints();
+/*app.MapUsuarioEndpoints();*/
 app.MapReservaEndpoints();
 app.MapPasajeroEndpoints();
 
