@@ -15,6 +15,10 @@ namespace Domain.Model
         public decimal Precio { get; private set; }
         public Ciudad Origen {  get; private set; }
         public Ciudad Destino { get; private set; }
+        private Ciudad _origen;
+        private Ciudad _destino;
+        public int OrigenId;
+        public int DestinoId;
         private List<Pasaje> _pasajes = new();
 
         public IReadOnlyCollection<Pasaje> Pasajes => _pasajes.AsReadOnly();

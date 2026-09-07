@@ -18,7 +18,16 @@ namespace Domain.Model
         public Avion Avion { get; private set; }
 
 
-        public int IdAvion;
+        public int AvionId;
+
+        public Asiento()
+        {
+
+        }
+        public Asiento(string codigo,string fila, string columna,int avionId)
+        {
+
+        }
 
 
     }

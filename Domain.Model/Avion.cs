@@ -13,9 +13,9 @@ namespace Domain.Model
         public int Capacidad { get; private set; }
         public string EstadoDisponibilidad { get; private set; }
 
-        private List<Asiento> _asientos = new();
+        private readonly List<Asiento> _asientos = new();
 
-        public IReadOnlyCollection<Asiento> Asientos;
+        public IReadOnlyCollection<Asiento> Asientos => _asientos.AsReadOnly();
 
         public Avion()
         {

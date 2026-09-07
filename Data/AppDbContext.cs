@@ -10,9 +10,9 @@ namespace Data
         public DbSet<Reserva> Reservas { get; set; }
         public DbSet<Pasaje> Pasajes { get; set; }
         public DbSet<Pasajero> Pasajeros { get; set; }
-        //public DbSet<Vuelo> Vuelos { get; set; }
-        //public DbSet<Avion> Aviones { get; set; }
-        //public DbSet<Asiento> Asientos { get; set; }
+        public DbSet<Vuelo> Vuelos { get; set; }
+        public DbSet<Avion> Aviones { get; set; }
+        public DbSet<Asiento> Asientos { get; set; }
         public DbSet<Pais> Paises { get; set; }
         public DbSet<Ciudad> Ciudades { get; set; }
 
@@ -23,12 +23,12 @@ namespace Data
         {
             this.Database.EnsureDeleted();
             this.Database.EnsureCreated();
-            // SeedInitialData();
+            //SeedInitialData();
         }
         internal AppDbContext()
         {
             this.Database.EnsureCreated();
-            // SeedInitialData();
+            //SeedInitialData();
         }
 
         
@@ -116,7 +116,7 @@ namespace Data
 
                 entity.HasOne(e => e.Reserva)
                     .WithMany()
-                    .HasForeignKey(p => p.ReservaId);
+                    .HasForeignKey(p => p.ReservaId).OnDelete(DeleteBehavior.NoAction);
 
                 entity.Navigation(e => e.Pasajero)
                     .HasField("_pasajero");
@@ -124,6 +124,20 @@ namespace Data
                 entity.HasOne(e => e.Pasajero)
                     .WithOne()
                     .HasForeignKey<Pasaje>(p => p.PasajeroId);
+
+                entity.Navigation(e => e.Vuelo)
+                    .HasField("_vuelo");
+                entity.HasOne(e => e.Vuelo)
+                    .WithMany()
+                    .HasForeignKey(e => e.VueloId).OnDelete(DeleteBehavior.NoAction);
+
+
+                entity.HasOne(e => e.Asiento)
+                    .WithMany()
+                    .HasForeignKey(e => new {e.AvionId,e.AsientoCodigo});
+
+                entity.Navigation(e => e.Asiento)
+                    .HasField("_asiento");
             });
 
             modelBuilder.Entity<Pasajero>(entity =>
@@ -162,6 +176,10 @@ namespace Data
 
                 entity.Navigation(e=>e.Ciudades)
                     .HasField("_ciudades");
+
+                entity.HasData(
+                    new { Id = 1, Nombre = "Argentina" },
+                    new { Id = 2, Nombre = "Brasil" });
             });
 
             modelBuilder.Entity<Ciudad>(entity =>
@@ -179,6 +197,76 @@ namespace Data
 
                 entity.Navigation(e => e.Pais)
                     .HasField("_pais");
+            });
+
+
+            modelBuilder.Entity<Avion>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Descripcion)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.EstadoDisponibilidad)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
+                 entity.Property(e => e.Capacidad)
+                    .IsRequired();
+
+                entity.Navigation(e => e.Asientos)
+                    .HasField("_asientos");
+
+            });
+
+            modelBuilder.Entity<Asiento>(entity =>
+            {
+                entity.HasKey(e => new {  e.AvionId, e.Codigo});
+
+                entity.Property(e => e.Fila)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.Columna)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.HasOne(e => e.Avion)
+                    .WithMany(a => a.Asientos)
+                    .HasForeignKey(e => e.AvionId);
+
+                entity.Navigation(e => e.Avion)
+                    .HasField("_avion");
+            });
+            modelBuilder.Entity<Vuelo>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.TiempoSalida)
+                    .IsRequired();
+
+                entity.Property(e => e.TiempoLlegada)
+                    .IsRequired();
+
+                entity.Property(e => e.Precio)
+                   .IsRequired();
+
+                entity.HasOne(e=>e.Origen)
+                    .WithMany()
+                    .HasForeignKey(e => e.OrigenId).OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(e=>e.Destino)
+                    .WithMany()
+                    .HasForeignKey(e => e.DestinoId).OnDelete(DeleteBehavior.NoAction);
+
+                entity.Navigation(e => e.Origen)
+                    .HasField("_origen");
+
+                entity.Navigation(e => e.Destino)
+                    .HasField("_destino");             
             });
         }
 

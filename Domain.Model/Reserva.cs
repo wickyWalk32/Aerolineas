@@ -18,6 +18,9 @@ namespace Domain.Model
         public Usuario Usuario { get; set; }
         public int UsuarioId { get; set; }
 
+        public Asiento Asiento { get; set; }
+
+
 
         private readonly List<Pasaje> _pasajes = new();
         public IReadOnlyCollection<Pasaje> Pasajes => _pasajes.AsReadOnly();

@@ -17,14 +17,24 @@ namespace Domain.Model
         public Reserva Reserva { get; set; }
         public int ReservaId { get; set; }
 
-
+        // PASAJERO
         private Pasajero _pasajero;
         public Pasajero Pasajero { get; set; }
         private int _pasajeroId;      
-
-        // public Pasajero Pasajero { get; set; }
         public int PasajeroId { get; set; }
 
+        // VUELO
+        private Vuelo _vuelo;
+        public Vuelo Vuelo { get; set; }
+
+        public int VueloId;
+
+        // ASIENTO
+        private Asiento _asiento;
+        public Asiento Asiento { get; set; }
+
+        public string AsientoCodigo;
+        public int AvionId;
 
         public Pasaje(string estado)
         {
