@@ -5,101 +5,89 @@ namespace WebApi
 {
     public static class UsuarioEndpoints
     {
-
         public static void MapUsuarioEndpoints(this WebApplication app)
         {
-            app.MapGet("/usuarios/{id}", async (int id, UsuarioService usuarioService) =>
+            // 1. OBTENER TODOS LOS USUARIOS
+            app.MapGet("/usuarios", () =>
             {
-                UsuarioDTO? dto = await usuarioService.GetByIdAsync(id);
-
-                if (dto == null)
-                {
-                    return Results.NotFound();
-                }
-
-                return Results.Ok(dto);
-            })
-            .WithName("GetUsuario")
-            .Produces<UsuarioDTO>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
-            //.RequireAuthorization("UsuariosLeer");
-
-            app.MapGet("/usuarios", async (UsuarioService usuarioService) =>
-            {
-
-                var dtos = await usuarioService.GetAllAsync();
-
-                return Results.Ok(dtos);
+                UsuarioService usuarioService = new UsuarioService();
+                var usuarios = usuarioService.ObtenerTodosLosUsuarios();
+                return Results.Ok(usuarios);
             })
             .WithName("GetAllUsuarios")
             .Produces<List<UsuarioDTO>>(StatusCodes.Status200OK)
             .WithOpenApi();
-            //.RequireAuthorization("UsuariosLeer");
 
-            app.MapPost("/usuarios", async (UsuarioCreateDTO dto, UsuarioService usuarioService) =>
+            // 2. CREAR UN NUEVO USUARIO (POST)
+            app.MapPost("/usuarios", (UsuarioDTO dto) =>
             {
-                try
+                if (dto == null)
                 {
-
-                    UsuarioDTO usuarioDTO = await usuarioService.AddAsync(dto);
-
-                    return Results.Created($"/usuarios/{usuarioDTO.Id}", usuarioDTO);
+                    return Results.BadRequest(new { error = "Los datos del usuario son inválidos." });
                 }
-                catch (ArgumentException ex)
-                {
-                    return Results.BadRequest(new { error = ex.Message });
-                }
+
+                UsuarioService usuarioService = new UsuarioService();
+                usuarioService.CrearUsuario(dto);
+
+                return Results.Created($"/usuarios/{dto.Id}", dto);
             })
             .WithName("AddUsuario")
             .Produces<UsuarioDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi();
-            //.RequireAuthorization("UsuariosAgregar");
 
-            app.MapPut("/usuarios", async (UsuarioUpdateDTO dto, UsuarioService usuarioService) =>
+            // 3. EDITAR UN USUARIO (PUT)
+            app.MapPut("/usuarios/{id}", (int id, UsuarioDTO dto) =>
             {
-                try
+                if (dto == null || dto.Id != id)
                 {
-
-                    var found = await usuarioService.UpdateAsync(dto.Id, dto);
-
-                    if (!found)
-                    {
-                        return Results.NotFound();
-                    }
-
-                    return Results.NoContent();
+                    return Results.BadRequest(new { error = "Datos incoherentes o inválidos." });
                 }
-                catch (ArgumentException ex)
-                {
-                    return Results.BadRequest(new { error = ex.Message });
-                }
+
+                UsuarioService usuarioService = new UsuarioService();
+                usuarioService.ActualizarUsuario(dto);
+
+                return Results.NoContent();
             })
             .WithName("UpdateUsuario")
             .Produces(StatusCodes.Status204NoContent)
-            .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi();
-            //.RequireAuthorization("UsuariosActualizar");
 
-            app.MapDelete("/usuarios/{id}", async (int id, UsuarioService usuarioService) =>
+            // 4. ELIMINAR UN USUARIO (DELETE)
+            app.MapDelete("/usuarios/{id}", (int id) =>
             {
-
-                var deleted = await usuarioService.DeleteAsync(id);
-
-                if (!deleted)
-                {
-                    return Results.NotFound();
-                }
+                UsuarioService usuarioService = new UsuarioService();
+                usuarioService.EliminarUsuario(id);
 
                 return Results.NoContent();
             })
             .WithName("DeleteUsuario")
             .Produces(StatusCodes.Status204NoContent)
-            .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi();
-            //.RequireAuthorization("UsuariosEliminar");
+
+            // 5. LOGIN DE ADMINISTRADOR
+            app.MapPost("/usuarios/login", (LoginRequestDTO request) =>
+            {
+                if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Contrasenia))
+                {
+                    return Results.BadRequest(new LoginResultDTO { Exitoso = false, Mensaje = "Debe ingresar email y contraseña." });
+                }
+
+                UsuarioService usuarioService = new UsuarioService();
+                var resultado = usuarioService.ValidarLoginAdmin(request);
+
+                if (!resultado.Exitoso)
+                {
+                    return Results.Json(resultado, statusCode: StatusCodes.Status401Unauthorized);
+                }
+
+                return Results.Ok(resultado);
+            })
+            .WithName("LoginUsuario")
+            .Produces<LoginResultDTO>(StatusCodes.Status200OK)
+            .Produces<LoginResultDTO>(StatusCodes.Status401Unauthorized)
+            .WithOpenApi();
         }
     }
 }

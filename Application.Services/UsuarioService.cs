@@ -7,7 +7,87 @@ namespace Application.Services
 {
     public class UsuarioService
     {
-        private readonly IUsuarioRepository _repo;
+
+        /*
+        Observación 1: quedaron ambos "IUsuarioRepository? _repo" y "UsuarioRepository? _repository" 
+        para ahorrar tiempo. Implementar solo uno.
+        Observación 2: UsuarioRepository? _repository tiene "?" para evitar errores y poder ejecutar
+        el código.
+        */
+
+        private readonly IUsuarioRepository? _repo;
+
+        // Menu de Administrador - CRUD de Usuarios
+        private readonly UsuarioRepository? _repository;
+
+        // Constructor agregado para Menu de Administrador - CRUD de Usuarios
+        public UsuarioService()
+        {
+            _repository = new UsuarioRepository();
+        }
+
+        // LOGIN
+        public LoginResultDTO ValidarLoginAdmin(LoginRequestDTO loginDto)
+        {
+            var usuario = _repository.ObtenerPorEmail(loginDto.Email);
+
+            // 1. Validar si el usuario existe
+            if (usuario == null)
+            {
+                return new LoginResultDTO { Exitoso = false, Mensaje = "Credenciales inválidas." };
+            }
+
+            // 2. Validar contraseña
+            if (usuario.ContraseniaHash != loginDto.Contrasenia)
+            {
+                return new LoginResultDTO { Exitoso = false, Mensaje = "Credenciales inválidas." };
+            }
+
+            // 3. Validar que tenga Rol "admin" (insensible a mayúsculas/minúsculas)
+            if (string.IsNullOrEmpty(usuario.Rol) || !usuario.Rol.Equals("admin", StringComparison.OrdinalIgnoreCase))
+            {
+                return new LoginResultDTO { Exitoso = false, Mensaje = "Acceso denegado: Se requieren permisos de Administrador." };
+            }
+
+            return new LoginResultDTO
+            {
+                Exitoso = true,
+                Mensaje = "Acceso concedido.",
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
+                Email = usuario.Email,
+                Rol = usuario.Rol
+            };
+
+        }
+
+
+        // Menu de Administrador - CRUD de Usuarios
+        public List<Usuario> ObtenerTodosLosUsuarios()
+        {
+            // Aquí irían reglas de negocio antes o después de consultar la BD
+            return _repository.ObtenerTodos();
+        }
+
+        // Menu de Administrador - CRUD de Usuarios
+        public void CrearUsuario(UsuarioDTO usuarioDto)
+        {
+            // Aca van las validaciones de negocio aquí. Por ejemplo: validar email duplicado
+            _repository.Agregar(usuarioDto);
+        }
+
+        // Menu de Administrador - CRUD de Usuarios
+        public void ActualizarUsuario(UsuarioDTO usuarioDto)
+        {
+            _repository.Actualizar(usuarioDto);
+        }
+
+        // Menu de Administrador - CRUD de Usuarios
+        public void EliminarUsuario(int id)
+        {
+            _repository.Eliminar(id);
+        }
+
 
         public UsuarioService(IUsuarioRepository repo)
         {
@@ -17,11 +97,14 @@ namespace Application.Services
         public async Task<List<UsuarioDTO>> GetAllAsync()
         {
             var usuarios = await _repo.GetAllAsync();
+
             return usuarios.Select(usuario => new UsuarioDTO
             {
                 Id = usuario.Id,
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
                 Email = usuario.Email,
-                ContraseniaHash = usuario.ContraseniaHash,
+                Rol = usuario.Rol
             }).ToList();
         }
 
@@ -37,9 +120,13 @@ namespace Application.Services
                 };
         }
 
-        public async Task<UsuarioDTO> AddAsync(UsuarioCreateDTO usuarioCreateDTO)
+        public async Task<UsuarioDTO> AddAsync(UsuarioDTO usuarioCreateDTO)
         {
-            Usuario usuario = new Usuario(usuarioCreateDTO.Email, usuarioCreateDTO.ContraseniaHash);
+            Usuario usuario = new Usuario(  usuarioCreateDTO.Nombre,
+                                            usuarioCreateDTO.Apellido,
+                                            usuarioCreateDTO.Email,
+                                            usuarioCreateDTO.ContraseniaHash,
+                                            usuarioCreateDTO.Rol);
            await _repo.AddAsync(usuario);
             UsuarioDTO usuarioDTO = new UsuarioDTO
             {
@@ -49,9 +136,10 @@ namespace Application.Services
             };
             return usuarioDTO;
         }
-        /*
-           // var resultado = await _repo.AddAsync(usuarioDTO);
-          */
+        
+        // Ver que es esto
+        // var resultado = await _repo.AddAsync(usuarioDTO);
+        
         public async Task<bool> UpdateAsync(int id, UsuarioUpdateDTO usuarioUpdateDTO)
         {
             Usuario usuario = new Usuario
@@ -78,5 +166,6 @@ namespace Application.Services
 
         public Task<bool> ExistsAsync(int id)
             => _repo.ExistsAsync(id);
+
     }
 }

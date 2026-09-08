@@ -18,7 +18,6 @@ namespace Application.Services
             _repo = repo;
         }
 
-
         public async Task<List<ReservaDTO>> GetAllAsync()
         {
             var reservas = await _repo.GetAllAsync();
@@ -41,5 +40,6 @@ namespace Application.Services
             };
             return reservaDTO;
         }
+
     }
 }

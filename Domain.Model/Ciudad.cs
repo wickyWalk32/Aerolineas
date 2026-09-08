@@ -19,6 +19,10 @@ namespace Domain.Model
         public Pais Pais { get; private set; }
         private int _paisId;
         public int PaisId { get; set; }
+        
+        
+        // Constructores de la clase Ciudad
+
         public Ciudad()
         {
         }
@@ -31,6 +35,8 @@ namespace Domain.Model
             SetPaisId(paisId);
         }
 
+        // Métodos de la calse Ciudad
+
         public void SetNombre(string nombre)
         {
             Nombre = nombre;
@@ -40,6 +46,7 @@ namespace Domain.Model
         {
             CodigoPostal = codPostal;
         }
+
         public void SetCodigoAeropuerto(string codAeropuerto)
         {
             CodigoAeropuerto = codAeropuerto;
