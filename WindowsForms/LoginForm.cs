@@ -40,13 +40,13 @@ namespace WindowsForms
             {
                 using (var httpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7099/") })
                 {
-                    var loginDto = new LoginRequestDTO
+                    LoginRequestDTO loginRequestDto = new LoginRequestDTO
                     {
                         Email = email,
                         Contrasenia = contrasenia
                     };
 
-                    HttpResponseMessage response = await httpClient.PostAsJsonAsync("api/usuarios/login", loginDto);
+                    HttpResponseMessage response = await httpClient.PostAsJsonAsync("/usuarios/login", loginRequestDto);
 
                     // Leemos la respuesta como LoginResultDTO (a resultado llega un DTO de Usuario)
                     var resultado = await response.Content.ReadFromJsonAsync<LoginResultDTO>();

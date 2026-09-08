@@ -55,7 +55,7 @@ namespace WindowsForms
             comboBoxRol.SelectedIndex = 0;
         }
 
-        // Guardar nuevo usuario / cambios en la base de datos
+        // Guardar nuevo usuario
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             // 1. Validaciones básicas

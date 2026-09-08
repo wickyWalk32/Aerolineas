@@ -1,5 +1,7 @@
 ﻿using Domain.Model;
+using DTOs;
 using Microsoft.EntityFrameworkCore;
+using Humanizer;
 using System;
 
 namespace Data
@@ -8,24 +10,21 @@ namespace Data
     {
         private readonly AppDbContext _context;
 
-        // Para LOGIN
-        public Usuario? ObtenerPorEmail(string email)
-        {
-            using (var db = new AppDbContext())
-            {
-                return db.Usuarios.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
-            }
-        }
-
-        // Menu de Administrador - CRUD de Usuarios
         public UsuarioRepository()
         {
             _context = new AppDbContext();
         }
 
-        public UsuarioRepository(AppDbContext context)
+        // LOGIN
+        public Usuario? ObtenerPorEmail(string email)
         {
-            _context = context;
+            return _context.Usuarios.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+        }
+
+        // LEER
+        public List<Usuario> ObtenerTodos() // Menu de Administrador - CRUD de Usuarios
+        {
+            return _context.Usuarios.ToList();
         }
 
         public async Task<List<Usuario>> GetAllAsync()
@@ -33,57 +32,33 @@ namespace Data
             return await _context.Usuarios.ToListAsync();
         }
 
-        // Menu de Administrador - CRUD de Usuarios
-        public List<Usuario> ObtenerTodos()
-        {
-            using (var db = new AppDbContext())
-            {
-                return db.Usuarios.ToList();
-            }
-        }
-
-        // Menu de Administrador - CRUD de Usuarios
-        public void Agregar(Usuario usuario)
-        {
-            using (var db = new AppDbContext())
-            {
-                // Aseguramos un Hash genérico si viene vacío para cumplir con IsRequired()
-                if (string.IsNullOrEmpty(usuario.ContraseniaHash))
-                {
-                    usuario.ContraseniaHash = "123456";
-                }
-
-                db.Usuarios.Add(usuario);
-                db.SaveChanges();
-            }
-        }
-
-        // Menu de Administrador - CRUD de Usuarios
-        public void Actualizar(Usuario usuario)
-        {
-            using (var db = new AppDbContext())
-            {
-                db.Usuarios.Update(usuario);
-                db.SaveChanges(); // SQL UPDATE
-            }
-        }
-
-        // Menu de Administrador - CRUD de Usuarios
-        public void Eliminar(int id)
-        {
-            using (var db = new AppDbContext())
-            {
-                var usuario = db.Usuarios.Find(id);
-                if (usuario != null)
-                {
-                    db.Usuarios.Remove(usuario);
-                    db.SaveChanges(); // SQL DELETE
-                }
-            }
-        }
-
         public async Task<Usuario?> GetByIdAsync(int id)
-            => await _context.Usuarios.FindAsync(id);
+        { 
+            return await _context.Usuarios.FindAsync(id);
+        }
+
+        // AGREGAR
+        public void Agregar(UsuarioDTO usuarioDto) // Menu de Administrador - CRUD de Usuarios
+        {
+
+            // Validar duplicados antes de insertar
+            if (_context.Usuarios.Any(u => u.Email.ToLower() == usuarioDto.Email.ToLower()))
+            {
+                throw new InvalidOperationException($"El email '{usuarioDto.Email}' ya está registrado.");
+            }
+
+            Usuario usuario = new Usuario
+            {
+                Nombre = usuarioDto.Nombre,
+                Apellido = usuarioDto.Apellido,
+                Email = usuarioDto.Email,
+                Rol = usuarioDto.Rol,
+                ContraseniaHash = string.IsNullOrEmpty(usuarioDto.ContraseniaHash) ? "123456" : usuarioDto.ContraseniaHash
+            };
+
+            _context.Usuarios.Add(usuario);
+            _context.SaveChanges();
+        }
 
         public async Task AddAsync(Usuario usuario)
         {
@@ -91,10 +66,39 @@ namespace Data
             await _context.SaveChangesAsync();
         }
 
+        // ACTUALIZAR
+        public void Actualizar(UsuarioDTO usuarioDto) // Menu de Administrador - CRUD de Usuarios
+        {
+            var usuarioDb = _context.Usuarios.Find(usuarioDto.Id);
+            
+            if (usuarioDb != null)
+            {
+                usuarioDb.Nombre = usuarioDto.Nombre;
+                usuarioDb.Apellido = usuarioDto.Apellido;
+                usuarioDb.Email = usuarioDto.Email;
+                usuarioDb.Rol = usuarioDto.Rol;
+
+                _context.SaveChanges();
+            }
+        }
+
         public async Task UpdateAsync(Usuario usuario)
         {
             _context.Entry(usuario).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+        }
+
+        // ELIMINAR
+        public void Eliminar(int id) // Menu de Administrador - CRUD de Usuarios
+        {
+            var usuario = _context.Usuarios.Find(id);
+
+            if (usuario != null)
+            {
+                _context.Usuarios.Remove(usuario);
+                _context.SaveChanges();
+            }
+
         }
 
         public async Task DeleteAsync(Usuario usuario)
@@ -104,7 +108,10 @@ namespace Data
         }
 
         public async Task<bool> ExistsAsync(int id)
-            => await _context.Usuarios.AnyAsync(e => e.Id == id);
+        { 
+            return await _context.Usuarios.AnyAsync(e => e.Id == id);
+        }
+
     }
 
 }

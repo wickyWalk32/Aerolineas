@@ -70,16 +70,16 @@ namespace Application.Services
         }
 
         // Menu de Administrador - CRUD de Usuarios
-        public void CrearUsuario(Usuario usuario)
+        public void CrearUsuario(UsuarioDTO usuarioDto)
         {
-            // Podrías agregar validaciones de negocio aquí (ej: validar email duplicado)
-            _repository.Agregar(usuario);
+            // Aca van las validaciones de negocio aquí. Por ejemplo: validar email duplicado
+            _repository.Agregar(usuarioDto);
         }
 
         // Menu de Administrador - CRUD de Usuarios
-        public void ActualizarUsuario(Usuario usuario)
+        public void ActualizarUsuario(UsuarioDTO usuarioDto)
         {
-            _repository.Actualizar(usuario);
+            _repository.Actualizar(usuarioDto);
         }
 
         // Menu de Administrador - CRUD de Usuarios
@@ -166,5 +166,6 @@ namespace Application.Services
 
         public Task<bool> ExistsAsync(int id)
             => _repo.ExistsAsync(id);
+
     }
 }

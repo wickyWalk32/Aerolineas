@@ -13,6 +13,8 @@ namespace Domain.Model
         public string Fila { get; private set; }
         public string Columna { get; private set; }
 
+        public string Estado { get; private set; }
+
         private Avion _avion;
         private int _avionId;
         public Avion Avion { get; private set; }

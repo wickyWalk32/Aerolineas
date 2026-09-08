@@ -31,8 +31,6 @@
             lblTituloMenuAdmin = new Label();
             panel1 = new Panel();
             lblTituloPanelAcciones = new Label();
-            btnAdministrarCiudades = new Button();
-            btnAdministrarPaises = new Button();
             btnAdministrarUsuarios = new Button();
             btnSalir = new Button();
             lblNombreApellido = new Label();
@@ -54,8 +52,6 @@
             // 
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(lblTituloPanelAcciones);
-            panel1.Controls.Add(btnAdministrarCiudades);
-            panel1.Controls.Add(btnAdministrarPaises);
             panel1.Controls.Add(btnAdministrarUsuarios);
             panel1.Location = new Point(245, 111);
             panel1.Name = "panel1";
@@ -71,26 +67,6 @@
             lblTituloPanelAcciones.Size = new Size(89, 28);
             lblTituloPanelAcciones.TabIndex = 3;
             lblTituloPanelAcciones.Text = "Acciones";
-            // 
-            // btnAdministrarCiudades
-            // 
-            btnAdministrarCiudades.Location = new Point(68, 182);
-            btnAdministrarCiudades.Name = "btnAdministrarCiudades";
-            btnAdministrarCiudades.Size = new Size(165, 29);
-            btnAdministrarCiudades.TabIndex = 2;
-            btnAdministrarCiudades.Text = "Administrar Ciudades";
-            btnAdministrarCiudades.UseVisualStyleBackColor = true;
-            btnAdministrarCiudades.Click += btnAdministrarCiudades_Click;
-            // 
-            // btnAdministrarPaises
-            // 
-            btnAdministrarPaises.Location = new Point(68, 137);
-            btnAdministrarPaises.Name = "btnAdministrarPaises";
-            btnAdministrarPaises.Size = new Size(165, 29);
-            btnAdministrarPaises.TabIndex = 1;
-            btnAdministrarPaises.Text = "Administrar Paises";
-            btnAdministrarPaises.UseVisualStyleBackColor = true;
-            btnAdministrarPaises.Click += btnAdministrarPaises_Click;
             // 
             // btnAdministrarUsuarios
             // 
@@ -155,8 +131,6 @@
         private Button btnSalir;
         private Label lblNombreApellido;
         private Label lblTituloPanelAcciones;
-        private Button btnAdministrarCiudades;
-        private Button btnAdministrarPaises;
         private Button btnAdministrarUsuarios;
         private Label lblAdmin;
     }

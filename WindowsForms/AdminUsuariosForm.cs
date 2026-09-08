@@ -44,7 +44,7 @@ namespace WindowsForms
             try
             {
                 // 1. Llama a la Web API mediante un GET HTTP
-                var listaUsuarios = await _httpClient.GetFromJsonAsync<List<Usuario>>("api/usuarios");
+                var listaUsuarios = await _httpClient.GetFromJsonAsync<List<Usuario>>("/usuarios");
 
                 if (listaUsuarios != null)
                 {
@@ -84,7 +84,7 @@ namespace WindowsForms
                     try
                     {
                         // Envía el usuario como JSON vía HTTP POST a https://localhost:7099/api/usuarios
-                        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("api/usuarios", nuevoUsuario);
+                        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/usuarios", nuevoUsuario);
 
                         if (response.IsSuccessStatusCode)
                         {
@@ -120,7 +120,7 @@ namespace WindowsForms
                     try
                     {
                         // HTTP PUT a api/usuarios/{id}
-                        HttpResponseMessage response = await _httpClient.PutAsJsonAsync($"api/usuarios/{usuarioModificado.Id}", usuarioModificado);
+                        HttpResponseMessage response = await _httpClient.PutAsJsonAsync($"/usuarios/{usuarioModificado.Id}", usuarioModificado);
 
                         if (response.IsSuccessStatusCode)
                         {
@@ -156,7 +156,7 @@ namespace WindowsForms
                 try
                 {
                     // HTTP DELETE a api/usuarios/{id}
-                    HttpResponseMessage response = await _httpClient.DeleteAsync($"api/usuarios/{usuarioAEliminar.Id}");
+                    HttpResponseMessage response = await _httpClient.DeleteAsync($"/usuarios/{usuarioAEliminar.Id}");
 
                     if (response.IsSuccessStatusCode)
                     {

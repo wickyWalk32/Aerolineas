@@ -13,34 +13,20 @@ namespace Data
         public DbSet<Pais> Paises { get; set; }
         public DbSet<Ciudad> Cuidades { get; set; }
         public DbSet<Pasajero> Pasajeros { get; set; }
-        /*
-<<<<<<< HEAD
-
         public DbSet<Pasaje> Pasajes { get; set; }
         public DbSet<Reserva> Reservas { get; set; }
-=======
-        */
-        //public DbSet<Vuelo> Vuelos { get; set; }
-        //public DbSet<Avion> Aviones { get; set; }
-        //public DbSet<Asiento> Asientos { get; set; }
-        
-        
-
-
-        /*
->>>>>>> 05c4e67c39935d2d6a6353855c046a4a329e728e
-        */
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-            this.Database.EnsureDeleted();
-            this.Database.EnsureCreated();
-            // SeedInitialData();
-        }
+        public DbSet<Vuelo> Vuelos { get; set; }
+        public DbSet<Avion> Aviones { get; set; }
+        public DbSet<Asiento> Asientos { get; set; }
 
         internal AppDbContext()
         {
             this.Database.EnsureCreated();
-            // SeedInitialData();
+        }
+
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+            this.Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -98,6 +84,28 @@ namespace Data
                 entity.HasMany(e => e.Reservas)
                     .WithOne(r => r.Usuario)
                     .HasForeignKey(r => r.UsuarioId);
+
+                entity.HasData(
+                    new Usuario
+                    {
+                        Id = 1, 
+                        Nombre = "alumno",
+                        Apellido = "net",
+                        Email = "alum@email.com",
+                        ContraseniaHash = "net123",
+                        Rol = "admin"
+                    },
+                    new Usuario
+                    {
+                        Id = 2, 
+                        Nombre = "usuario",
+                        Apellido = "comun",
+                        Email = "usu@email.com",
+                        ContraseniaHash = "net321",
+                        Rol = "usuario"
+                    }
+                );
+
             });
 
             modelBuilder.Entity<Reserva>(entity =>
@@ -173,56 +181,78 @@ namespace Data
 
             });
 
-            /*
+            
             modelBuilder.Entity<Pais>(entity =>
             {
-<<<<<<< HEAD
                 // Primary Key
-                entity.HasKey(e => e.Id);
+                entity.HasKey(entityPais => entityPais.Id);
+                entity.Property(entityPais => entityPais.Id).ValueGeneratedOnAdd();
+
+                entity.Property(entityPais => entityPais.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Navigation(entityPais => entityPais.Ciudades)
+                    .HasField("_ciudades");
+            
             });
 
             modelBuilder.Entity<Ciudad>(entityCiudad =>
             {
                 // Primary Key
                 entityCiudad.HasKey(ciudad => ciudad.Id);
+                entityCiudad.Property(ciudad => ciudad.Id).ValueGeneratedOnAdd();
+
+                entityCiudad.Property(ciudad => ciudad.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(100);
 
                 // Relación Pais -> Ciudades (1 a muchos)
                 entityCiudad.HasOne(ciudad => ciudad.Pais)
                             .WithMany(pais => pais.Ciudades)
-                            .HasForeignKey(ciudad => ciudad.IdPais);
+                            .HasForeignKey(ciudad => ciudad.PaisId);
+
+                entityCiudad.Navigation(ciudad => ciudad.Pais)
+                    .HasField("_pais");
 
             });
-=======
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                entity.Property(e => e.Nombre)
+            modelBuilder.Entity<Asiento>(entity =>
+            {
+                // Primary Key
+                entity.HasKey(entityAsiento => entityAsiento.Codigo);
+                entity.Property(entityAsiento => entityAsiento.Codigo).ValueGeneratedOnAdd();
+
+                entity.Property(entityPais => entityPais.Fila)
                     .IsRequired()
-                    .HasMaxLength(100);
+                    .HasMaxLength(1);
 
-                entity.Navigation(e=>e.Ciudades)
-                    .HasField("_ciudades");
+                entity.Property(entityPais => entityPais.Columna)
+                    .IsRequired()
+                    .HasMaxLength(3);
+
+                entity.Property(entityPais => entityPais.Estado)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
             });
 
-            modelBuilder.Entity<Ciudad>(entity =>
+            modelBuilder.Entity<Vuelo>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                entity.Property(e => e.Nombre)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.HasOne(v => v.Origen)
+                    .WithMany()
+                    .HasForeignKey(v => v.OrigenId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(e => e.Pais)
-                    .WithMany(p => p.Ciudades)
-                    .HasForeignKey(e => e.PaisId);
-
-                entity.Navigation(e => e.Pais)
-                    .HasField("_pais");
+                entity.HasOne(v => v.Destino)
+                    .WithMany()
+                    .HasForeignKey(v => v.DestinoId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
-        }
->>>>>>> 05c4e67c39935d2d6a6353855c046a4a329e728e
-            */
+
         }
     }
 }

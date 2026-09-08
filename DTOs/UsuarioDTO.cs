@@ -19,16 +19,6 @@
         public string? Rol { get; set; }
     }
 
-    public class UsuarioDTO
-    {
-        public int Id { get; set; }
-        public string Nombre { get; set; } = string.Empty;
-        public string Apellido { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string ContraseniaHash { get; set; } = string.Empty;
-        public string Rol { get; set; } = string.Empty;
-    }
-
     public class UsuarioCreateDTO
     {
         public string Nombre { get; set; } = string.Empty;
@@ -46,4 +36,15 @@
         public string? ContraseniaHash { get; set; } // Opcional para actualizar
         public string Rol { get; set; } = string.Empty;
     }
+
+    public class UsuarioDTO
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Apellido { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string? ContraseniaHash { get; set; } // Opcional para actualizar
+        public string Rol { get; set; } = string.Empty;
+    }
+
 }
