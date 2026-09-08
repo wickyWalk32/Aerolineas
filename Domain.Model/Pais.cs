@@ -26,7 +26,7 @@ namespace Domain.Model
 
         public void SetNombre(string nombre)
         {
-            Nombre = Nombre;
+            Nombre = nombre;
         }
     }
 }

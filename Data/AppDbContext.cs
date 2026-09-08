@@ -21,7 +21,7 @@ namespace Data
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            this.Database.EnsureDeleted();
+            //this.Database.EnsureDeleted();
             this.Database.EnsureCreated();
             //SeedInitialData();
         }
@@ -86,14 +86,14 @@ namespace Data
 
                 entity.Property(e => e.FechaHoraReserva)
                     .IsRequired();
-
+                /*
                 entity.Navigation(e => e.Usuario)
                     .HasField("_usuario");
 
                 entity.HasOne(e=> e.Usuario)
                     .WithMany()
                     .HasForeignKey(r => r.UsuarioId);
-
+                */
                 entity.Navigation(e => e.Pasajes)
                     .HasField("_pasajes");
 

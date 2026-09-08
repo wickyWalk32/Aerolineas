@@ -34,6 +34,10 @@ builder.Services.AddScoped<IReservaRepository, ReservaRepository>();
 builder.Services.AddScoped<ReservaService>();
 builder.Services.AddScoped<IPasajeroRepository, PasajeroRepository>();
 builder.Services.AddScoped<PasajeroService>();
+builder.Services.AddScoped<IPaisRepository, PaisRepository>();
+builder.Services.AddScoped<PaisService>();
+builder.Services.AddScoped<ICiudadRepository, CiudadRepository>();
+builder.Services.AddScoped<CiudadService>();
 //builder.Services.AddControllers();
 
 // Add Dependency Injection
@@ -46,14 +50,14 @@ var app = builder.Build();
 
 
 
-// /*
+/*
  // Para testear la creacion del contexto
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.EnsureCreated();
 }
-// */
+*/
 
 
 
@@ -79,6 +83,8 @@ app.MapSwagger().RequireAuthorization();
 app.MapUsuarioEndpoints();
 app.MapReservaEndpoints();
 app.MapPasajeroEndpoints();
+app.MapPaisEndpoints();
+app.MapCiudadEndpoints();
 
 app.MapGet("/", () => "Hello, World!");
 app.MapControllers();
