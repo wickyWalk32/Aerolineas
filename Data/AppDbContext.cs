@@ -11,7 +11,7 @@ namespace Data
         //DbSets
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Pais> Paises { get; set; }
-        public DbSet<Ciudad> Cuidades { get; set; }
+        public DbSet<Ciudad> Ciudades { get; set; }
         public DbSet<Pasajero> Pasajeros { get; set; }
         public DbSet<Pasaje> Pasajes { get; set; }
         public DbSet<Reserva> Reservas { get; set; }
@@ -21,11 +21,13 @@ namespace Data
 
         internal AppDbContext()
         {
+            //this.Database.EnsureDeleted();
             this.Database.EnsureCreated();
         }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
+            //this.Database.EnsureDeleted();
             this.Database.EnsureCreated();
         }
 

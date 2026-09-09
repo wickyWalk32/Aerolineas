@@ -59,5 +59,9 @@ namespace WindowsForms
 
         }
 
+        private void UsuarioItemControl_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

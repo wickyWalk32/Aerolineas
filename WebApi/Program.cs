@@ -66,7 +66,7 @@ app.MapPasajeroEndpoints();
 app.MapPaisEndpoints();
 app.MapCiudadEndpoints();
 
-app.MapGet("/", () => "Hello, World!");
+//app.MapGet("/", () => "Hello, World!");
 app.MapRazorPages();
 
 app.Run();

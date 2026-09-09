@@ -53,7 +53,7 @@ namespace WindowsForms
 
                     if (response.IsSuccessStatusCode && resultado != null && resultado.Exitoso)
                     {
-                        MessageBox.Show("¡Bienvenido al sistema!", "Acceso Concedido", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //MessageBox.Show("¡Bienvenido al sistema!", "Acceso Concedido", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         MenuPrincipalForm ventanaMenuPrincipal = new MenuPrincipalForm(this, resultado);
                         ventanaMenuPrincipal.Show();
@@ -82,7 +82,7 @@ namespace WindowsForms
         // Cierra la aplicación por completo y libera todos los procesos
         private void btnSalirSistema_Click(object sender, EventArgs e)
         {
-            
+
             DialogResult resultado = MessageBox.Show(
                 "¿Está seguro de que desea salir del sistema?",
                 "Confirmar salida",
@@ -96,5 +96,9 @@ namespace WindowsForms
             }
         }
 
+        private void textBoxEmail_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -184,5 +184,14 @@ namespace WindowsForms
             this.Close();
         }
 
+        private void panelListaUsuarios_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void AdminUsuariosForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

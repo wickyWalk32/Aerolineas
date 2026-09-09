@@ -59,26 +59,28 @@
             panel1.Controls.Add(lblEmail);
             panel1.Controls.Add(lblApellido);
             panel1.Controls.Add(lblNombre);
-            panel1.Location = new Point(230, 96);
+            panel1.Location = new Point(201, 72);
+            panel1.Margin = new Padding(3, 2, 3, 2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(345, 303);
+            panel1.Size = new Size(302, 228);
             panel1.TabIndex = 0;
+            panel1.Paint += panel1_Paint;
             // 
             // lblId
             // 
             lblId.AutoSize = true;
-            lblId.Location = new Point(28, 26);
+            lblId.Location = new Point(24, 20);
             lblId.Name = "lblId";
-            lblId.Size = new Size(24, 20);
+            lblId.Size = new Size(18, 15);
             lblId.TabIndex = 9;
             lblId.Text = "ID";
             // 
             // lblIdUsuario
             // 
             lblIdUsuario.AutoSize = true;
-            lblIdUsuario.Location = new Point(108, 26);
+            lblIdUsuario.Location = new Point(94, 20);
             lblIdUsuario.Name = "lblIdUsuario";
-            lblIdUsuario.Size = new Size(22, 20);
+            lblIdUsuario.Size = new Size(17, 15);
             lblIdUsuario.TabIndex = 3;
             lblIdUsuario.Text = "id";
             lblIdUsuario.Click += label1_Click;
@@ -86,16 +88,18 @@
             // comboBoxRol
             // 
             comboBoxRol.FormattingEnabled = true;
-            comboBoxRol.Location = new Point(108, 181);
+            comboBoxRol.Location = new Point(94, 136);
+            comboBoxRol.Margin = new Padding(3, 2, 3, 2);
             comboBoxRol.Name = "comboBoxRol";
-            comboBoxRol.Size = new Size(208, 28);
+            comboBoxRol.Size = new Size(182, 23);
             comboBoxRol.TabIndex = 3;
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(120, 236);
+            btnGuardar.Location = new Point(105, 177);
+            btnGuardar.Margin = new Padding(3, 2, 3, 2);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(94, 29);
+            btnGuardar.Size = new Size(82, 22);
             btnGuardar.TabIndex = 8;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
@@ -103,31 +107,35 @@
             // 
             // textBoxEmail
             // 
-            textBoxEmail.Location = new Point(108, 138);
+            textBoxEmail.Location = new Point(94, 104);
+            textBoxEmail.Margin = new Padding(3, 2, 3, 2);
             textBoxEmail.Name = "textBoxEmail";
-            textBoxEmail.Size = new Size(208, 27);
+            textBoxEmail.Size = new Size(182, 23);
             textBoxEmail.TabIndex = 6;
             // 
             // textBoxApellido
             // 
-            textBoxApellido.Location = new Point(108, 98);
+            textBoxApellido.Location = new Point(94, 74);
+            textBoxApellido.Margin = new Padding(3, 2, 3, 2);
             textBoxApellido.Name = "textBoxApellido";
-            textBoxApellido.Size = new Size(208, 27);
+            textBoxApellido.Size = new Size(182, 23);
             textBoxApellido.TabIndex = 5;
             // 
             // textBoxNombre
             // 
-            textBoxNombre.Location = new Point(108, 59);
+            textBoxNombre.Location = new Point(94, 44);
+            textBoxNombre.Margin = new Padding(3, 2, 3, 2);
             textBoxNombre.Name = "textBoxNombre";
-            textBoxNombre.Size = new Size(208, 27);
+            textBoxNombre.Size = new Size(182, 23);
             textBoxNombre.TabIndex = 4;
+            textBoxNombre.TextChanged += textBoxNombre_TextChanged;
             // 
             // lblRol
             // 
             lblRol.AutoSize = true;
-            lblRol.Location = new Point(25, 184);
+            lblRol.Location = new Point(22, 138);
             lblRol.Name = "lblRol";
-            lblRol.Size = new Size(31, 20);
+            lblRol.Size = new Size(24, 15);
             lblRol.TabIndex = 3;
             lblRol.Text = "Rol";
             lblRol.Click += lblRol_Click;
@@ -135,27 +143,27 @@
             // lblEmail
             // 
             lblEmail.AutoSize = true;
-            lblEmail.Location = new Point(25, 145);
+            lblEmail.Location = new Point(22, 109);
             lblEmail.Name = "lblEmail";
-            lblEmail.Size = new Size(46, 20);
+            lblEmail.Size = new Size(36, 15);
             lblEmail.TabIndex = 2;
             lblEmail.Text = "Email";
             // 
             // lblApellido
             // 
             lblApellido.AutoSize = true;
-            lblApellido.Location = new Point(25, 105);
+            lblApellido.Location = new Point(22, 79);
             lblApellido.Name = "lblApellido";
-            lblApellido.Size = new Size(66, 20);
+            lblApellido.Size = new Size(51, 15);
             lblApellido.TabIndex = 1;
             lblApellido.Text = "Apellido";
             // 
             // lblNombre
             // 
             lblNombre.AutoSize = true;
-            lblNombre.Location = new Point(25, 66);
+            lblNombre.Location = new Point(22, 50);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(64, 20);
+            lblNombre.Size = new Size(51, 15);
             lblNombre.TabIndex = 0;
             lblNombre.Text = "Nombre";
             // 
@@ -163,17 +171,18 @@
             // 
             lblTituloNuevoEditarUsuario.AutoSize = true;
             lblTituloNuevoEditarUsuario.Font = new Font("Segoe UI", 16F);
-            lblTituloNuevoEditarUsuario.Location = new Point(140, 30);
+            lblTituloNuevoEditarUsuario.Location = new Point(122, 22);
             lblTituloNuevoEditarUsuario.Name = "lblTituloNuevoEditarUsuario";
-            lblTituloNuevoEditarUsuario.Size = new Size(262, 37);
+            lblTituloNuevoEditarUsuario.Size = new Size(211, 30);
             lblTituloNuevoEditarUsuario.TabIndex = 1;
             lblTituloNuevoEditarUsuario.Text = "NuevoEditar Usuario";
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(140, 438);
+            btnVolver.Location = new Point(122, 328);
+            btnVolver.Margin = new Padding(3, 2, 3, 2);
             btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(94, 29);
+            btnVolver.Size = new Size(82, 22);
             btnVolver.TabIndex = 2;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
@@ -181,14 +190,16 @@
             // 
             // UsuarioAMForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 523);
+            ClientSize = new Size(700, 392);
             Controls.Add(btnVolver);
             Controls.Add(lblTituloNuevoEditarUsuario);
             Controls.Add(panel1);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "UsuarioAMForm";
             Text = "Administrador";
+            Load += UsuarioAMForm_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);

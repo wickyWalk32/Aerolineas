@@ -11,7 +11,7 @@ namespace WebApi
             {
 
                 var dtos = await paisService.GetAllAsync();
-
+                Console.WriteLine($"TYPE: {dtos.GetType()}");
                 return Results.Ok(dtos);
             })
             .WithName("GetAllPaises")

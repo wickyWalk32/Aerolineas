@@ -34,6 +34,11 @@ namespace WindowsForms
             lblNombreApellido.Text = $"{_usuarioAutenticado.Nombre} {_usuarioAutenticado.Apellido}";
 
         }
+        public MenuPrincipalForm()
+        {
+            InitializeComponent();
+
+        }
 
         private void btnAdministrarUsuarios_Click(object sender, EventArgs e)
         {
@@ -79,5 +84,11 @@ namespace WindowsForms
             this.Close();
         }
 
+        private void btnAdministrarCiudades_Click(object sender, EventArgs e)
+        {
+            CiudadDetalle ventanaCiudad = new CiudadDetalle(this);
+            ventanaCiudad.Show();
+            this.Hide();
+        }
     }
 }

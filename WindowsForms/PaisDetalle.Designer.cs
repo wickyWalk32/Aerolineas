@@ -35,7 +35,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(50, 116);
+            button1.Location = new Point(227, 50);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 0;
@@ -45,15 +45,16 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(67, 44);
+            label1.Location = new Point(111, 22);
             label1.Name = "label1";
             label1.Size = new Size(28, 15);
             label1.TabIndex = 1;
             label1.Text = "Pais";
+            label1.Click += label1_Click;
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(37, 72);
+            textBox1.Location = new Point(81, 50);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(100, 23);
             textBox1.TabIndex = 2;
@@ -62,7 +63,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(182, 190);
+            ClientSize = new Size(371, 111);
             Controls.Add(textBox1);
             Controls.Add(label1);
             Controls.Add(button1);

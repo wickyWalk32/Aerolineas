@@ -45,9 +45,9 @@
             // 
             lblTituloLogin.AutoSize = true;
             lblTituloLogin.Font = new Font("Segoe UI", 22F);
-            lblTituloLogin.Location = new Point(175, 25);
+            lblTituloLogin.Location = new Point(153, 19);
             lblTituloLogin.Name = "lblTituloLogin";
-            lblTituloLogin.Size = new Size(113, 50);
+            lblTituloLogin.Size = new Size(92, 41);
             lblTituloLogin.TabIndex = 5;
             lblTituloLogin.Text = "Login";
             // 
@@ -60,16 +60,18 @@
             panel1.Controls.Add(label2);
             panel1.Controls.Add(label1);
             panel1.Controls.Add(lblTituloLogin);
-            panel1.Location = new Point(162, 57);
+            panel1.Location = new Point(142, 43);
+            panel1.Margin = new Padding(3, 2, 3, 2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(486, 297);
+            panel1.Size = new Size(426, 223);
             panel1.TabIndex = 7;
             // 
             // btnIngresar
             // 
-            btnIngresar.Location = new Point(175, 226);
+            btnIngresar.Location = new Point(153, 170);
+            btnIngresar.Margin = new Padding(3, 2, 3, 2);
             btnIngresar.Name = "btnIngresar";
-            btnIngresar.Size = new Size(133, 29);
+            btnIngresar.Size = new Size(116, 22);
             btnIngresar.TabIndex = 10;
             btnIngresar.Text = "Ingresar";
             btnIngresar.UseVisualStyleBackColor = true;
@@ -77,44 +79,48 @@
             // 
             // textBoxPassword
             // 
-            textBoxPassword.Location = new Point(243, 169);
+            textBoxPassword.Location = new Point(213, 127);
+            textBoxPassword.Margin = new Padding(3, 2, 3, 2);
             textBoxPassword.Name = "textBoxPassword";
             textBoxPassword.PasswordChar = '*';
-            textBoxPassword.Size = new Size(167, 27);
+            textBoxPassword.Size = new Size(147, 23);
             textBoxPassword.TabIndex = 9;
             // 
             // textBoxEmail
             // 
             textBoxEmail.AccessibleName = "";
             textBoxEmail.BackColor = SystemColors.Window;
-            textBoxEmail.Location = new Point(243, 121);
+            textBoxEmail.Location = new Point(213, 91);
+            textBoxEmail.Margin = new Padding(3, 2, 3, 2);
             textBoxEmail.Name = "textBoxEmail";
-            textBoxEmail.Size = new Size(167, 27);
+            textBoxEmail.Size = new Size(147, 23);
             textBoxEmail.TabIndex = 8;
+            textBoxEmail.TextChanged += textBoxEmail_TextChanged;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(77, 172);
+            label2.Location = new Point(67, 129);
             label2.Name = "label2";
-            label2.Size = new Size(151, 20);
+            label2.Size = new Size(121, 15);
             label2.TabIndex = 7;
             label2.Text = "Ingrese su contraseña";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(77, 124);
+            label1.Location = new Point(67, 93);
             label1.Name = "label1";
-            label1.Size = new Size(116, 20);
+            label1.Size = new Size(92, 15);
             label1.TabIndex = 6;
             label1.Text = "Ingrese su email";
             // 
             // btnSalirSistema
             // 
-            btnSalirSistema.Location = new Point(54, 402);
+            btnSalirSistema.Location = new Point(47, 302);
+            btnSalirSistema.Margin = new Padding(3, 2, 3, 2);
             btnSalirSistema.Name = "btnSalirSistema";
-            btnSalirSistema.Size = new Size(142, 29);
+            btnSalirSistema.Size = new Size(124, 22);
             btnSalirSistema.TabIndex = 8;
             btnSalirSistema.Text = "Salir del sistema";
             btnSalirSistema.UseVisualStyleBackColor = true;
@@ -123,30 +129,31 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(378, 402);
+            label3.Location = new Point(331, 302);
             label3.Name = "label3";
-            label3.Size = new Size(390, 20);
+            label3.Size = new Size(311, 15);
             label3.TabIndex = 9;
             label3.Text = "admin valido: email = alum@email.com , contra = net123";
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(378, 422);
+            label4.Location = new Point(331, 316);
             label4.Name = "label4";
-            label4.Size = new Size(389, 20);
+            label4.Size = new Size(314, 15);
             label4.TabIndex = 10;
             label4.Text = "usuario comun: email = usu@email.com , contra = net321";
             // 
             // LoginForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 480);
+            ClientSize = new Size(700, 360);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(btnSalirSistema);
             Controls.Add(panel1);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "LoginForm";
             Text = "Login";
             Load += LoginForm_Load;

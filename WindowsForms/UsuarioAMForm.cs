@@ -21,7 +21,7 @@ namespace WindowsForms
         private readonly AdminUsuariosForm _ventanaAdminUsuarios;
 
         /* Dos constructores: depende cual se llama, es la ventana que se carga: nuevo / editar. */
-        
+
         // Constructor para nuevo usuario
         public UsuarioAMForm(AdminUsuariosForm ventanaAdminUsuarios)
         {
@@ -108,5 +108,19 @@ namespace WindowsForms
 
         }
 
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void textBoxNombre_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UsuarioAMForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
