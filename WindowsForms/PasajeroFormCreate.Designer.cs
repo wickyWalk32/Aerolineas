@@ -41,7 +41,7 @@ namespace WindowsForms
             lblNombre.AutoSize = true;
             lblNombre.Location = new Point(24, 20);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(82, 25);
+            lblNombre.Size = new Size(54, 15);
             lblNombre.TabIndex = 0;
             lblNombre.Text = "Nombre:";
             // 
@@ -50,7 +50,7 @@ namespace WindowsForms
             lblApellido.AutoSize = true;
             lblApellido.Location = new Point(24, 56);
             lblApellido.Name = "lblApellido";
-            lblApellido.Size = new Size(82, 25);
+            lblApellido.Size = new Size(54, 15);
             lblApellido.TabIndex = 1;
             lblApellido.Text = "Apellido:";
             // 
@@ -59,7 +59,7 @@ namespace WindowsForms
             lblTipoDocumento.AutoSize = true;
             lblTipoDocumento.Location = new Point(24, 92);
             lblTipoDocumento.Name = "lblTipoDocumento";
-            lblTipoDocumento.Size = new Size(173, 25);
+            lblTipoDocumento.Size = new Size(114, 15);
             lblTipoDocumento.TabIndex = 2;
             lblTipoDocumento.Text = "Tipo de documento:";
             // 
@@ -68,7 +68,7 @@ namespace WindowsForms
             lblNroDocumento.AutoSize = true;
             lblNroDocumento.Location = new Point(24, 128);
             lblNroDocumento.Name = "lblNroDocumento";
-            lblNroDocumento.Size = new Size(159, 25);
+            lblNroDocumento.Size = new Size(105, 15);
             lblNroDocumento.TabIndex = 3;
             lblNroDocumento.Text = "Nº de documento:";
             // 
@@ -77,7 +77,7 @@ namespace WindowsForms
             lblTipoPasajero.AutoSize = true;
             lblTipoPasajero.Location = new Point(24, 164);
             lblTipoPasajero.Name = "lblTipoPasajero";
-            lblTipoPasajero.Size = new Size(123, 25);
+            lblTipoPasajero.Size = new Size(80, 15);
             lblTipoPasajero.TabIndex = 4;
             lblTipoPasajero.Text = "Tipo pasajero:";
             // 
@@ -85,21 +85,21 @@ namespace WindowsForms
             // 
             txtNombre.Location = new Point(140, 16);
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(240, 31);
+            txtNombre.Size = new Size(240, 23);
             txtNombre.TabIndex = 0;
             // 
             // txtApellido
             // 
             txtApellido.Location = new Point(140, 52);
             txtApellido.Name = "txtApellido";
-            txtApellido.Size = new Size(240, 31);
+            txtApellido.Size = new Size(240, 23);
             txtApellido.TabIndex = 1;
             // 
             // txtNroDocumento
             // 
             txtNroDocumento.Location = new Point(220, 127);
             txtNroDocumento.Name = "txtNroDocumento";
-            txtNroDocumento.Size = new Size(160, 31);
+            txtNroDocumento.Size = new Size(160, 23);
             txtNroDocumento.TabIndex = 3;
             // 
             // cboTipoDocumento
@@ -107,16 +107,15 @@ namespace WindowsForms
             cboTipoDocumento.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTipoDocumento.Location = new Point(220, 88);
             cboTipoDocumento.Name = "cboTipoDocumento";
-            cboTipoDocumento.Size = new Size(160, 33);
+            cboTipoDocumento.Size = new Size(160, 23);
             cboTipoDocumento.TabIndex = 2;
-            cboTipoDocumento.SelectedIndexChanged += cboTipoDocumento_SelectedIndexChanged;
             // 
             // cboTipoPasajero
             // 
             cboTipoPasajero.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTipoPasajero.Location = new Point(220, 164);
             cboTipoPasajero.Name = "cboTipoPasajero";
-            cboTipoPasajero.Size = new Size(160, 33);
+            cboTipoPasajero.Size = new Size(160, 23);
             cboTipoPasajero.TabIndex = 4;
             // 
             // btnGuardar

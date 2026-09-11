@@ -95,7 +95,6 @@
             textBoxEmail.Name = "textBoxEmail";
             textBoxEmail.Size = new Size(147, 23);
             textBoxEmail.TabIndex = 8;
-            textBoxEmail.TextChanged += textBoxEmail_TextChanged;
             // 
             // label2
             // 

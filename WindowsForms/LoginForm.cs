@@ -92,13 +92,9 @@ namespace WindowsForms
 
             if (resultado == DialogResult.Yes)
             {
-                Application.Exit();
+                //Application.Exit();
             }
         }
 
-        private void textBoxEmail_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

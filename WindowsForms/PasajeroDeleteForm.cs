@@ -1,7 +1,5 @@
 using System;
 using System.Windows.Forms;
-using Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace WindowsForms
 {
@@ -26,13 +24,8 @@ namespace WindowsForms
 
             try
             {
-                var options = new DbContextOptionsBuilder<AppDbContext>().Options;
-                using var context = new AppDbContext(options);
-                var repo = new PasajeroRepository(context);
-                var service = new PasajeroService(repo);
-
-                bool eliminado = await service.DeleteAsync(id);
-                if (eliminado)
+                var response = await Program.HttpClient.DeleteAsync($"pasajeros/{id}");
+                if (response.IsSuccessStatusCode)
                 {
                     MessageBox.Show("Pasajero eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     DialogResult = DialogResult.OK;

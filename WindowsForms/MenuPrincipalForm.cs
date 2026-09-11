@@ -61,27 +61,11 @@ namespace WindowsForms
             MessageBox.Show("Administración de países no implementada aún.", "No implementado", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void btnAdministrarCiudades_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Type tipo = Type.GetType("WindowsForms.AdminCiudadesForm, WindowsForms");
-                if (tipo != null)
-                {
-                    Form ventana = (Form)Activator.CreateInstance(tipo, this)!;
-                    ventana.Show();
-                    this.Hide();
-                    return;
-                }
-            }
-            catch { }
-            MessageBox.Show("Administración de ciudades no implementada aún.", "No implementado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
             _loginForm.Show();
-                    this.Close();
+            this.Close();
         }
 
         // Nuevo: abre el formulario independiente de administración de pasajeros
@@ -100,9 +84,4 @@ namespace WindowsForms
         }
     }
 }
-        private void MenuPrincipalForm_Load(object sender, EventArgs e)
-        {
 
-        }
-    }
-}

@@ -1,12 +1,9 @@
+using DTOs;
 using System;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Data;
-using DTOs;
-using Microsoft.EntityFrameworkCore;
-using Domain;
-using Application.Services;
 
 namespace WindowsForms
 {
@@ -26,16 +23,13 @@ namespace WindowsForms
         {
             try
             {
-                // Construye opciones vacías: AppDbContext.OnConfiguring leerá appsettings.json si es necesario
-                var options = new DbContextOptionsBuilder<AppDbContext>().Options;
-                using var context = new AppDbContext(options);
-                var repo = new PasajeroRepository(context);
-                var service = new PasajeroService(repo);
+                // Construye opciones vacías: AppDbContext.OnConfiguring leerá appsettings.json si es necesari
 
-                var lista = await service.GetAllAsync();
+                var response = await Program.HttpClient.GetFromJsonAsync<List<PasajeroDTO>>("pasajeros");
+                
 
                 // Ordena por Apellido, luego Nombre
-                var ordenada = lista.OrderBy(p => p.Apellido).ThenBy(p => p.Nombre).ToList();
+                var ordenada = response?.OrderBy(p => p.Apellido).ThenBy(p => p.Nombre).ToList();
 
                 // Bind con un BindingSource para facilitar futuras operaciones
                 var bs = new BindingSource { DataSource = ordenada };

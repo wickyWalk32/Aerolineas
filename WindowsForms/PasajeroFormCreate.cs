@@ -11,10 +11,5 @@ namespace WindowsForms
         {
             // Inicializaciones adicionales al cargar el formulario (si las necesitas).             
         }
-
-        private void cboTipoDocumento_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
