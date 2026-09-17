@@ -1,8 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
-using Domain.Model;
-
-namespace WindowsForms
+﻿namespace WindowsForms
 {
     public partial class PasajeroDetalle : Form
     {
@@ -174,69 +170,6 @@ namespace WindowsForms
             ((System.ComponentModel.ISupportInitialize)errorProviderNroDni).EndInit();
             ResumeLayout(false);
             PerformLayout();
-        }
-
-        private void CargarDesplegables()
-        {
-            cboTipoDocumento.Items.Clear();
-            cboTipoDocumento.Items.Add("DNI");
-            cboTipoDocumento.Items.Add("Pasaporte");
-            cboTipoDocumento.Items.Add("LE/LC");
-            cboTipoDocumento.SelectedIndex = 0;
-
-            cboTipoPasajero.Items.Clear();
-            cboTipoPasajero.Items.Add("E - Estándar");
-            cboTipoPasajero.Items.Add("F - Frecuente");
-            cboTipoPasajero.Items.Add("V - VIP");
-            cboTipoPasajero.SelectedIndex = 0;
-        }
-
-        private void BtnGuardar_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
-                string.IsNullOrWhiteSpace(txtApellido.Text) ||
-                string.IsNullOrWhiteSpace(txtNroDocumento.Text))
-            {
-                MessageBox.Show("Por favor complete todos los campos obligatorios.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            string seleccionTipo = cboTipoPasajero.SelectedItem.ToString();
-            char tipoChar = seleccionTipo[0];
-
-            try
-            {
-                Pasajero nuevoPasajero = new Pasajero(
-                    txtNombre.Text.Trim(),
-                    txtApellido.Text.Trim(),
-                    cboTipoDocumento.SelectedItem.ToString(),
-                    txtNroDocumento.Text.Trim(),
-                    tipoChar
-                );
-
-                MessageBox.Show($"¡Pasajero {nuevoPasajero.Nombre} {nuevoPasajero.Apellido} registrado exitosamente!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                LimpiarCampos();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ocurrió un error al guardar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnVolver_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void LimpiarCampos()
-        {
-            txtNombre.Clear();
-            txtApellido.Clear();
-            txtNroDocumento.Clear();
-            cboTipoDocumento.SelectedIndex = 0;
-            cboTipoPasajero.SelectedIndex = 0;
-            txtNombre.Focus();
         }
         private ErrorProvider errorProviderNroDni;
         private System.ComponentModel.IContainer components;

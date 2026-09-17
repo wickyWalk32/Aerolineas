@@ -48,7 +48,10 @@ namespace WindowsForms
 
 
         }
-
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
         private void ClearForm()
         {
             txtNombre.Clear();
