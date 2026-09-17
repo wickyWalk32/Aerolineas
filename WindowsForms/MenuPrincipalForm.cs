@@ -39,7 +39,7 @@ namespace WindowsForms
 
         private void btnAdministrarUsuarios_Click(object sender, EventArgs e)
         {
-            AdminUsuariosForm ventanaAdminUsuarios = new AdminUsuariosForm(this);
+            UsuarioAdminMenu ventanaAdminUsuarios = new UsuarioAdminMenu(this);
             ventanaAdminUsuarios.Show();
             this.Hide();
         }

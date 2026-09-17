@@ -1,161 +1,244 @@
-﻿namespace WindowsForms
+﻿using System;
+using System.Windows.Forms;
+using Domain.Model;
+
+namespace WindowsForms
 {
-    partial class PasajeroDetalle
+    public partial class PasajeroDetalle : Form
     {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private Label lblNombre;
+        private Label lblApellido;
+        private Label lblTipoDocumento;
+        private Label lblNroDocumento;
+        private Label lblTipoPasajero;
+        private TextBox txtNombre;
+        private TextBox txtApellido;
+        private TextBox txtNroDocumento;
+        private ComboBox cboTipoDocumento;
+        private ComboBox cboTipoPasajero;
+        private Button btnGuardar;
+        private Button btnVolver;
 
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
-            textBox1 = new TextBox();
-            labelNombre = new Label();
-            label2 = new Label();
-            textBox2 = new TextBox();
-            label1 = new Label();
-            textBox3 = new TextBox();
-            label3 = new Label();
-            textBox4 = new TextBox();
-            comboBox1 = new ComboBox();
+            components = new System.ComponentModel.Container();
+            lblNombre = new Label();
+            lblApellido = new Label();
+            lblTipoDocumento = new Label();
+            lblNroDocumento = new Label();
+            lblTipoPasajero = new Label();
+            txtNombre = new TextBox();
+            txtApellido = new TextBox();
+            txtNroDocumento = new TextBox();
+            cboTipoDocumento = new ComboBox();
+            cboTipoPasajero = new ComboBox();
+            btnGuardar = new Button();
+            btnVolver = new Button();
+            errorProviderNroDni = new ErrorProvider(components);
+            ((System.ComponentModel.ISupportInitialize)errorProviderNroDni).BeginInit();
             SuspendLayout();
             // 
-            // button1
+            // lblNombre
             // 
-            button1.Location = new Point(113, 259);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 0;
-            button1.Text = "Enviar";
-            button1.UseVisualStyleBackColor = true;
+            lblNombre.AutoSize = true;
+            lblNombre.Location = new Point(24, 20);
+            lblNombre.Name = "lblNombre";
+            lblNombre.Size = new Size(54, 15);
+            lblNombre.TabIndex = 0;
+            lblNombre.Text = "Nombre:";
             // 
-            // textBox1
+            // lblApellido
             // 
-            textBox1.Location = new Point(130, 29);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 1;
+            lblApellido.AutoSize = true;
+            lblApellido.Location = new Point(24, 56);
+            lblApellido.Name = "lblApellido";
+            lblApellido.Size = new Size(54, 15);
+            lblApellido.TabIndex = 1;
+            lblApellido.Text = "Apellido:";
             // 
-            // labelNombre
+            // lblTipoDocumento
             // 
-            labelNombre.AutoSize = true;
-            labelNombre.Location = new Point(67, 32);
-            labelNombre.Name = "labelNombre";
-            labelNombre.Size = new Size(51, 15);
-            labelNombre.TabIndex = 2;
-            labelNombre.Text = "Nombre";
-            labelNombre.Click += label1_Click;
+            lblTipoDocumento.AutoSize = true;
+            lblTipoDocumento.Location = new Point(24, 92);
+            lblTipoDocumento.Name = "lblTipoDocumento";
+            lblTipoDocumento.Size = new Size(114, 15);
+            lblTipoDocumento.TabIndex = 2;
+            lblTipoDocumento.Text = "Tipo de documento:";
             // 
-            // label2
+            // lblNroDocumento
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(67, 76);
-            label2.Name = "label2";
-            label2.Size = new Size(51, 15);
-            label2.TabIndex = 4;
-            label2.Text = "Apellido";
+            lblNroDocumento.AutoSize = true;
+            lblNroDocumento.Location = new Point(24, 128);
+            lblNroDocumento.Name = "lblNroDocumento";
+            lblNroDocumento.Size = new Size(105, 15);
+            lblNroDocumento.TabIndex = 3;
+            lblNroDocumento.Text = "Nº de documento:";
             // 
-            // textBox2
+            // lblTipoPasajero
             // 
-            textBox2.Location = new Point(130, 73);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 3;
+            lblTipoPasajero.AutoSize = true;
+            lblTipoPasajero.Location = new Point(24, 164);
+            lblTipoPasajero.Name = "lblTipoPasajero";
+            lblTipoPasajero.Size = new Size(80, 15);
+            lblTipoPasajero.TabIndex = 4;
+            lblTipoPasajero.Text = "Tipo pasajero:";
             // 
-            // label1
+            // txtNombre
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(91, 164);
-            label1.Name = "label1";
-            label1.Size = new Size(27, 15);
-            label1.TabIndex = 8;
-            label1.Text = "DNI";
+            txtNombre.Location = new Point(140, 16);
+            txtNombre.Name = "txtNombre";
+            txtNombre.Size = new Size(240, 23);
+            txtNombre.TabIndex = 0;
             // 
-            // textBox3
+            // txtApellido
             // 
-            textBox3.Location = new Point(130, 161);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(100, 23);
-            textBox3.TabIndex = 7;
+            txtApellido.Location = new Point(140, 52);
+            txtApellido.Name = "txtApellido";
+            txtApellido.Size = new Size(240, 23);
+            txtApellido.TabIndex = 1;
             // 
-            // label3
+            // txtNroDocumento
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(67, 120);
-            label3.Name = "label3";
-            label3.Size = new Size(53, 15);
-            label3.TabIndex = 6;
-            label3.Text = "TIpo DNI";
-            label3.Click += label3_Click;
+            txtNroDocumento.Location = new Point(220, 127);
+            txtNroDocumento.Name = "txtNroDocumento";
+            txtNroDocumento.Size = new Size(160, 23);
+            txtNroDocumento.TabIndex = 3;
+            txtNroDocumento.KeyPress += txtNroDocumento_KeyPress;
             // 
-            // textBox4
+            // cboTipoDocumento
             // 
-            textBox4.Location = new Point(130, 117);
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(100, 23);
-            textBox4.TabIndex = 5;
+            cboTipoDocumento.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboTipoDocumento.Items.AddRange(new object[] { "DNI", "DNI (Extranjero)", "Libreta Cívica (LC)", "Libreta de Enrolamiento (LE)" });
+            cboTipoDocumento.Location = new Point(220, 88);
+            cboTipoDocumento.Name = "cboTipoDocumento";
+            cboTipoDocumento.Size = new Size(160, 23);
+            cboTipoDocumento.TabIndex = 2;
             // 
-            // comboBox1
+            // cboTipoPasajero
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(113, 207);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(121, 23);
-            comboBox1.TabIndex = 9;
+            cboTipoPasajero.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboTipoPasajero.Items.AddRange(new object[] { "Adulto", "Menor" });
+            cboTipoPasajero.Location = new Point(220, 164);
+            cboTipoPasajero.Name = "cboTipoPasajero";
+            cboTipoPasajero.Size = new Size(160, 23);
+            cboTipoPasajero.TabIndex = 4;
+            // 
+            // btnGuardar
+            // 
+            btnGuardar.Location = new Point(61, 295);
+            btnGuardar.Name = "btnGuardar";
+            btnGuardar.Size = new Size(100, 30);
+            btnGuardar.TabIndex = 5;
+            btnGuardar.Text = "Guardar";
+            btnGuardar.UseVisualStyleBackColor = true;
+            btnGuardar.Click += this.btnGuardar_Click;
+            // 
+            // btnVolver
+            // 
+            btnVolver.Location = new Point(298, 295);
+            btnVolver.Name = "btnVolver";
+            btnVolver.Size = new Size(100, 30);
+            btnVolver.TabIndex = 6;
+            btnVolver.Text = "Volver";
+            btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.Click += btnVolver_Click;
+            // 
+            // errorProviderNroDni
+            // 
+            errorProviderNroDni.ContainerControl = this;
             // 
             // PasajeroDetalle
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(305, 306);
-            Controls.Add(comboBox1);
-            Controls.Add(label1);
-            Controls.Add(textBox3);
-            Controls.Add(label3);
-            Controls.Add(textBox4);
-            Controls.Add(label2);
-            Controls.Add(textBox2);
-            Controls.Add(labelNombre);
-            Controls.Add(textBox1);
-            Controls.Add(button1);
+            AcceptButton = btnGuardar;
+            CancelButton = btnVolver;
+            ClientSize = new Size(465, 374);
+            Controls.Add(lblNombre);
+            Controls.Add(txtNombre);
+            Controls.Add(lblApellido);
+            Controls.Add(txtApellido);
+            Controls.Add(lblTipoDocumento);
+            Controls.Add(cboTipoDocumento);
+            Controls.Add(lblNroDocumento);
+            Controls.Add(txtNroDocumento);
+            Controls.Add(lblTipoPasajero);
+            Controls.Add(cboTipoPasajero);
+            Controls.Add(btnGuardar);
+            Controls.Add(btnVolver);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "PasajeroDetalle";
-            Text = "Form1";
-            Load += Form1_Load;
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Registro de Pasajero";
+            ((System.ComponentModel.ISupportInitialize)errorProviderNroDni).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
-        #endregion
+        private void CargarDesplegables()
+        {
+            cboTipoDocumento.Items.Clear();
+            cboTipoDocumento.Items.Add("DNI");
+            cboTipoDocumento.Items.Add("Pasaporte");
+            cboTipoDocumento.Items.Add("LE/LC");
+            cboTipoDocumento.SelectedIndex = 0;
 
-        private Button button1;
-        private TextBox textBox1;
-        private Label labelNombre;
-        private Label label2;
-        private TextBox textBox2;
-        private Label label1;
-        private TextBox textBox3;
-        private Label label3;
-        private TextBox textBox4;
-        private ComboBox comboBox1;
+            cboTipoPasajero.Items.Clear();
+            cboTipoPasajero.Items.Add("E - Estándar");
+            cboTipoPasajero.Items.Add("F - Frecuente");
+            cboTipoPasajero.Items.Add("V - VIP");
+            cboTipoPasajero.SelectedIndex = 0;
+        }
+
+        private void BtnGuardar_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
+                string.IsNullOrWhiteSpace(txtApellido.Text) ||
+                string.IsNullOrWhiteSpace(txtNroDocumento.Text))
+            {
+                MessageBox.Show("Por favor complete todos los campos obligatorios.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string seleccionTipo = cboTipoPasajero.SelectedItem.ToString();
+            char tipoChar = seleccionTipo[0];
+
+            try
+            {
+                Pasajero nuevoPasajero = new Pasajero(
+                    txtNombre.Text.Trim(),
+                    txtApellido.Text.Trim(),
+                    cboTipoDocumento.SelectedItem.ToString(),
+                    txtNroDocumento.Text.Trim(),
+                    tipoChar
+                );
+
+                MessageBox.Show($"¡Pasajero {nuevoPasajero.Nombre} {nuevoPasajero.Apellido} registrado exitosamente!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                LimpiarCampos();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocurrió un error al guardar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void LimpiarCampos()
+        {
+            txtNombre.Clear();
+            txtApellido.Clear();
+            txtNroDocumento.Clear();
+            cboTipoDocumento.SelectedIndex = 0;
+            cboTipoPasajero.SelectedIndex = 0;
+            txtNombre.Focus();
+        }
+        private ErrorProvider errorProviderNroDni;
+        private System.ComponentModel.IContainer components;
     }
 }

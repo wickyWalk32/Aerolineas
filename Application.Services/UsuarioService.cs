@@ -15,7 +15,7 @@ namespace Application.Services
         el código.
         */
 
-        private readonly IUsuarioRepository? _repo;
+        private readonly IUsuarioRepository _repo;
 
         // Menu de Administrador - CRUD de Usuarios
         private readonly UsuarioRepository? _repository;
@@ -69,12 +69,7 @@ namespace Application.Services
             return _repository.ObtenerTodos();
         }
 
-        // Menu de Administrador - CRUD de Usuarios
-        public void CrearUsuario(UsuarioDTO usuarioDto)
-        {
-            // Aca van las validaciones de negocio aquí. Por ejemplo: validar email duplicado
-            _repository.Agregar(usuarioDto);
-        }
+
 
         // Menu de Administrador - CRUD de Usuarios
         public void ActualizarUsuario(UsuarioDTO usuarioDto)
@@ -104,6 +99,7 @@ namespace Application.Services
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Email = usuario.Email,
+                ContraseniaHash = usuario.ContraseniaHash,
                 Rol = usuario.Rol
             }).ToList();
         }
@@ -120,7 +116,7 @@ namespace Application.Services
                 };
         }
 
-        public async Task<UsuarioDTO> AddAsync(UsuarioDTO usuarioCreateDTO)
+        public async Task<UsuarioDTO> AddAsync(UsuarioCreateDTO usuarioCreateDTO)
         {
             Usuario usuario = new Usuario(  usuarioCreateDTO.Nombre,
                                             usuarioCreateDTO.Apellido,
@@ -132,6 +128,8 @@ namespace Application.Services
             {
                 Id = usuario.Id,
                 Email = usuario.Email,
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
                 ContraseniaHash = usuario.ContraseniaHash
             };
             return usuarioDTO;
@@ -142,14 +140,22 @@ namespace Application.Services
         
         public async Task<bool> UpdateAsync(int id, UsuarioUpdateDTO usuarioUpdateDTO)
         {
-            Usuario usuario = new Usuario
+            var usuario = await _repo.GetByIdAsync(id);
+            if (usuario == null)
             {
-                Id = usuarioUpdateDTO.Id,
-                Email = usuarioUpdateDTO.Email,
-                ContraseniaHash = usuarioUpdateDTO.ContraseniaHash,
-            };
-            if (id != usuario.Id)
                 return false;
+            }
+            usuario.SetNombre(usuarioUpdateDTO.Nombre);
+            usuario.SetApellido(usuarioUpdateDTO.Apellido);
+            usuario.SetEmail(usuarioUpdateDTO.Email);
+            usuario.SetRol(usuarioUpdateDTO.Rol);
+
+            //Solo actualizar contraseña si se proporciona y es distinta a la actual
+            if (!string.IsNullOrWhiteSpace(usuarioUpdateDTO.ContraseniaHash) &&
+                usuarioUpdateDTO.ContraseniaHash!= usuario.ContraseniaHash)
+            {
+                usuario.SetContraseniaHash(usuarioUpdateDTO.ContraseniaHash);
+            }
 
             await _repo.UpdateAsync(usuario);
             return true;

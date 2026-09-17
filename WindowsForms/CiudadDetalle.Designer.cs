@@ -30,11 +30,11 @@
         {
             btnGuardar = new Button();
             textBoxNombre = new TextBox();
-            textBox2 = new TextBox();
+            textBoxCodigoPostal = new TextBox();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
-            textBox3 = new TextBox();
+            textBoxCodigoAeropuerto = new TextBox();
             comboBoxPais = new ComboBox();
             label4 = new Label();
             btnVolver = new Button();
@@ -57,12 +57,12 @@
             textBoxNombre.Size = new Size(100, 23);
             textBoxNombre.TabIndex = 1;
             // 
-            // textBox2
+            // textBoxCodigoPostal
             // 
-            textBox2.Location = new Point(204, 73);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 2;
+            textBoxCodigoPostal.Location = new Point(204, 73);
+            textBoxCodigoPostal.Name = "textBoxCodigoPostal";
+            textBoxCodigoPostal.Size = new Size(100, 23);
+            textBoxCodigoPostal.TabIndex = 2;
             // 
             // label1
             // 
@@ -91,12 +91,12 @@
             label3.TabIndex = 6;
             label3.Text = "Codigo Aeropuerto";
             // 
-            // textBox3
+            // textBoxCodigoAeropuerto
             // 
-            textBox3.Location = new Point(204, 121);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(100, 23);
-            textBox3.TabIndex = 5;
+            textBoxCodigoAeropuerto.Location = new Point(204, 121);
+            textBoxCodigoAeropuerto.Name = "textBoxCodigoAeropuerto";
+            textBoxCodigoAeropuerto.Size = new Size(100, 23);
+            textBoxCodigoAeropuerto.TabIndex = 5;
             // 
             // comboBoxPais
             // 
@@ -134,10 +134,10 @@
             Controls.Add(label4);
             Controls.Add(comboBoxPais);
             Controls.Add(label3);
-            Controls.Add(textBox3);
+            Controls.Add(textBoxCodigoAeropuerto);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(textBox2);
+            Controls.Add(textBoxCodigoPostal);
             Controls.Add(textBoxNombre);
             Controls.Add(btnGuardar);
             Name = "CiudadDetalle";
@@ -150,11 +150,11 @@
 
         private Button btnGuardar;
         private TextBox textBoxNombre;
-        private TextBox textBox2;
+        private TextBox textBoxCodigoPostal;
         private Label label1;
         private Label label2;
         private Label label3;
-        private TextBox textBox3;
+        private TextBox textBoxCodigoAeropuerto;
         private ComboBox comboBoxPais;
         private Label label4;
         private Button btnVolver;

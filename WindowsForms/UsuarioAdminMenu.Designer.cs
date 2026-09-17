@@ -1,6 +1,6 @@
 ﻿namespace WindowsForms
 {
-    partial class AdminUsuariosForm
+    partial class UsuarioAdminMenu
     {
         /// <summary>
         /// Required designer variable.
@@ -59,13 +59,12 @@
             // 
             panelListaUsuarios.AutoScroll = true;
             panelListaUsuarios.FlowDirection = FlowDirection.TopDown;
-            panelListaUsuarios.Location = new Point(31, 56);
+            panelListaUsuarios.Location = new Point(12, 56);
             panelListaUsuarios.Margin = new Padding(3, 2, 3, 2);
             panelListaUsuarios.Name = "panelListaUsuarios";
-            panelListaUsuarios.Size = new Size(638, 224);
+            panelListaUsuarios.Size = new Size(696, 224);
             panelListaUsuarios.TabIndex = 2;
             panelListaUsuarios.WrapContents = false;
-            panelListaUsuarios.Paint += panelListaUsuarios_Paint;
             // 
             // btnNuevoUsuario
             // 
@@ -82,7 +81,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(700, 338);
+            ClientSize = new Size(720, 338);
             Controls.Add(btnNuevoUsuario);
             Controls.Add(panelListaUsuarios);
             Controls.Add(btnVolver);
@@ -90,7 +89,6 @@
             Margin = new Padding(3, 2, 3, 2);
             Name = "AdminUsuariosForm";
             Text = "Administrador";
-            Load += AdminUsuariosForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }

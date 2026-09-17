@@ -30,6 +30,7 @@ namespace WindowsForms
             dgvPasajeros.AllowUserToAddRows = false;
             dgvPasajeros.AllowUserToDeleteRows = false;
             dgvPasajeros.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvPasajeros.AutoGenerateColumns = false;
             dgvPasajeros.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvPasajeros.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvPasajeros.Columns.AddRange(new DataGridViewColumn[] { colId, colTipo, colNombre, colApellido, colTipoDoc, colNroDoc });
@@ -45,36 +46,49 @@ namespace WindowsForms
             // 
             // colId
             // 
+            colId.DataPropertyName = "Id";
+            colId.HeaderText = "ID";
             colId.MinimumWidth = 8;
             colId.Name = "colId";
             colId.ReadOnly = true;
             // 
             // colTipo
             // 
+            colTipo.DataPropertyName = "Tipo";
+            colTipo.HeaderText = "Tipo";
             colTipo.MinimumWidth = 8;
             colTipo.Name = "colTipo";
             colTipo.ReadOnly = true;
             // 
             // colNombre
             // 
+            colNombre.DataPropertyName = "Nombre";
+            colNombre.HeaderText = "Nombre";
             colNombre.MinimumWidth = 8;
             colNombre.Name = "colNombre";
             colNombre.ReadOnly = true;
             // 
             // colApellido
             // 
+            colApellido.DataPropertyName = "Apellido";
+            colApellido.HeaderText = "Apellido";
             colApellido.MinimumWidth = 8;
             colApellido.Name = "colApellido";
             colApellido.ReadOnly = true;
             // 
             // colTipoDoc
             // 
+            colTipoDoc.DataPropertyName = "TipoDocumento";
+            colTipoDoc.HeaderText = "Tipo Documento";
             colTipoDoc.MinimumWidth = 8;
             colTipoDoc.Name = "colTipoDoc";
             colTipoDoc.ReadOnly = true;
+
             // 
             // colNroDoc
             // 
+            colNroDoc.DataPropertyName = "NroDocumento";
+            colNroDoc.HeaderText = "Nro. Documento";
             colNroDoc.MinimumWidth = 8;
             colNroDoc.Name = "colNroDoc";
             colNroDoc.ReadOnly = true;

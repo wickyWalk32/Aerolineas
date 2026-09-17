@@ -52,6 +52,8 @@ namespace Data
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Nombre)
                     .IsRequired()
@@ -61,8 +63,6 @@ namespace Data
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Email)
                     .IsRequired()

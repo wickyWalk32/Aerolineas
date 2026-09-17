@@ -1,6 +1,6 @@
 ﻿namespace WindowsForms
 {
-    partial class UsuarioAMForm
+    partial class UsuarioDetalle
     {
         /// <summary>
         /// Required designer variable.
@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            textBoxContrasenia = new TextBox();
+            lblContrasenia = new Label();
             lblId = new Label();
             lblIdUsuario = new Label();
             comboBoxRol = new ComboBox();
@@ -48,6 +50,8 @@
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(textBoxContrasenia);
+            panel1.Controls.Add(lblContrasenia);
             panel1.Controls.Add(lblId);
             panel1.Controls.Add(lblIdUsuario);
             panel1.Controls.Add(comboBoxRol);
@@ -62,9 +66,26 @@
             panel1.Location = new Point(201, 72);
             panel1.Margin = new Padding(3, 2, 3, 2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(302, 228);
+            panel1.Size = new Size(302, 242);
             panel1.TabIndex = 0;
-            panel1.Paint += panel1_Paint;
+            // 
+            // textBoxContrasenia
+            // 
+            textBoxContrasenia.Location = new Point(94, 134);
+            textBoxContrasenia.Margin = new Padding(3, 2, 3, 2);
+            textBoxContrasenia.Name = "textBoxContrasenia";
+            textBoxContrasenia.Size = new Size(182, 23);
+            textBoxContrasenia.TabIndex = 11;
+            textBoxContrasenia.UseSystemPasswordChar = true;
+            // 
+            // lblContrasenia
+            // 
+            lblContrasenia.AutoSize = true;
+            lblContrasenia.Location = new Point(22, 137);
+            lblContrasenia.Name = "lblContrasenia";
+            lblContrasenia.Size = new Size(67, 15);
+            lblContrasenia.TabIndex = 10;
+            lblContrasenia.Text = "Contraseña";
             // 
             // lblId
             // 
@@ -83,12 +104,12 @@
             lblIdUsuario.Size = new Size(17, 15);
             lblIdUsuario.TabIndex = 3;
             lblIdUsuario.Text = "id";
-            lblIdUsuario.Click += label1_Click;
             // 
             // comboBoxRol
             // 
             comboBoxRol.FormattingEnabled = true;
-            comboBoxRol.Location = new Point(94, 136);
+            comboBoxRol.Items.AddRange(new object[] { "admin", "usuario" });
+            comboBoxRol.Location = new Point(94, 164);
             comboBoxRol.Margin = new Padding(3, 2, 3, 2);
             comboBoxRol.Name = "comboBoxRol";
             comboBoxRol.Size = new Size(182, 23);
@@ -96,7 +117,7 @@
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(105, 177);
+            btnGuardar.Location = new Point(105, 208);
             btnGuardar.Margin = new Padding(3, 2, 3, 2);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(82, 22);
@@ -128,17 +149,15 @@
             textBoxNombre.Name = "textBoxNombre";
             textBoxNombre.Size = new Size(182, 23);
             textBoxNombre.TabIndex = 4;
-            textBoxNombre.TextChanged += textBoxNombre_TextChanged;
             // 
             // lblRol
             // 
             lblRol.AutoSize = true;
-            lblRol.Location = new Point(22, 138);
+            lblRol.Location = new Point(24, 167);
             lblRol.Name = "lblRol";
             lblRol.Size = new Size(24, 15);
             lblRol.TabIndex = 3;
             lblRol.Text = "Rol";
-            lblRol.Click += lblRol_Click;
             // 
             // lblEmail
             // 
@@ -188,7 +207,7 @@
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
             // 
-            // UsuarioAMForm
+            // UsuarioDetalle
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -197,9 +216,8 @@
             Controls.Add(lblTituloNuevoEditarUsuario);
             Controls.Add(panel1);
             Margin = new Padding(3, 2, 3, 2);
-            Name = "UsuarioAMForm";
+            Name = "UsuarioDetalle";
             Text = "Administrador";
-            Load += UsuarioAMForm_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
@@ -222,5 +240,7 @@
         private ComboBox comboBoxRol;
         private Label lblIdUsuario;
         private Label lblId;
+        private TextBox textBoxContrasenia;
+        private Label lblContrasenia;
     }
 }

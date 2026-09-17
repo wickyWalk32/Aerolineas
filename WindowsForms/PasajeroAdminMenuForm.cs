@@ -15,30 +15,14 @@ namespace WindowsForms
 
         private void BtnCrearPasajero_Click(object sender, EventArgs e)
         {
-            try
-            {
-                // Especifica el constructor correcto si hay sobrecarga ambigua
-                var ventana = new PasajeroFormCreate();
+                var ventana = new PasajeroDetalle();
                 ventana.ShowDialog(this);
-            }
-            catch
-            {
-                MessageBox.Show("Formulario de creación de pasajero no disponible.", "No implementado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
         }
 
         private void BtnModificarPasajero_Click(object sender, EventArgs e)
         {
-            try
-            {
-                // Abrimos listado (desde ahí se puede implementar edición)
                 var ventana = new PasajeroListForm();
                 ventana.ShowDialog(this);
-            }
-            catch
-            {
-                MessageBox.Show("Formulario para modificar pasajero no disponible.", "No implementado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
         }
 
         private void BtnMostrarPasajeros_Click(object sender, EventArgs e)

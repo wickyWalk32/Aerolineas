@@ -8,28 +8,29 @@ namespace WebApi
         public static void MapUsuarioEndpoints(this WebApplication app)
         {
             // 1. OBTENER TODOS LOS USUARIOS
-            app.MapGet("/usuarios", () =>
+            app.MapGet("/usuarios", async (UsuarioService usuarioService) =>
             {
-                UsuarioService usuarioService = new UsuarioService();
-                var usuarios = usuarioService.ObtenerTodosLosUsuarios();
-                return Results.Ok(usuarios);
+                var usuariosDTO = await usuarioService.GetAllAsync();
+                return Results.Ok(usuariosDTO);
             })
             .WithName("GetAllUsuarios")
             .Produces<List<UsuarioDTO>>(StatusCodes.Status200OK)
             .WithOpenApi();
 
             // 2. CREAR UN NUEVO USUARIO (POST)
-            app.MapPost("/usuarios", (UsuarioDTO dto) =>
+            app.MapPost("/usuarios", async (UsuarioCreateDTO dto, UsuarioService usuarioService) =>
             {
-                if (dto == null)
+                try
                 {
-                    return Results.BadRequest(new { error = "Los datos del usuario son inválidos." });
+
+                    UsuarioDTO usuarioDTO = await usuarioService.AddAsync(dto);
+
+                    return Results.Created($"/usuarios/{usuarioDTO.Id}", usuarioDTO);
                 }
-
-                UsuarioService usuarioService = new UsuarioService();
-                usuarioService.CrearUsuario(dto);
-
-                return Results.Created($"/usuarios/{dto.Id}", dto);
+                catch (ArgumentException ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
             })
             .WithName("AddUsuario")
             .Produces<UsuarioDTO>(StatusCodes.Status201Created)
@@ -37,15 +38,14 @@ namespace WebApi
             .WithOpenApi();
 
             // 3. EDITAR UN USUARIO (PUT)
-            app.MapPut("/usuarios/{id}", (int id, UsuarioDTO dto) =>
+            app.MapPut("/usuarios/{id}", async (int id, UsuarioUpdateDTO dto, UsuarioService usuarioService) =>
             {
-                if (dto == null || dto.Id != id)
-                {
-                    return Results.BadRequest(new { error = "Datos incoherentes o inválidos." });
-                }
-
-                UsuarioService usuarioService = new UsuarioService();
-                usuarioService.ActualizarUsuario(dto);
+                //if (dto == null || dto.Id != id)
+                //{
+                //    return Results.BadRequest(new { error = "Datos incoherentes o inválidos." });
+                //}
+                System.Console.Write(dto);
+                await usuarioService.UpdateAsync(id,dto);
 
                 return Results.NoContent();
             })

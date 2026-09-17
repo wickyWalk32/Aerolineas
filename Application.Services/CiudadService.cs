@@ -27,6 +27,7 @@ namespace Application.Services
                 Nombre = ciudad.Nombre,
                 CodigoPostal = ciudad.CodigoPostal,
                 CodigoAeropuerto = ciudad.CodigoAeropuerto,
+                PaisId = ciudad.PaisId,
 
             }).ToList();
         }

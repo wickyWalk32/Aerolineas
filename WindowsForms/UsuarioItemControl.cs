@@ -1,5 +1,4 @@
-﻿using Domain.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,16 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DTOs;
 
 namespace WindowsForms
 {
     public partial class UsuarioItemControl : UserControl
     {
         // Eventos que escuchará el formulario padre (UsuarioAMForm.cs)
-        public event EventHandler<Usuario>? OnEditarClicked;
-        public event EventHandler<Usuario>? OnEliminarClicked;
+        public event EventHandler<UsuarioDTO>? OnEditarClicked;
+        public event EventHandler<UsuarioDTO>? OnEliminarClicked;
 
-        private Usuario? _usuarioActual;
+        private UsuarioDTO? _usuarioActual;
 
         public UsuarioItemControl()
         {
@@ -25,7 +25,7 @@ namespace WindowsForms
         }
 
         // Método para cargar la información en este ítem visual
-        public void CargarDatos(Usuario usuario)
+        public void CargarDatos(UsuarioDTO usuario)
         {
             _usuarioActual = usuario;
 
@@ -51,17 +51,6 @@ namespace WindowsForms
             {
                 OnEliminarClicked?.Invoke(this, _usuarioActual);
             }
-        }
-
-        // por error
-        private void lblIdUsuario_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void UsuarioItemControl_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

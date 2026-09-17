@@ -38,27 +38,7 @@ namespace Data
         }
 
         // AGREGAR
-        public void Agregar(UsuarioDTO usuarioDto) // Menu de Administrador - CRUD de Usuarios
-        {
 
-            // Validar duplicados antes de insertar
-            if (_context.Usuarios.Any(u => u.Email.ToLower() == usuarioDto.Email.ToLower()))
-            {
-                throw new InvalidOperationException($"El email '{usuarioDto.Email}' ya está registrado.");
-            }
-
-            Usuario usuario = new Usuario
-            {
-                Nombre = usuarioDto.Nombre,
-                Apellido = usuarioDto.Apellido,
-                Email = usuarioDto.Email,
-                Rol = usuarioDto.Rol,
-                ContraseniaHash = string.IsNullOrEmpty(usuarioDto.ContraseniaHash) ? "123456" : usuarioDto.ContraseniaHash
-            };
-
-            _context.Usuarios.Add(usuario);
-            _context.SaveChanges();
-        }
 
         public async Task AddAsync(Usuario usuario)
         {

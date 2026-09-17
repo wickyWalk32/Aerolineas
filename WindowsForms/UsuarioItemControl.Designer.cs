@@ -93,7 +93,6 @@
             lblIdUsuario.Size = new Size(17, 15);
             lblIdUsuario.TabIndex = 5;
             lblIdUsuario.Text = "id";
-            lblIdUsuario.Click += lblIdUsuario_Click;
             // 
             // UsuarioItemControl
             // 
@@ -109,7 +108,6 @@
             Margin = new Padding(3, 2, 3, 2);
             Name = "UsuarioItemControl";
             Size = new Size(633, 36);
-            Load += UsuarioItemControl_Load;
             ResumeLayout(false);
             PerformLayout();
         }
