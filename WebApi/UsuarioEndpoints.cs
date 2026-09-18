@@ -55,9 +55,8 @@ namespace WebApi
             .WithOpenApi();
 
             // 4. ELIMINAR UN USUARIO (DELETE)
-            app.MapDelete("/usuarios/{id}", (int id) =>
+            app.MapDelete("/usuarios/{id}", async (int id, UsuarioService usuarioService) =>
             {
-                UsuarioService usuarioService = new UsuarioService();
                 usuarioService.EliminarUsuario(id);
 
                 return Results.NoContent();
@@ -67,14 +66,13 @@ namespace WebApi
             .WithOpenApi();
 
             // 5. LOGIN DE ADMINISTRADOR
-            app.MapPost("/usuarios/login", (LoginRequestDTO request) =>
+            app.MapPost("/usuarios/login", (LoginRequestDTO request, UsuarioService usuarioService) =>
             {
                 if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Contrasenia))
                 {
                     return Results.BadRequest(new LoginResultDTO { Exitoso = false, Mensaje = "Debe ingresar email y contraseña." });
                 }
 
-                UsuarioService usuarioService = new UsuarioService();
                 var resultado = usuarioService.ValidarLoginAdmin(request);
 
                 if (!resultado.Exitoso)

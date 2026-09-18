@@ -15,15 +15,15 @@ namespace Application.Services
         el código.
         */
 
-        private readonly IUsuarioRepository _repo;
 
         // Menu de Administrador - CRUD de Usuarios
-        private readonly UsuarioRepository? _repository;
+        private readonly IUsuarioRepository _repository;
+
 
         // Constructor agregado para Menu de Administrador - CRUD de Usuarios
-        public UsuarioService()
+        public UsuarioService(IUsuarioRepository usuarioRepository)
         {
-            _repository = new UsuarioRepository();
+            _repository = usuarioRepository;
         }
 
         // LOGIN
@@ -48,7 +48,7 @@ namespace Application.Services
             {
                 return new LoginResultDTO { Exitoso = false, Mensaje = "Acceso denegado: Se requieren permisos de Administrador." };
             }
-
+            
             return new LoginResultDTO
             {
                 Exitoso = true,
@@ -84,14 +84,11 @@ namespace Application.Services
         }
 
 
-        public UsuarioService(IUsuarioRepository repo)
-        {
-            _repo = repo;
-        }
+        
 
         public async Task<List<UsuarioDTO>> GetAllAsync()
         {
-            var usuarios = await _repo.GetAllAsync();
+            var usuarios = await _repository.GetAllAsync();
 
             return usuarios.Select(usuario => new UsuarioDTO
             {
@@ -106,7 +103,7 @@ namespace Application.Services
 
         public async Task<UsuarioDTO?> GetByIdAsync(int id)
         {
-            var usuario = await _repo.GetByIdAsync(id);
+            var usuario = await _repository.GetByIdAsync(id);
             if (usuario == null) return null;
             return  new UsuarioDTO
                 {
@@ -123,7 +120,7 @@ namespace Application.Services
                                             usuarioCreateDTO.Email,
                                             usuarioCreateDTO.ContraseniaHash,
                                             usuarioCreateDTO.Rol);
-           await _repo.AddAsync(usuario);
+           await _repository.AddAsync(usuario);
             UsuarioDTO usuarioDTO = new UsuarioDTO
             {
                 Id = usuario.Id,
@@ -140,7 +137,7 @@ namespace Application.Services
         
         public async Task<bool> UpdateAsync(int id, UsuarioUpdateDTO usuarioUpdateDTO)
         {
-            var usuario = await _repo.GetByIdAsync(id);
+            var usuario = await _repository.GetByIdAsync(id);
             if (usuario == null)
             {
                 return false;
@@ -157,21 +154,21 @@ namespace Application.Services
                 usuario.SetContraseniaHash(usuarioUpdateDTO.ContraseniaHash);
             }
 
-            await _repo.UpdateAsync(usuario);
+            await _repository.UpdateAsync(usuario);
             return true;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var user = await _repo.GetByIdAsync(id);
+            var user = await _repository.GetByIdAsync(id);
             if (user == null) return false;
 
-            await _repo.DeleteAsync(user);
+            await _repository.DeleteAsync(user);
             return true;
         }
 
         public Task<bool> ExistsAsync(int id)
-            => _repo.ExistsAsync(id);
+            => _repository.ExistsAsync(id);
 
     }
 }

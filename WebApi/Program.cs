@@ -31,11 +31,24 @@ builder.Services.AddScoped<IPaisRepository, PaisRepository>();
 builder.Services.AddScoped<PaisService>();
 builder.Services.AddScoped<ICiudadRepository, CiudadRepository>();
 builder.Services.AddScoped<CiudadService>();
-//builder.Services.AddControllers();
+
 
 // Add Dependency Injection
 
 var app = builder.Build();
+
+
+/* ----------------------------------
+ * INICIALIZACIÓN DE LA BASE DE DATOS
+ */
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    //context.Database.EnsureDeleted();
+    context.Database.EnsureCreated(); // Crea la BD y aplica configuraciones iniciales
+}
+
 
 /* EJECUCIÓN Y RUTAS */
 

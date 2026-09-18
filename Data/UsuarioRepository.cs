@@ -10,15 +10,24 @@ namespace Data
     {
         private readonly AppDbContext _context;
 
-        public UsuarioRepository()
+        public UsuarioRepository(AppDbContext context)
         {
-            _context = new AppDbContext();
+            _context = context;
         }
 
         // LOGIN
-        public Usuario? ObtenerPorEmail(string email)
+        public LoginResultDTO? ObtenerPorEmail(string email)
         {
-            return _context.Usuarios.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+            Usuario usuario = _context.Usuarios.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+
+            LoginResultDTO usuarioLoginDto = new LoginResultDTO();
+            usuarioLoginDto.Nombre = usuario.Nombre;
+            usuarioLoginDto.Apellido = usuario.Apellido;
+            usuarioLoginDto.Email = usuario.Email;
+            usuarioLoginDto.ContraseniaHash = usuario.ContraseniaHash;
+            usuarioLoginDto.Rol = usuario.Rol;
+
+            return usuarioLoginDto;
         }
 
         // LEER

@@ -1,4 +1,5 @@
 ﻿using Domain.Model;
+using DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,10 @@ namespace Data
             Task UpdateAsync(Usuario usuario);
             Task DeleteAsync(Usuario usuario);
             Task<bool> ExistsAsync(int id);
-        }
+            LoginResultDTO ObtenerPorEmail(string email);
+            List<Usuario> ObtenerTodos();
+            void Actualizar(UsuarioDTO usuarioDto);
+            void Eliminar(int id);
+    }
     
 }

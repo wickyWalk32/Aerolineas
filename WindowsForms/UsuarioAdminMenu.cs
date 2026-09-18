@@ -96,8 +96,10 @@ namespace WindowsForms
                 try
                 {
                     // HTTP DELETE a api/usuarios/{id}
-                    HttpResponseMessage response = await _httpClient.DeleteAsync($"/usuarios/{usuarioAEliminar.Id}");
+                    // HttpResponseMessage response = await _httpClient.DeleteAsync($"/usuarios/{usuarioAEliminar.Id}");
 
+                    HttpResponseMessage response = await Program.HttpClient.DeleteAsync($"/usuarios/{usuarioAEliminar.Id}");
+                    
                     if (response.IsSuccessStatusCode)
                     {
                         MessageBox.Show("Usuario eliminado exitosamente.");

@@ -91,7 +91,7 @@ namespace WindowsForms
 
             if (resultado == DialogResult.Yes)
             {
-                //Application.Exit();
+                Application.Exit();
             }
         }
 

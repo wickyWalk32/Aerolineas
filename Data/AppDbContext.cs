@@ -19,16 +19,8 @@ namespace Data
         public DbSet<Avion> Aviones { get; set; }
         public DbSet<Asiento> Asientos { get; set; }
 
-        internal AppDbContext()
-        {
-            //this.Database.EnsureDeleted();
-            this.Database.EnsureCreated();
-        }
-
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            //this.Database.EnsureDeleted();
-            this.Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -48,6 +40,10 @@ namespace Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+
+            modelBuilder.ApplyConfiguration(new PaisConfiguration());
+
 
             modelBuilder.Entity<Usuario>(entity =>
             {
@@ -210,10 +206,6 @@ namespace Data
 
                 entity.Navigation(entityPais => entityPais.Ciudades)
                     .HasField("_ciudades");
-
-                entity.HasData(
-                    new { Id = 1, Nombre = "Argentina" },
-                    new { Id = 2, Nombre = "Brasil" });
             });
 
             modelBuilder.Entity<Ciudad>(entityCiudad =>

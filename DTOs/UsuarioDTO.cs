@@ -15,6 +15,7 @@
         public string Mensaje { get; set; } = string.Empty;
         public string Nombre { get; set; } = string.Empty;
         public string Apellido { get; set; } = string.Empty;
+        public string ContraseniaHash { get; set; } = string.Empty;
         public string? Email { get; set; }
         public string? Rol { get; set; }
     }

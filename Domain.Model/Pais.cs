@@ -29,11 +29,26 @@ namespace Domain.Model
             SetNombre(nombre);
         }
 
-        // Métodos de la clase Pais
+        public Pais(int id, string nombre)
+        {
+            this.SetId(id);
+            this.SetNombre(nombre);
+        }
+
+        // <<< MÉTODOS: SETTERS >>>
+
+        public void SetId(int id)
+        {
+            if (id < 0)
+                throw new ArgumentException("Id de país inválido.");
+            this.Id = id;
+        }
 
         public void SetNombre(string nombre)
         {
-            Nombre = nombre;
+            if (string.IsNullOrWhiteSpace(nombre))
+                throw new ArgumentException("Nombre de país inválido.");
+            this.Nombre = nombre;
         }
 
     }
