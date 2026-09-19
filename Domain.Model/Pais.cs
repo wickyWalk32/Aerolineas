@@ -8,17 +8,20 @@ namespace Domain.Model
 {
     public class Pais
     {
-        // Atributos de la clase Pais
 
-        public int Id { get; set; }
+        // <<< ATRIBUTOS >>>
 
-        public string Nombre { get; set; } = string.Empty;
+        public int Id { get; private set; }
+        public string Nombre { get; private set; } = string.Empty;
 
-        private List<Ciudad> _ciudades = new();
+        // <<< ATRIBUTOS DE NAVEGACIÓN DEL MODELO >>>
 
+        // 1 Pais > Muchas Ciudades
+
+        private readonly List<Ciudad> _ciudades = new(); // new List<Ciudad>() ?
         public IReadOnlyCollection<Ciudad> Ciudades => _ciudades.AsReadOnly();
-        
-        // Constructores de la clase Pais
+
+        // <<< CONSTRUCTORES >>>
 
         public Pais()
         {
@@ -26,7 +29,7 @@ namespace Domain.Model
 
         public Pais(string nombre)
         {
-            SetNombre(nombre);
+            this.SetNombre(nombre);
         }
 
         public Pais(int id, string nombre)
@@ -50,6 +53,20 @@ namespace Domain.Model
                 throw new ArgumentException("Nombre de país inválido.");
             this.Nombre = nombre;
         }
+
+        public void AddCiudad(Ciudad ciudad)
+        {
+            ArgumentNullException.ThrowIfNull(ciudad);
+            _ciudades.Add(ciudad);
+        }
+
+        public void RemoveCiudad(Ciudad ciudad)
+        {
+            ArgumentNullException.ThrowIfNull(ciudad);
+            _ciudades.Remove(ciudad);
+        }
+
+        // <<< DEMÁS MÉTODOS >>>
 
     }
 }

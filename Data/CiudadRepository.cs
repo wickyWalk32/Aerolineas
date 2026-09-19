@@ -8,21 +8,25 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public class CiudadRepository:ICiudadRepository
+    public class CiudadRepository : ICiudadRepository
     {
         private readonly AppDbContext _context;
+        
         public CiudadRepository(AppDbContext context)
         {
             _context = context;
         }
+
         public async Task<List<Ciudad>> GetAllAsync()
         {
-            return await _context.Ciudades.ToListAsync();
+            return await _context.Ciudades.Include(c => c.Pais).ToListAsync();
         }
 
 
         public async Task<Ciudad?> GetByIdAsync(int id)
-            => await _context.Ciudades.FindAsync(id);
+        { 
+            return await _context.Ciudades.Include(c => c.Pais).FirstOrDefaultAsync(c => c.Id == id);
+        }
 
         public async Task AddAsync(Ciudad ciudad)
         {
@@ -41,5 +45,6 @@ namespace Data
             _context.Ciudades.Remove(ciudad);
             await _context.SaveChangesAsync();
         }
+
     }
 }

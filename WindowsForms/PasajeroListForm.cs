@@ -53,7 +53,25 @@ namespace WindowsForms
 
         private void dgvPasajeros_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0)
+                return;
 
+            var row = dgvPasajeros.Rows[e.RowIndex];
+
+            PasajeroUpdateDTO pasajero = new PasajeroUpdateDTO
+            {
+                Id = (int)Convert.ToInt32(row.Cells["colId"].Value),
+                Tipo = (char)row.Cells["colTipo"].Value,
+                Nombre = (string)row.Cells["colNombre"].Value,
+                Apellido = (string)row.Cells["colApellido"].Value,
+                TipoDocumento = (string)row.Cells["colTipoDoc"].Value,
+                NroDocumento = (string)row.Cells["colNroDoc"].Value
+            };
+
+
+            // Modificar Pasajero
+            var pasajeroDetalle = new PasajeroDetalle(pasajero);
+            pasajeroDetalle.Show();
         }
     }
 }

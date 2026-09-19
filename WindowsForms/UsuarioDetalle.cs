@@ -125,9 +125,8 @@ namespace WindowsForms
                     MessageBox.Show($"Error de conexión: {ex.Message}");
                 }
             }
-
-
         }
+
         public void ClearForm()
         {
             textBoxNombre.Clear();

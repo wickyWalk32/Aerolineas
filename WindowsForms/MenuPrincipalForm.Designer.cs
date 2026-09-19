@@ -49,9 +49,9 @@ namespace WindowsForms
             // 
             lblTituloMenuAdmin.AutoSize = true;
             lblTituloMenuAdmin.Font = new Font("Segoe UI", 16F);
-            lblTituloMenuAdmin.Location = new Point(27, 20);
+            lblTituloMenuAdmin.Location = new Point(31, 27);
             lblTituloMenuAdmin.Name = "lblTituloMenuAdmin";
-            lblTituloMenuAdmin.Size = new Size(243, 30);
+            lblTituloMenuAdmin.Size = new Size(298, 37);
             lblTituloMenuAdmin.TabIndex = 0;
             lblTituloMenuAdmin.Text = "Menú de Administrador";
             // 
@@ -62,18 +62,16 @@ namespace WindowsForms
             panel1.Controls.Add(lblTituloPanelAcciones);
             panel1.Controls.Add(btnAdministrarUsuarios);
             panel1.Controls.Add(btnAdministrarPasajeros);
-            panel1.Location = new Point(214, 83);
-            panel1.Margin = new Padding(3, 2, 3, 2);
+            panel1.Location = new Point(245, 111);
             panel1.Name = "panel1";
-            panel1.Size = new Size(261, 181);
+            panel1.Size = new Size(298, 241);
             panel1.TabIndex = 1;
             // 
             // btnAdministrarCiudades
             // 
-            btnAdministrarCiudades.Location = new Point(60, 113);
-            btnAdministrarCiudades.Margin = new Padding(3, 2, 3, 2);
+            btnAdministrarCiudades.Location = new Point(65, 126);
             btnAdministrarCiudades.Name = "btnAdministrarCiudades";
-            btnAdministrarCiudades.Size = new Size(144, 22);
+            btnAdministrarCiudades.Size = new Size(165, 29);
             btnAdministrarCiudades.TabIndex = 2;
             btnAdministrarCiudades.Text = "Administrar Ciudades";
             btnAdministrarCiudades.UseVisualStyleBackColor = true;
@@ -83,18 +81,17 @@ namespace WindowsForms
             // 
             lblTituloPanelAcciones.AutoSize = true;
             lblTituloPanelAcciones.Font = new Font("Segoe UI", 12F);
-            lblTituloPanelAcciones.Location = new Point(66, 11);
+            lblTituloPanelAcciones.Location = new Point(103, 26);
             lblTituloPanelAcciones.Name = "lblTituloPanelAcciones";
-            lblTituloPanelAcciones.Size = new Size(71, 21);
+            lblTituloPanelAcciones.Size = new Size(89, 28);
             lblTituloPanelAcciones.TabIndex = 3;
             lblTituloPanelAcciones.Text = "Acciones";
             // 
             // btnAdministrarUsuarios
             // 
-            btnAdministrarUsuarios.Location = new Point(60, 45);
-            btnAdministrarUsuarios.Margin = new Padding(3, 2, 3, 2);
+            btnAdministrarUsuarios.Location = new Point(65, 76);
             btnAdministrarUsuarios.Name = "btnAdministrarUsuarios";
-            btnAdministrarUsuarios.Size = new Size(144, 22);
+            btnAdministrarUsuarios.Size = new Size(165, 29);
             btnAdministrarUsuarios.TabIndex = 0;
             btnAdministrarUsuarios.Text = "Administrar Usuarios";
             btnAdministrarUsuarios.UseVisualStyleBackColor = true;
@@ -102,10 +99,9 @@ namespace WindowsForms
             // 
             // btnAdministrarPasajeros
             // 
-            btnAdministrarPasajeros.Location = new Point(60, 146);
-            btnAdministrarPasajeros.Margin = new Padding(3, 2, 3, 2);
+            btnAdministrarPasajeros.Location = new Point(65, 178);
             btnAdministrarPasajeros.Name = "btnAdministrarPasajeros";
-            btnAdministrarPasajeros.Size = new Size(144, 22);
+            btnAdministrarPasajeros.Size = new Size(165, 29);
             btnAdministrarPasajeros.TabIndex = 4;
             btnAdministrarPasajeros.Text = "Administrar Pasajeros";
             btnAdministrarPasajeros.UseVisualStyleBackColor = true;
@@ -113,10 +109,9 @@ namespace WindowsForms
             // 
             // btnSalir
             // 
-            btnSalir.Location = new Point(566, 26);
-            btnSalir.Margin = new Padding(3, 2, 3, 2);
+            btnSalir.Location = new Point(647, 35);
             btnSalir.Name = "btnSalir";
-            btnSalir.Size = new Size(83, 22);
+            btnSalir.Size = new Size(95, 29);
             btnSalir.TabIndex = 2;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
@@ -125,32 +120,31 @@ namespace WindowsForms
             // lblNombreApellido
             // 
             lblNombreApellido.AutoSize = true;
-            lblNombreApellido.Location = new Point(451, 29);
+            lblNombreApellido.Location = new Point(515, 39);
             lblNombreApellido.Name = "lblNombreApellido";
-            lblNombreApellido.Size = new Size(98, 15);
+            lblNombreApellido.Size = new Size(125, 20);
             lblNombreApellido.TabIndex = 3;
             lblNombreApellido.Text = "Nombre Apellido";
             // 
             // lblAdmin
             // 
             lblAdmin.AutoSize = true;
-            lblAdmin.Location = new Point(405, 29);
+            lblAdmin.Location = new Point(463, 39);
             lblAdmin.Name = "lblAdmin";
-            lblAdmin.Size = new Size(46, 15);
+            lblAdmin.Size = new Size(56, 20);
             lblAdmin.TabIndex = 4;
             lblAdmin.Text = "Admin:";
             // 
             // MenuPrincipalForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(700, 337);
+            ClientSize = new Size(800, 449);
             Controls.Add(lblAdmin);
             Controls.Add(lblNombreApellido);
             Controls.Add(btnSalir);
             Controls.Add(panel1);
             Controls.Add(lblTituloMenuAdmin);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "MenuPrincipalForm";
             Text = "Administrador";
             panel1.ResumeLayout(false);

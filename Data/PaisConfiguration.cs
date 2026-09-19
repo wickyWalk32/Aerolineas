@@ -19,7 +19,7 @@ namespace Data
         {
 
             // Configuración de la tabla
-            builder.ToTable("paises");
+            builder.ToTable("Paises");
             builder.HasKey(pais => pais.Id);
             builder.Property(pais => pais.Nombre).IsRequired().HasMaxLength(100);
 

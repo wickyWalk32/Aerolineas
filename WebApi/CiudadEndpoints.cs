@@ -1,5 +1,7 @@
 ﻿using Application.Services;
 using DTOs;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Builder;
 
 namespace WebApi
 {
@@ -7,6 +9,19 @@ namespace WebApi
     {
         public static void MapCiudadEndpoints(this WebApplication app)
         {
+
+            app.MapGet("/ciudades", async (CiudadService ciudadService) =>
+            {
+
+                var dtos = await ciudadService.GetAllAsync();
+
+                return Results.Ok(dtos);
+            })
+            .WithName("GetAllCiudades")
+            .Produces<List<CiudadDTO>>(StatusCodes.Status200OK)
+            .WithOpenApi();
+            //.RequireAuthorization("CiudadesLeer");
+
             app.MapGet("/ciudades/{id}", async (int id, CiudadService ciudadService) =>
             {
                 CiudadDTO? dto = await ciudadService.GetByIdAsync(id);
@@ -22,19 +37,7 @@ namespace WebApi
             .Produces<CiudadDTO>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi();
-            //.RequireAuthorization("CiudadsLeer");
-
-            app.MapGet("/ciudades", async (CiudadService ciudadService) =>
-            {
-
-                var dtos = await ciudadService.GetAllAsync();
-
-                return Results.Ok(dtos);
-            })
-            .WithName("GetAllCiudads")
-            .Produces<List<CiudadDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi();
-            //.RequireAuthorization("CiudadsLeer");
+            //.RequireAuthorization("CiudadesLeer");
 
             app.MapPost("/ciudades", async (CiudadCreateDTO dto, CiudadService ciudadService) =>
             {
@@ -54,14 +57,14 @@ namespace WebApi
             .Produces<CiudadDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi();
-            //.RequireAuthorization("CiudadsAgregar");
+            //.RequireAuthorization("CiudadesAgregar");
 
-            app.MapPut("/ciudades", async (CiudadUpdateDTO dto, CiudadService ciudadService) =>
+            app.MapPut("/ciudades/{id}", async (int id, CiudadUpdateDTO dto, CiudadService ciudadService) =>
             {
                 try
                 {
 
-                    var found = await ciudadService.UpdateAsync(dto.Id, dto);
+                    var found = await ciudadService.UpdateAsync(id,dto);
 
                     if (!found)
                     {
@@ -80,7 +83,7 @@ namespace WebApi
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi();
-            //.RequireAuthorization("CiudadsActualizar");
+            //.RequireAuthorization("CiudadesActualizar");
 
             app.MapDelete("/ciudades/{id}", async (int id, CiudadService ciudadService) =>
             {
@@ -98,7 +101,7 @@ namespace WebApi
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi();
-            //.RequireAuthorization("CiudadsEliminar");
+            //.RequireAuthorization("CiudadesEliminar");
         }
     }
 }

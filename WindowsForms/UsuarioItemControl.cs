@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DTOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,12 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DTOs;
 
 namespace WindowsForms
 {
     public partial class UsuarioItemControl : UserControl
     {
+
         // Eventos que escuchará el formulario padre (UsuarioAMForm.cs)
         public event EventHandler<UsuarioDTO>? OnEditarClicked;
         public event EventHandler<UsuarioDTO>? OnEliminarClicked;

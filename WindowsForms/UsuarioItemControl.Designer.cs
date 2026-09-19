@@ -39,27 +39,26 @@
             // lblNombreApellido
             // 
             lblNombreApellido.AutoSize = true;
-            lblNombreApellido.Location = new Point(84, 10);
+            lblNombreApellido.Location = new Point(96, 13);
             lblNombreApellido.Name = "lblNombreApellido";
-            lblNombreApellido.Size = new Size(103, 15);
+            lblNombreApellido.Size = new Size(136, 20);
             lblNombreApellido.TabIndex = 0;
-            lblNombreApellido.Text = "nombre y apellido";
+            lblNombreApellido.Text = "Nombre y Apellido";
             // 
             // lblEmail
             // 
             lblEmail.AutoSize = true;
-            lblEmail.Location = new Point(228, 10);
+            lblEmail.Location = new Point(261, 13);
             lblEmail.Name = "lblEmail";
-            lblEmail.Size = new Size(36, 15);
+            lblEmail.Size = new Size(46, 20);
             lblEmail.TabIndex = 1;
-            lblEmail.Text = "email";
+            lblEmail.Text = "Email";
             // 
             // btnEditarUsuario
             // 
-            btnEditarUsuario.Location = new Point(471, 8);
-            btnEditarUsuario.Margin = new Padding(3, 2, 3, 2);
+            btnEditarUsuario.Location = new Point(538, 11);
             btnEditarUsuario.Name = "btnEditarUsuario";
-            btnEditarUsuario.Size = new Size(65, 22);
+            btnEditarUsuario.Size = new Size(74, 29);
             btnEditarUsuario.TabIndex = 2;
             btnEditarUsuario.Text = "Editar";
             btnEditarUsuario.UseVisualStyleBackColor = true;
@@ -67,10 +66,9 @@
             // 
             // btnEliminarUsuario
             // 
-            btnEliminarUsuario.Location = new Point(541, 8);
-            btnEliminarUsuario.Margin = new Padding(3, 2, 3, 2);
+            btnEliminarUsuario.Location = new Point(618, 11);
             btnEliminarUsuario.Name = "btnEliminarUsuario";
-            btnEliminarUsuario.Size = new Size(62, 22);
+            btnEliminarUsuario.Size = new Size(71, 29);
             btnEliminarUsuario.TabIndex = 3;
             btnEliminarUsuario.Text = "Eliminar";
             btnEliminarUsuario.UseVisualStyleBackColor = true;
@@ -79,24 +77,24 @@
             // lblRol
             // 
             lblRol.AutoSize = true;
-            lblRol.Location = new Point(334, 10);
+            lblRol.Location = new Point(437, 13);
             lblRol.Name = "lblRol";
-            lblRol.Size = new Size(21, 15);
+            lblRol.Size = new Size(31, 20);
             lblRol.TabIndex = 4;
-            lblRol.Text = "rol";
+            lblRol.Text = "Rol";
             // 
             // lblIdUsuario
             // 
             lblIdUsuario.AutoSize = true;
-            lblIdUsuario.Location = new Point(29, 10);
+            lblIdUsuario.Location = new Point(33, 13);
             lblIdUsuario.Name = "lblIdUsuario";
-            lblIdUsuario.Size = new Size(17, 15);
+            lblIdUsuario.Size = new Size(22, 20);
             lblIdUsuario.TabIndex = 5;
-            lblIdUsuario.Text = "id";
+            lblIdUsuario.Text = "Id";
             // 
             // UsuarioItemControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BorderStyle = BorderStyle.FixedSingle;
             Controls.Add(lblIdUsuario);
@@ -105,9 +103,8 @@
             Controls.Add(btnEditarUsuario);
             Controls.Add(lblEmail);
             Controls.Add(lblNombreApellido);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "UsuarioItemControl";
-            Size = new Size(633, 36);
+            Size = new Size(723, 48);
             ResumeLayout(false);
             PerformLayout();
         }

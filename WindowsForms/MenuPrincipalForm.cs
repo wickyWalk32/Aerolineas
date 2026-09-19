@@ -77,8 +77,8 @@ namespace WindowsForms
 
         private void btnAdministrarCiudades_Click(object sender, EventArgs e)
         {
-            CiudadDetalle ventanaCiudad = new CiudadDetalle(this);
-            ventanaCiudad.Show();
+            CiudadAdminMenu ventanaAdminCiudades = new CiudadAdminMenu(this);
+            ventanaAdminCiudades.Show();
             this.Hide();
         }
     }

@@ -35,8 +35,8 @@ namespace WindowsForms
 
 
             // VENTANA QUE SE ABRE AL INICIAR LA APLICACION
-            Application.Run(new LoginForm());
-            //Application.Run(new MenuPrincipalForm());
+            //Application.Run(new LoginForm());
+            Application.Run(new MenuPrincipalForm());
         }
     }
 }

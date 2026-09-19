@@ -14,5 +14,6 @@ namespace Data
         Task AddAsync(Ciudad ciudad);
         Task UpdateAsync(Ciudad ciudad);
         Task DeleteAsync(Ciudad ciudad);
+
     }
 }

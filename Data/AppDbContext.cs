@@ -85,23 +85,23 @@ namespace Data
 
                 entity.HasData(
                     new Usuario
-                    {
-                        Id = 1, 
-                        Nombre = "alumno",
-                        Apellido = "net",
-                        Email = "alum@email.com",
-                        ContraseniaHash = "net123",
-                        Rol = "admin"
-                    },
+                    (
+                        1, 
+                        "alumno",
+                        "net",
+                        "alum@email.com",
+                        "net123",
+                        "admin"
+                    ),
                     new Usuario
-                    {
-                        Id = 2, 
-                        Nombre = "usuario",
-                        Apellido = "comun",
-                        Email = "usu@email.com",
-                        ContraseniaHash = "net321",
-                        Rol = "usuario"
-                    }
+                    (
+                        2,
+                        "usuario",
+                        "comun",
+                        "usu@email.com",
+                        "net321",
+                        "usuario"
+                    )
                 );
 
             });
@@ -215,19 +215,16 @@ namespace Data
                 entityCiudad.Property(ciudad => ciudad.Id).ValueGeneratedOnAdd();
 
                 entityCiudad.Property(ciudad => ciudad.Nombre)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                            .IsRequired()
+                            .HasMaxLength(100);
 
                 // Relación Pais -> Ciudades (1 a muchos)
                 entityCiudad.HasOne(ciudad => ciudad.Pais)
                             .WithMany(pais => pais.Ciudades)
                             .HasForeignKey(ciudad => ciudad.PaisId);
 
-                entityCiudad.Navigation(ciudad => ciudad.Pais)
-                    .HasField("_pais");
-
             });
-
+            /*
             modelBuilder.Entity<Asiento>(entity =>
             {
                 // Primary Key
@@ -263,8 +260,7 @@ namespace Data
                     .HasForeignKey(v => v.DestinoId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
-
-
+            */
             modelBuilder.Entity<Avion>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -305,6 +301,7 @@ namespace Data
                 entity.Navigation(e => e.Avion)
                     .HasField("_avion");
             });
+
             modelBuilder.Entity<Vuelo>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -333,6 +330,7 @@ namespace Data
                 entity.Navigation(e => e.Destino)
                     .HasField("_destino");             
             });
+
         }
     }
 }

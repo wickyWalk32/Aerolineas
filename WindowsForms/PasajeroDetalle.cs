@@ -6,9 +6,40 @@ namespace WindowsForms
 {
     public partial class PasajeroDetalle : Form
     {
+        private bool _esEdicion = false;
+        private int _pasajeroId = 0;
+
+
         public PasajeroDetalle()
         {
             InitializeComponent();
+        }
+
+        public PasajeroDetalle(PasajeroUpdateDTO pasajeroUpdateDTO)
+        {
+            
+            InitializeComponent();
+
+            _esEdicion = true;
+            _pasajeroId = pasajeroUpdateDTO.Id;
+
+            string tipoPas = "";
+
+            if (pasajeroUpdateDTO.Tipo == 'A') 
+            {
+                tipoPas = "Adulto";
+            }
+
+            if (pasajeroUpdateDTO.Tipo == 'M')
+            {
+                tipoPas = "Menor";
+            }
+
+            cboTipoPasajero.Text = tipoPas; //arreglar
+            txtNombre.Text = pasajeroUpdateDTO.Nombre;
+            txtApellido.Text = pasajeroUpdateDTO.Apellido;
+            cboTipoDocumento.Text = pasajeroUpdateDTO.TipoDocumento;
+            txtNroDocumento.Text = pasajeroUpdateDTO.NroDocumento;
         }
 
         private void txtNroDocumento_KeyPress(object sender, KeyPressEventArgs e)
@@ -24,26 +55,57 @@ namespace WindowsForms
             }
         }
         private async void btnGuardar_Click(object sender, EventArgs e) {
-            PasajeroCreateDTO pasajero = new PasajeroCreateDTO
+            if (!_esEdicion)
             {
-                Tipo = cboTipoPasajero.Text[0],
-                Nombre = txtNombre.Text,
-                Apellido = txtApellido.Text,
-                TipoDocumento = cboTipoDocumento.Text,
-                NroDocumento = txtNroDocumento.Text
-            };
+                PasajeroCreateDTO pasajero = new PasajeroCreateDTO
+                {
+                    Tipo = cboTipoPasajero.Text[0],
+                    Nombre = txtNombre.Text,
+                    Apellido = txtApellido.Text,
+                    TipoDocumento = cboTipoDocumento.Text,
+                    NroDocumento = txtNroDocumento.Text
+                };
 
-            var request = await Program.HttpClient.PostAsJsonAsync<PasajeroCreateDTO>("pasajeros", pasajero);
+                var request = await Program.HttpClient.PostAsJsonAsync<PasajeroCreateDTO>("pasajeros", pasajero);
 
-            if (request.IsSuccessStatusCode)
-            {
-                ClearForm();
-                MessageBox.Show("Pasajero Guardado", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (request.IsSuccessStatusCode)
+                {
+                    ClearForm();
+                    MessageBox.Show("Pasajero Guardado", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Error al guardar pasajero", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                }
             }
             else
             {
-                MessageBox.Show("Error al guardar pasajero", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (_pasajeroId == 0)
+                {
+                    return;
+                }
+                PasajeroUpdateDTO pasajero = new PasajeroUpdateDTO
+                {
+                    Id = _pasajeroId,
+                    Tipo = cboTipoPasajero.Text[0],
+                    Nombre = txtNombre.Text,
+                    Apellido = txtApellido.Text,
+                    TipoDocumento = cboTipoDocumento.Text,
+                    NroDocumento = txtNroDocumento.Text
+                };
+                                                      
+                var request = await Program.HttpClient.PutAsJsonAsync<PasajeroUpdateDTO>($"pasajeros/{_pasajeroId}", pasajero);
 
+                if (request.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Cambios Guardados", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Error al guardar pasajero", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                }
             }
 
 

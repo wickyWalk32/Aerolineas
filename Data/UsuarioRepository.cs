@@ -21,6 +21,7 @@ namespace Data
             Usuario usuario = _context.Usuarios.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
 
             LoginResultDTO usuarioLoginDto = new LoginResultDTO();
+            
             usuarioLoginDto.Nombre = usuario.Nombre;
             usuarioLoginDto.Apellido = usuario.Apellido;
             usuarioLoginDto.Email = usuario.Email;
@@ -62,10 +63,10 @@ namespace Data
             
             if (usuarioDb != null)
             {
-                usuarioDb.Nombre = usuarioDto.Nombre;
-                usuarioDb.Apellido = usuarioDto.Apellido;
-                usuarioDb.Email = usuarioDto.Email;
-                usuarioDb.Rol = usuarioDto.Rol;
+                usuarioDb.SetNombre(usuarioDto.Nombre);
+                usuarioDb.SetApellido(usuarioDto.Apellido);
+                usuarioDb.SetEmail(usuarioDto.Email);
+                usuarioDb.SetRol(usuarioDto.Rol);
 
                 _context.SaveChanges();
             }

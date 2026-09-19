@@ -55,12 +55,12 @@ namespace WebApi
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi();
 
-            app.MapPut("/pasajeros", async (PasajeroUpdateDTO dto, PasajeroService pasajeroService) =>
+            app.MapPut("/pasajeros/{id}", async (int id, PasajeroUpdateDTO dto, PasajeroService pasajeroService) =>
             {
                 try
                 {
 
-                    var found = await pasajeroService.UpdateAsync(dto.Id, dto);
+                    var found = await pasajeroService.UpdateAsync(id, dto);
 
                     if (!found)
                     {

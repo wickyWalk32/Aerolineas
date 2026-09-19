@@ -66,9 +66,9 @@ namespace WindowsForms
         // Abrir UsuarioDetalle
         private void btnNuevoUsuario_Click(object sender, EventArgs e)
         {
-            UsuarioDetalle usuarioDetalleForm = new UsuarioDetalle(this);
+            UsuarioDetalle usuarioDetalle = new UsuarioDetalle(this);
             this.Hide();
-            usuarioDetalleForm.Show();
+            usuarioDetalle.Show();
         }
 
         // Evento para Editar: relacionado con el boton Editar de la tarjeta genérica UsuarioItemControl.cs
@@ -95,9 +95,7 @@ namespace WindowsForms
             {
                 try
                 {
-                    // HTTP DELETE a api/usuarios/{id}
-                    // HttpResponseMessage response = await _httpClient.DeleteAsync($"/usuarios/{usuarioAEliminar.Id}");
-
+                    // HTTP DELETE a /usuarios/{id}
                     HttpResponseMessage response = await Program.HttpClient.DeleteAsync($"/usuarios/{usuarioAEliminar.Id}");
                     
                     if (response.IsSuccessStatusCode)
@@ -125,5 +123,6 @@ namespace WindowsForms
             // Cerramos la pantalla actual de Administrar Usuarios
             this.Close();
         }
+
     }
 }

@@ -68,19 +68,26 @@ namespace WebApi
             // 5. LOGIN DE ADMINISTRADOR
             app.MapPost("/usuarios/login", (LoginRequestDTO request, UsuarioService usuarioService) =>
             {
-                if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Contrasenia))
+                try
                 {
-                    return Results.BadRequest(new LoginResultDTO { Exitoso = false, Mensaje = "Debe ingresar email y contraseña." });
+                    if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Contrasenia))
+                    {
+                        return Results.BadRequest(new LoginResultDTO { Exitoso = false, Mensaje = "Debe ingresar email y contraseña." });
+                    }
+
+                    var resultado = usuarioService.ValidarLoginAdmin(request);
+
+                    if (!resultado.Exitoso)
+                    {
+                        return Results.Json(resultado, statusCode: StatusCodes.Status401Unauthorized);
+                    }
+
+                    return Results.Ok(resultado);
+                }catch (ArgumentException ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
                 }
 
-                var resultado = usuarioService.ValidarLoginAdmin(request);
-
-                if (!resultado.Exitoso)
-                {
-                    return Results.Json(resultado, statusCode: StatusCodes.Status401Unauthorized);
-                }
-
-                return Results.Ok(resultado);
             })
             .WithName("LoginUsuario")
             .Produces<LoginResultDTO>(StatusCodes.Status200OK)
