@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.OpenApi;
 using Microsoft.EntityFrameworkCore;
 using WebApi;
 
-/* CONFIGURACIÓN */
-
+/* ----------------------------------
+ * CONFIGURACIÓN
+ */
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
@@ -19,6 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer( builder.Configuration.GetConnectionString("DefaultConnection") ) );
 
 // Add Dependency Injection
+
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
 
@@ -27,8 +29,10 @@ builder.Services.AddScoped<ReservaService>();
 
 builder.Services.AddScoped<IPasajeroRepository, PasajeroRepository>();
 builder.Services.AddScoped<PasajeroService>();
+
 builder.Services.AddScoped<IPaisRepository, PaisRepository>();
 builder.Services.AddScoped<PaisService>();
+
 builder.Services.AddScoped<ICiudadRepository, CiudadRepository>();
 builder.Services.AddScoped<CiudadService>();
 
@@ -36,7 +40,6 @@ builder.Services.AddScoped<CiudadService>();
 // Add Dependency Injection
 
 var app = builder.Build();
-
 
 /* ----------------------------------
  * INICIALIZACIÓN DE LA BASE DE DATOS
@@ -50,9 +53,12 @@ using (var scope = app.Services.CreateScope())
 }
 
 
-/* EJECUCIÓN Y RUTAS */
+/* ----------------------------------
+ * EJECUCIÓN Y RUTAS
+ */
 
 // Configure the HTTP request pipeline.
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -72,14 +78,15 @@ app.UseRouting();
 app.UseAuthorization();
 
 // Map endpoints (Minimal APIs)
-app.MapSwagger()/*.RequireAuthorization()*/;
+
 app.MapUsuarioEndpoints();
 app.MapReservaEndpoints();
 app.MapPasajeroEndpoints();
 app.MapPaisEndpoints();
 app.MapCiudadEndpoints();
 
-//app.MapGet("/", () => "Hello, World!");
+//app.MapGet("/", () => "Hello, World!");       //?
+app.MapSwagger()/*.RequireAuthorization()*/;    //Ver que es
 app.MapRazorPages();
 
 app.Run();

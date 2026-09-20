@@ -40,7 +40,7 @@
             // lblIdCiudad
             // 
             lblIdCiudad.AutoSize = true;
-            lblIdCiudad.Location = new Point(23, 14);
+            lblIdCiudad.Location = new Point(25, 15);
             lblIdCiudad.Name = "lblIdCiudad";
             lblIdCiudad.Size = new Size(22, 20);
             lblIdCiudad.TabIndex = 0;
@@ -49,7 +49,7 @@
             // lblNombreCiudad
             // 
             lblNombreCiudad.AutoSize = true;
-            lblNombreCiudad.Location = new Point(73, 14);
+            lblNombreCiudad.Location = new Point(72, 15);
             lblNombreCiudad.Name = "lblNombreCiudad";
             lblNombreCiudad.Size = new Size(64, 20);
             lblNombreCiudad.TabIndex = 1;
@@ -57,9 +57,9 @@
             // 
             // btnEditarCiudad
             // 
-            btnEditarCiudad.Location = new Point(624, 10);
+            btnEditarCiudad.Location = new Point(868, 11);
             btnEditarCiudad.Name = "btnEditarCiudad";
-            btnEditarCiudad.Size = new Size(85, 29);
+            btnEditarCiudad.Size = new Size(90, 29);
             btnEditarCiudad.TabIndex = 2;
             btnEditarCiudad.Text = "Editar";
             btnEditarCiudad.UseVisualStyleBackColor = true;
@@ -67,9 +67,9 @@
             // 
             // btnEliminarCiudad
             // 
-            btnEliminarCiudad.Location = new Point(715, 10);
+            btnEliminarCiudad.Location = new Point(965, 11);
             btnEliminarCiudad.Name = "btnEliminarCiudad";
-            btnEliminarCiudad.Size = new Size(85, 29);
+            btnEliminarCiudad.Size = new Size(90, 29);
             btnEliminarCiudad.TabIndex = 3;
             btnEliminarCiudad.Text = "Eliminar";
             btnEliminarCiudad.UseVisualStyleBackColor = true;
@@ -78,7 +78,7 @@
             // lblCodigoPostal
             // 
             lblCodigoPostal.AutoSize = true;
-            lblCodigoPostal.Location = new Point(260, 14);
+            lblCodigoPostal.Location = new Point(318, 15);
             lblCodigoPostal.Name = "lblCodigoPostal";
             lblCodigoPostal.Size = new Size(103, 20);
             lblCodigoPostal.TabIndex = 4;
@@ -87,7 +87,7 @@
             // lblCodigoAeropuerto
             // 
             lblCodigoAeropuerto.AutoSize = true;
-            lblCodigoAeropuerto.Location = new Point(369, 14);
+            lblCodigoAeropuerto.Location = new Point(478, 15);
             lblCodigoAeropuerto.Name = "lblCodigoAeropuerto";
             lblCodigoAeropuerto.Size = new Size(90, 20);
             lblCodigoAeropuerto.TabIndex = 5;
@@ -96,7 +96,7 @@
             // lblPais
             // 
             lblPais.AutoSize = true;
-            lblPais.Location = new Point(512, 14);
+            lblPais.Location = new Point(658, 15);
             lblPais.Name = "lblPais";
             lblPais.Size = new Size(34, 20);
             lblPais.TabIndex = 6;
@@ -115,7 +115,7 @@
             Controls.Add(lblNombreCiudad);
             Controls.Add(lblIdCiudad);
             Name = "CiudadItemControl";
-            Size = new Size(818, 46);
+            Size = new Size(1080, 50);
             ResumeLayout(false);
             PerformLayout();
         }

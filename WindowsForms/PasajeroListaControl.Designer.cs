@@ -1,6 +1,6 @@
 ﻿namespace WindowsForms
 {
-    partial class PasajeroLista
+    partial class PasajeroListaControl
     {
         /// <summary> 
         /// Variable del diseñador necesaria.

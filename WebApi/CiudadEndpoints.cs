@@ -12,9 +12,7 @@ namespace WebApi
 
             app.MapGet("/ciudades", async (CiudadService ciudadService) =>
             {
-
                 var dtos = await ciudadService.GetAllAsync();
-
                 return Results.Ok(dtos);
             })
             .WithName("GetAllCiudades")
@@ -24,14 +22,14 @@ namespace WebApi
 
             app.MapGet("/ciudades/{id}", async (int id, CiudadService ciudadService) =>
             {
-                CiudadDTO? dto = await ciudadService.GetByIdAsync(id);
+                CiudadDTO? ciudadDto = await ciudadService.GetByIdAsync(id);
 
-                if (dto == null)
+                if (ciudadDto == null)
                 {
                     return Results.NotFound();
                 }
 
-                return Results.Ok(dto);
+                return Results.Ok(ciudadDto);
             })
             .WithName("GetCiudad")
             .Produces<CiudadDTO>(StatusCodes.Status200OK)
@@ -44,9 +42,9 @@ namespace WebApi
                 try
                 {
 
-                    CiudadDTO ciudadDTO = await ciudadService.AddAsync(dto);
+                    CiudadDTO ciudadDto = await ciudadService.AddAsync(dto);
 
-                    return Results.Created($"/ciudades/{ciudadDTO.Id}", ciudadDTO);
+                    return Results.Created($"/ciudades/{ciudadDto.Id}", ciudadDto);
                 }
                 catch (ArgumentException ex)
                 {

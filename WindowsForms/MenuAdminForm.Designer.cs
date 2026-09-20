@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace WindowsForms
 {
-    partial class MenuPrincipalForm
+    partial class MenuAdminForm
     {
         /// <summary>
         /// Required designer variable.
@@ -39,7 +39,7 @@ namespace WindowsForms
             lblTituloPanelAcciones = new Label();
             btnAdministrarUsuarios = new Button();
             btnAdministrarPasajeros = new Button();
-            btnSalir = new Button();
+            btnSalirDelSistema = new Button();
             lblNombreApellido = new Label();
             lblAdmin = new Label();
             panel1.SuspendLayout();
@@ -62,14 +62,14 @@ namespace WindowsForms
             panel1.Controls.Add(lblTituloPanelAcciones);
             panel1.Controls.Add(btnAdministrarUsuarios);
             panel1.Controls.Add(btnAdministrarPasajeros);
-            panel1.Location = new Point(245, 111);
+            panel1.Location = new Point(244, 133);
             panel1.Name = "panel1";
-            panel1.Size = new Size(298, 241);
+            panel1.Size = new Size(298, 334);
             panel1.TabIndex = 1;
             // 
             // btnAdministrarCiudades
             // 
-            btnAdministrarCiudades.Location = new Point(65, 126);
+            btnAdministrarCiudades.Location = new Point(65, 111);
             btnAdministrarCiudades.Name = "btnAdministrarCiudades";
             btnAdministrarCiudades.Size = new Size(165, 29);
             btnAdministrarCiudades.TabIndex = 2;
@@ -99,7 +99,7 @@ namespace WindowsForms
             // 
             // btnAdministrarPasajeros
             // 
-            btnAdministrarPasajeros.Location = new Point(65, 178);
+            btnAdministrarPasajeros.Location = new Point(65, 146);
             btnAdministrarPasajeros.Name = "btnAdministrarPasajeros";
             btnAdministrarPasajeros.Size = new Size(165, 29);
             btnAdministrarPasajeros.TabIndex = 4;
@@ -107,20 +107,20 @@ namespace WindowsForms
             btnAdministrarPasajeros.UseVisualStyleBackColor = true;
             btnAdministrarPasajeros.Click += btnAdministrarPasajeros_Click;
             // 
-            // btnSalir
+            // btnSalirDelSistema
             // 
-            btnSalir.Location = new Point(647, 35);
-            btnSalir.Name = "btnSalir";
-            btnSalir.Size = new Size(95, 29);
-            btnSalir.TabIndex = 2;
-            btnSalir.Text = "Salir";
-            btnSalir.UseVisualStyleBackColor = true;
-            btnSalir.Click += btnSalir_Click;
+            btnSalirDelSistema.Location = new Point(593, 35);
+            btnSalirDelSistema.Name = "btnSalirDelSistema";
+            btnSalirDelSistema.Size = new Size(149, 29);
+            btnSalirDelSistema.TabIndex = 2;
+            btnSalirDelSistema.Text = "Salir del sistema";
+            btnSalirDelSistema.UseVisualStyleBackColor = true;
+            btnSalirDelSistema.Click += btnSalirDelSistema_Click;
             // 
             // lblNombreApellido
             // 
             lblNombreApellido.AutoSize = true;
-            lblNombreApellido.Location = new Point(515, 39);
+            lblNombreApellido.Location = new Point(88, 80);
             lblNombreApellido.Name = "lblNombreApellido";
             lblNombreApellido.Size = new Size(125, 20);
             lblNombreApellido.TabIndex = 3;
@@ -129,23 +129,23 @@ namespace WindowsForms
             // lblAdmin
             // 
             lblAdmin.AutoSize = true;
-            lblAdmin.Location = new Point(463, 39);
+            lblAdmin.Location = new Point(36, 80);
             lblAdmin.Name = "lblAdmin";
             lblAdmin.Size = new Size(56, 20);
             lblAdmin.TabIndex = 4;
             lblAdmin.Text = "Admin:";
             // 
-            // MenuPrincipalForm
+            // MenuAdminForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 449);
+            ClientSize = new Size(800, 542);
             Controls.Add(lblAdmin);
             Controls.Add(lblNombreApellido);
-            Controls.Add(btnSalir);
+            Controls.Add(btnSalirDelSistema);
             Controls.Add(panel1);
             Controls.Add(lblTituloMenuAdmin);
-            Name = "MenuPrincipalForm";
+            Name = "MenuAdminForm";
             Text = "Administrador";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -157,7 +157,7 @@ namespace WindowsForms
 
         private Label lblTituloMenuAdmin;
         private Panel panel1;
-        private Button btnSalir;
+        private Button btnSalirDelSistema;
         private Label lblNombreApellido;
         private Label lblTituloPanelAcciones;
         private Button btnAdministrarUsuarios;

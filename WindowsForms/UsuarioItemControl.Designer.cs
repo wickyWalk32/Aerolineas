@@ -39,7 +39,7 @@
             // lblNombreApellido
             // 
             lblNombreApellido.AutoSize = true;
-            lblNombreApellido.Location = new Point(96, 13);
+            lblNombreApellido.Location = new Point(111, 15);
             lblNombreApellido.Name = "lblNombreApellido";
             lblNombreApellido.Size = new Size(136, 20);
             lblNombreApellido.TabIndex = 0;
@@ -48,7 +48,7 @@
             // lblEmail
             // 
             lblEmail.AutoSize = true;
-            lblEmail.Location = new Point(261, 13);
+            lblEmail.Location = new Point(458, 15);
             lblEmail.Name = "lblEmail";
             lblEmail.Size = new Size(46, 20);
             lblEmail.TabIndex = 1;
@@ -56,9 +56,9 @@
             // 
             // btnEditarUsuario
             // 
-            btnEditarUsuario.Location = new Point(538, 11);
+            btnEditarUsuario.Location = new Point(868, 11);
             btnEditarUsuario.Name = "btnEditarUsuario";
-            btnEditarUsuario.Size = new Size(74, 29);
+            btnEditarUsuario.Size = new Size(90, 29);
             btnEditarUsuario.TabIndex = 2;
             btnEditarUsuario.Text = "Editar";
             btnEditarUsuario.UseVisualStyleBackColor = true;
@@ -66,9 +66,9 @@
             // 
             // btnEliminarUsuario
             // 
-            btnEliminarUsuario.Location = new Point(618, 11);
+            btnEliminarUsuario.Location = new Point(965, 11);
             btnEliminarUsuario.Name = "btnEliminarUsuario";
-            btnEliminarUsuario.Size = new Size(71, 29);
+            btnEliminarUsuario.Size = new Size(90, 29);
             btnEliminarUsuario.TabIndex = 3;
             btnEliminarUsuario.Text = "Eliminar";
             btnEliminarUsuario.UseVisualStyleBackColor = true;
@@ -77,7 +77,7 @@
             // lblRol
             // 
             lblRol.AutoSize = true;
-            lblRol.Location = new Point(437, 13);
+            lblRol.Location = new Point(750, 15);
             lblRol.Name = "lblRol";
             lblRol.Size = new Size(31, 20);
             lblRol.TabIndex = 4;
@@ -86,7 +86,7 @@
             // lblIdUsuario
             // 
             lblIdUsuario.AutoSize = true;
-            lblIdUsuario.Location = new Point(33, 13);
+            lblIdUsuario.Location = new Point(25, 15);
             lblIdUsuario.Name = "lblIdUsuario";
             lblIdUsuario.Size = new Size(22, 20);
             lblIdUsuario.TabIndex = 5;
@@ -104,7 +104,7 @@
             Controls.Add(lblEmail);
             Controls.Add(lblNombreApellido);
             Name = "UsuarioItemControl";
-            Size = new Size(723, 48);
+            Size = new Size(1085, 50);
             ResumeLayout(false);
             PerformLayout();
         }

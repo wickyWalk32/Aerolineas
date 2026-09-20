@@ -7,11 +7,11 @@ namespace WebApi
     {
         public static void MapUsuarioEndpoints(this WebApplication app)
         {
-            // 1. OBTENER TODOS LOS USUARIOS
+            // 1. OBTENER TODOS LOS USUARIOS (GET)
             app.MapGet("/usuarios", async (UsuarioService usuarioService) =>
             {
-                var usuariosDTO = await usuarioService.GetAllAsync();
-                return Results.Ok(usuariosDTO);
+                var usuariosDto = await usuarioService.GetAllAsync();
+                return Results.Ok(usuariosDto);
             })
             .WithName("GetAllUsuarios")
             .Produces<List<UsuarioDTO>>(StatusCodes.Status200OK)
@@ -22,10 +22,8 @@ namespace WebApi
             {
                 try
                 {
-
-                    UsuarioDTO usuarioDTO = await usuarioService.AddAsync(dto);
-
-                    return Results.Created($"/usuarios/{usuarioDTO.Id}", usuarioDTO);
+                    UsuarioDTO usuarioDto = await usuarioService.AddAsync(dto);
+                    return Results.Created($"/usuarios/{usuarioDto.Id}", usuarioDto);
                 }
                 catch (ArgumentException ex)
                 {
@@ -33,7 +31,7 @@ namespace WebApi
                 }
             })
             .WithName("AddUsuario")
-            .Produces<UsuarioDTO>(StatusCodes.Status201Created)
+            .Produces<UsuarioCreateDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi();
 
@@ -57,25 +55,24 @@ namespace WebApi
             // 4. ELIMINAR UN USUARIO (DELETE)
             app.MapDelete("/usuarios/{id}", async (int id, UsuarioService usuarioService) =>
             {
-                usuarioService.EliminarUsuario(id);
-
+                await usuarioService.DeleteAsync(id);
                 return Results.NoContent();
             })
             .WithName("DeleteUsuario")
             .Produces(StatusCodes.Status204NoContent)
             .WithOpenApi();
 
-            // 5. LOGIN DE ADMINISTRADOR
-            app.MapPost("/usuarios/login", (LoginRequestDTO request, UsuarioService usuarioService) =>
+            // 5. LOGIN DE USUARIOS
+            app.MapPost("/usuarios/login", (UsuarioLoginRequestDTO usuarioLoginRequestDto, UsuarioService usuarioService) =>
             {
                 try
                 {
-                    if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Contrasenia))
+                    if (string.IsNullOrWhiteSpace(usuarioLoginRequestDto.Email) || string.IsNullOrWhiteSpace(usuarioLoginRequestDto.Contrasenia))
                     {
-                        return Results.BadRequest(new LoginResultDTO { Exitoso = false, Mensaje = "Debe ingresar email y contraseña." });
+                        return Results.BadRequest(new UsuarioLoginResultDTO { Exitoso = false, Mensaje = "Debe ingresar email y contraseña." });
                     }
 
-                    var resultado = usuarioService.ValidarLoginAdmin(request);
+                    UsuarioLoginResultDTO resultado = usuarioService.ValidarLogin(usuarioLoginRequestDto);
 
                     if (!resultado.Exitoso)
                     {
@@ -83,16 +80,18 @@ namespace WebApi
                     }
 
                     return Results.Ok(resultado);
-                }catch (ArgumentException ex)
+                }
+                catch (ArgumentException ex)
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
 
             })
             .WithName("LoginUsuario")
-            .Produces<LoginResultDTO>(StatusCodes.Status200OK)
-            .Produces<LoginResultDTO>(StatusCodes.Status401Unauthorized)
+            .Produces<UsuarioLoginResultDTO>(StatusCodes.Status200OK)
+            .Produces<UsuarioLoginResultDTO>(StatusCodes.Status401Unauthorized)
             .WithOpenApi();
+        
         }
     }
 }

@@ -5,9 +5,9 @@ namespace WindowsForms
 {
     public partial class PasajeroAdminMenuForm : Form
     {
-        private readonly MenuPrincipalForm _menuPrincipalForm;
+        private readonly MenuAdminForm _menuPrincipalForm;
 
-        public PasajeroAdminMenuForm(MenuPrincipalForm menuPrincipalForm)
+        public PasajeroAdminMenuForm(MenuAdminForm menuPrincipalForm)
         {
             _menuPrincipalForm = menuPrincipalForm;
             InitializeComponent();
@@ -15,7 +15,7 @@ namespace WindowsForms
 
         private void BtnCrearPasajero_Click(object sender, EventArgs e)
         {
-                var ventana = new PasajeroDetalle();
+                var ventana = new PasajeroDetalleForm();
                 ventana.ShowDialog(this);
         }
 

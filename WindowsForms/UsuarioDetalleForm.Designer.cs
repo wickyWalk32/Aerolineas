@@ -1,6 +1,6 @@
 ﻿namespace WindowsForms
 {
-    partial class UsuarioDetalle
+    partial class UsuarioDetalleForm
     {
         /// <summary>
         /// Required designer variable.
@@ -63,45 +63,43 @@
             panel1.Controls.Add(lblEmail);
             panel1.Controls.Add(lblApellido);
             panel1.Controls.Add(lblNombre);
-            panel1.Location = new Point(201, 72);
-            panel1.Margin = new Padding(3, 2, 3, 2);
+            panel1.Location = new Point(230, 96);
             panel1.Name = "panel1";
-            panel1.Size = new Size(302, 242);
+            panel1.Size = new Size(345, 322);
             panel1.TabIndex = 0;
             // 
             // textBoxContrasenia
             // 
-            textBoxContrasenia.Location = new Point(94, 134);
-            textBoxContrasenia.Margin = new Padding(3, 2, 3, 2);
+            textBoxContrasenia.Location = new Point(107, 179);
             textBoxContrasenia.Name = "textBoxContrasenia";
-            textBoxContrasenia.Size = new Size(182, 23);
+            textBoxContrasenia.Size = new Size(207, 27);
             textBoxContrasenia.TabIndex = 11;
             textBoxContrasenia.UseSystemPasswordChar = true;
             // 
             // lblContrasenia
             // 
             lblContrasenia.AutoSize = true;
-            lblContrasenia.Location = new Point(22, 137);
+            lblContrasenia.Location = new Point(25, 183);
             lblContrasenia.Name = "lblContrasenia";
-            lblContrasenia.Size = new Size(67, 15);
+            lblContrasenia.Size = new Size(83, 20);
             lblContrasenia.TabIndex = 10;
             lblContrasenia.Text = "Contraseña";
             // 
             // lblId
             // 
             lblId.AutoSize = true;
-            lblId.Location = new Point(24, 20);
+            lblId.Location = new Point(27, 27);
             lblId.Name = "lblId";
-            lblId.Size = new Size(18, 15);
+            lblId.Size = new Size(24, 20);
             lblId.TabIndex = 9;
             lblId.Text = "ID";
             // 
             // lblIdUsuario
             // 
             lblIdUsuario.AutoSize = true;
-            lblIdUsuario.Location = new Point(94, 20);
+            lblIdUsuario.Location = new Point(107, 27);
             lblIdUsuario.Name = "lblIdUsuario";
-            lblIdUsuario.Size = new Size(17, 15);
+            lblIdUsuario.Size = new Size(22, 20);
             lblIdUsuario.TabIndex = 3;
             lblIdUsuario.Text = "id";
             // 
@@ -109,18 +107,16 @@
             // 
             comboBoxRol.FormattingEnabled = true;
             comboBoxRol.Items.AddRange(new object[] { "admin", "usuario" });
-            comboBoxRol.Location = new Point(94, 164);
-            comboBoxRol.Margin = new Padding(3, 2, 3, 2);
+            comboBoxRol.Location = new Point(107, 219);
             comboBoxRol.Name = "comboBoxRol";
-            comboBoxRol.Size = new Size(182, 23);
+            comboBoxRol.Size = new Size(207, 28);
             comboBoxRol.TabIndex = 3;
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(105, 208);
-            btnGuardar.Margin = new Padding(3, 2, 3, 2);
+            btnGuardar.Location = new Point(120, 277);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(82, 22);
+            btnGuardar.Size = new Size(94, 29);
             btnGuardar.TabIndex = 8;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
@@ -128,61 +124,58 @@
             // 
             // textBoxEmail
             // 
-            textBoxEmail.Location = new Point(94, 104);
-            textBoxEmail.Margin = new Padding(3, 2, 3, 2);
+            textBoxEmail.Location = new Point(107, 139);
             textBoxEmail.Name = "textBoxEmail";
-            textBoxEmail.Size = new Size(182, 23);
+            textBoxEmail.Size = new Size(207, 27);
             textBoxEmail.TabIndex = 6;
             // 
             // textBoxApellido
             // 
-            textBoxApellido.Location = new Point(94, 74);
-            textBoxApellido.Margin = new Padding(3, 2, 3, 2);
+            textBoxApellido.Location = new Point(107, 99);
             textBoxApellido.Name = "textBoxApellido";
-            textBoxApellido.Size = new Size(182, 23);
+            textBoxApellido.Size = new Size(207, 27);
             textBoxApellido.TabIndex = 5;
             // 
             // textBoxNombre
             // 
-            textBoxNombre.Location = new Point(94, 44);
-            textBoxNombre.Margin = new Padding(3, 2, 3, 2);
+            textBoxNombre.Location = new Point(107, 59);
             textBoxNombre.Name = "textBoxNombre";
-            textBoxNombre.Size = new Size(182, 23);
+            textBoxNombre.Size = new Size(207, 27);
             textBoxNombre.TabIndex = 4;
             // 
             // lblRol
             // 
             lblRol.AutoSize = true;
-            lblRol.Location = new Point(24, 167);
+            lblRol.Location = new Point(27, 223);
             lblRol.Name = "lblRol";
-            lblRol.Size = new Size(24, 15);
+            lblRol.Size = new Size(31, 20);
             lblRol.TabIndex = 3;
             lblRol.Text = "Rol";
             // 
             // lblEmail
             // 
             lblEmail.AutoSize = true;
-            lblEmail.Location = new Point(22, 109);
+            lblEmail.Location = new Point(25, 145);
             lblEmail.Name = "lblEmail";
-            lblEmail.Size = new Size(36, 15);
+            lblEmail.Size = new Size(46, 20);
             lblEmail.TabIndex = 2;
             lblEmail.Text = "Email";
             // 
             // lblApellido
             // 
             lblApellido.AutoSize = true;
-            lblApellido.Location = new Point(22, 79);
+            lblApellido.Location = new Point(25, 105);
             lblApellido.Name = "lblApellido";
-            lblApellido.Size = new Size(51, 15);
+            lblApellido.Size = new Size(66, 20);
             lblApellido.TabIndex = 1;
             lblApellido.Text = "Apellido";
             // 
             // lblNombre
             // 
             lblNombre.AutoSize = true;
-            lblNombre.Location = new Point(22, 50);
+            lblNombre.Location = new Point(25, 67);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(51, 15);
+            lblNombre.Size = new Size(64, 20);
             lblNombre.TabIndex = 0;
             lblNombre.Text = "Nombre";
             // 
@@ -190,33 +183,31 @@
             // 
             lblTituloNuevoEditarUsuario.AutoSize = true;
             lblTituloNuevoEditarUsuario.Font = new Font("Segoe UI", 16F);
-            lblTituloNuevoEditarUsuario.Location = new Point(122, 22);
+            lblTituloNuevoEditarUsuario.Location = new Point(139, 29);
             lblTituloNuevoEditarUsuario.Name = "lblTituloNuevoEditarUsuario";
-            lblTituloNuevoEditarUsuario.Size = new Size(211, 30);
+            lblTituloNuevoEditarUsuario.Size = new Size(262, 37);
             lblTituloNuevoEditarUsuario.TabIndex = 1;
             lblTituloNuevoEditarUsuario.Text = "NuevoEditar Usuario";
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(122, 328);
-            btnVolver.Margin = new Padding(3, 2, 3, 2);
+            btnVolver.Location = new Point(139, 466);
             btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(82, 22);
+            btnVolver.Size = new Size(94, 29);
             btnVolver.TabIndex = 2;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
             // 
-            // UsuarioDetalle
+            // UsuarioDetalleForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(700, 392);
+            ClientSize = new Size(800, 543);
             Controls.Add(btnVolver);
             Controls.Add(lblTituloNuevoEditarUsuario);
             Controls.Add(panel1);
-            Margin = new Padding(3, 2, 3, 2);
-            Name = "UsuarioDetalle";
+            Name = "UsuarioDetalleForm";
             Text = "Administrador";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

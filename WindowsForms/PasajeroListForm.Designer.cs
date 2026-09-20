@@ -14,15 +14,9 @@ namespace WindowsForms
         private void InitializeComponent()
         {
             dgvPasajeros = new DataGridView();
-            colId = new DataGridViewTextBoxColumn();
-            colTipo = new DataGridViewTextBoxColumn();
-            colNombre = new DataGridViewTextBoxColumn();
-            colApellido = new DataGridViewTextBoxColumn();
-            colTipoDoc = new DataGridViewTextBoxColumn();
-            colNroDoc = new DataGridViewTextBoxColumn();
             btnRefrescar = new Button();
             btnCerrar = new Button();
-            ((System.ComponentModel.ISupportInitialize)dgvPasajeros).BeginInit();
+            ((ISupportInitialize)dgvPasajeros).BeginInit();
             SuspendLayout();
             // 
             // dgvPasajeros
@@ -30,10 +24,8 @@ namespace WindowsForms
             dgvPasajeros.AllowUserToAddRows = false;
             dgvPasajeros.AllowUserToDeleteRows = false;
             dgvPasajeros.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvPasajeros.AutoGenerateColumns = false;
             dgvPasajeros.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvPasajeros.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvPasajeros.Columns.AddRange(new DataGridViewColumn[] { colId, colTipo, colNombre, colApellido, colTipoDoc, colNroDoc });
             dgvPasajeros.Location = new Point(12, 12);
             dgvPasajeros.MultiSelect = false;
             dgvPasajeros.Name = "dgvPasajeros";
@@ -44,59 +36,10 @@ namespace WindowsForms
             dgvPasajeros.TabIndex = 0;
             dgvPasajeros.CellContentClick += dgvPasajeros_CellContentClick;
             // 
-            // colId
-            // 
-            colId.DataPropertyName = "Id";
-            colId.HeaderText = "ID";
-            colId.MinimumWidth = 8;
-            colId.Name = "colId";
-            colId.ReadOnly = true;
-            // 
-            // colTipo
-            // 
-            colTipo.DataPropertyName = "Tipo";
-            colTipo.HeaderText = "Tipo";
-            colTipo.MinimumWidth = 8;
-            colTipo.Name = "colTipo";
-            colTipo.ReadOnly = true;
-            // 
-            // colNombre
-            // 
-            colNombre.DataPropertyName = "Nombre";
-            colNombre.HeaderText = "Nombre";
-            colNombre.MinimumWidth = 8;
-            colNombre.Name = "colNombre";
-            colNombre.ReadOnly = true;
-            // 
-            // colApellido
-            // 
-            colApellido.DataPropertyName = "Apellido";
-            colApellido.HeaderText = "Apellido";
-            colApellido.MinimumWidth = 8;
-            colApellido.Name = "colApellido";
-            colApellido.ReadOnly = true;
-            // 
-            // colTipoDoc
-            // 
-            colTipoDoc.DataPropertyName = "TipoDocumento";
-            colTipoDoc.HeaderText = "Tipo Documento";
-            colTipoDoc.MinimumWidth = 8;
-            colTipoDoc.Name = "colTipoDoc";
-            colTipoDoc.ReadOnly = true;
-
-            // 
-            // colNroDoc
-            // 
-            colNroDoc.DataPropertyName = "NroDocumento";
-            colNroDoc.HeaderText = "Nro. Documento";
-            colNroDoc.MinimumWidth = 8;
-            colNroDoc.Name = "colNroDoc";
-            colNroDoc.ReadOnly = true;
-            // 
             // btnRefrescar
             // 
             btnRefrescar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnRefrescar.Location = new Point(12, 444);
+            btnRefrescar.Location = new Point(834, 444);
             btnRefrescar.Name = "btnRefrescar";
             btnRefrescar.Size = new Size(120, 30);
             btnRefrescar.TabIndex = 1;
@@ -107,7 +50,7 @@ namespace WindowsForms
             // btnCerrar
             // 
             btnCerrar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCerrar.Location = new Point(834, 444);
+            btnCerrar.Location = new Point(12, 444);
             btnCerrar.Name = "btnCerrar";
             btnCerrar.Size = new Size(120, 30);
             btnCerrar.TabIndex = 2;
@@ -125,7 +68,7 @@ namespace WindowsForms
             StartPosition = FormStartPosition.CenterParent;
             Text = "Listado de Pasajeros";
             Load += PasajeroListForm_Load;
-            ((System.ComponentModel.ISupportInitialize)dgvPasajeros).EndInit();
+            ((ISupportInitialize)dgvPasajeros).EndInit();
             ResumeLayout(false);
         }
         private DataGridViewTextBoxColumn colId;

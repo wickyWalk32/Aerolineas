@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace WindowsForms
 {
-    public partial class PasajeroLista : UserControl
+    public partial class PasajeroListaControl : UserControl
     {
-        public PasajeroLista()
+        public PasajeroListaControl()
         {
             InitializeComponent();
         }

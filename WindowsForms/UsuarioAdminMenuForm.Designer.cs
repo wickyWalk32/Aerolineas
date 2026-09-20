@@ -1,6 +1,6 @@
 ﻿namespace WindowsForms
 {
-    partial class UsuarioAdminMenu
+    partial class UsuarioAdminMenuForm
     {
         /// <summary>
         /// Required designer variable.
@@ -38,7 +38,7 @@
             // 
             lblTituloAdminUsuarios.AutoSize = true;
             lblTituloAdminUsuarios.Font = new Font("Segoe UI", 16F);
-            lblTituloAdminUsuarios.Location = new Point(35, 21);
+            lblTituloAdminUsuarios.Location = new Point(70, 30);
             lblTituloAdminUsuarios.Name = "lblTituloAdminUsuarios";
             lblTituloAdminUsuarios.Size = new Size(263, 37);
             lblTituloAdminUsuarios.TabIndex = 0;
@@ -46,11 +46,11 @@
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(35, 392);
+            btnVolver.Location = new Point(70, 430);
             btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(94, 29);
+            btnVolver.Size = new Size(180, 30);
             btnVolver.TabIndex = 1;
-            btnVolver.Text = "Volver";
+            btnVolver.Text = "Volver a menú principal";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
             // 
@@ -58,32 +58,32 @@
             // 
             panelListaUsuarios.AutoScroll = true;
             panelListaUsuarios.FlowDirection = FlowDirection.TopDown;
-            panelListaUsuarios.Location = new Point(14, 75);
+            panelListaUsuarios.Location = new Point(70, 100);
             panelListaUsuarios.Name = "panelListaUsuarios";
-            panelListaUsuarios.Size = new Size(758, 299);
+            panelListaUsuarios.Size = new Size(1100, 300);
             panelListaUsuarios.TabIndex = 2;
             panelListaUsuarios.WrapContents = false;
             // 
             // btnNuevoUsuario
             // 
-            btnNuevoUsuario.Location = new Point(646, 29);
+            btnNuevoUsuario.Location = new Point(1030, 40);
             btnNuevoUsuario.Name = "btnNuevoUsuario";
-            btnNuevoUsuario.Size = new Size(126, 29);
+            btnNuevoUsuario.Size = new Size(140, 30);
             btnNuevoUsuario.TabIndex = 3;
-            btnNuevoUsuario.Text = "Nuevo usuario";
+            btnNuevoUsuario.Text = "Nuevo Usuario";
             btnNuevoUsuario.UseVisualStyleBackColor = true;
             btnNuevoUsuario.Click += btnNuevoUsuario_Click;
             // 
-            // UsuarioAdminMenu
+            // UsuarioAdminMenuForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(788, 451);
+            ClientSize = new Size(1242, 503);
             Controls.Add(btnNuevoUsuario);
             Controls.Add(panelListaUsuarios);
             Controls.Add(btnVolver);
             Controls.Add(lblTituloAdminUsuarios);
-            Name = "UsuarioAdminMenu";
+            Name = "UsuarioAdminMenuForm";
             Text = "Administrador";
             ResumeLayout(false);
             PerformLayout();

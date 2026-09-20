@@ -40,6 +40,7 @@ namespace Domain.Model
             this.SetRol(rol);
         }
 
+        // Constuctor para el agregado manual de usuarios en el DbContext.
         public Usuario(int id, string nombre, string apellido, string email, string contrasenia, string rol)
         {
             this.SetId(id);

@@ -87,19 +87,37 @@ namespace Data
                     new Usuario
                     (
                         1, 
-                        "alumno",
-                        "net",
-                        "alum@email.com",
-                        "net123",
-                        "admin"
+                        "Administrador",                // nombre
+                        "del sistema",                  // apellido
+                        "administrador@email.com",      // email
+                        "administrador",                // contrasenia
+                        "admin"                         // rol
                     ),
                     new Usuario
                     (
                         2,
+                        "Usuario",
+                        "del sistema",
+                        "usuario@email.com",
                         "usuario",
-                        "comun",
+                        "usuario"
+                    ),
+                    new Usuario
+                    (
+                        3,
+                        "Pedro",
+                        "Gonzalez",
+                        "admin@email.com",
+                        "admin",
+                        "admin"
+                    ),
+                    new Usuario
+                    (
+                        4,
+                        "María",
+                        "Suárez",
                         "usu@email.com",
-                        "net321",
+                        "usu",
                         "usuario"
                     )
                 );

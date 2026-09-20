@@ -12,17 +12,17 @@ using DTOs;
 
 namespace WindowsForms
 {
-    public partial class UsuarioAdminMenu : Form
+    public partial class UsuarioAdminMenuForm : Form
     {
         // Para reabrir la ventana de Login salir del sistema.
-        private readonly MenuPrincipalForm _menuPrincipalForm;
-        private readonly UsuarioDetalle _usuarioDetalle;
+        private readonly MenuAdminForm _menuPrincipalForm;
+        /*private readonly UsuarioDetalleForm _usuarioDetalle;
 
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClient;*/
 
         // Constructor: se ejecuta al cargar la ventana
         // Recibe la instancia original de MenuPrincipalForm y cargar el menu ppal al salir
-        public UsuarioAdminMenu(MenuPrincipalForm menuPrincipalForm)
+        public UsuarioAdminMenuForm(MenuAdminForm menuPrincipalForm)
         {
             InitializeComponent();
             _menuPrincipalForm = menuPrincipalForm;
@@ -66,7 +66,7 @@ namespace WindowsForms
         // Abrir UsuarioDetalle
         private void btnNuevoUsuario_Click(object sender, EventArgs e)
         {
-            UsuarioDetalle usuarioDetalle = new UsuarioDetalle(this);
+            UsuarioDetalleForm usuarioDetalle = new UsuarioDetalleForm(this);
             this.Hide();
             usuarioDetalle.Show();
         }
@@ -75,7 +75,7 @@ namespace WindowsForms
         // Se ejecuta cuando hacen clic en "Editar" en cualquiera de las tarjetas / filas.
         private void Item_OnEditarClicked(object? sender, UsuarioDTO usuarioAEditar)
         {
-            UsuarioDetalle usuarioDetalleForm = new UsuarioDetalle(this, usuarioAEditar);
+            UsuarioDetalleForm usuarioDetalleForm = new UsuarioDetalleForm(this, usuarioAEditar);
             this.Hide();
             usuarioDetalleForm.Show();
         }

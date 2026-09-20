@@ -12,13 +12,13 @@ using System.Windows.Forms;
 
 namespace WindowsForms
 {
-    public partial class CiudadAdminMenu : Form
+    public partial class CiudadAdminMenuForm : Form
     {
 
-        private readonly MenuPrincipalForm _menuPrincipalForm;
+        private readonly MenuAdminForm _menuPrincipalForm;
 
 
-        public CiudadAdminMenu(MenuPrincipalForm menuPrincipalForm)
+        public CiudadAdminMenuForm(MenuAdminForm menuPrincipalForm)
         {
             InitializeComponent();
             _menuPrincipalForm = menuPrincipalForm;
@@ -60,7 +60,7 @@ namespace WindowsForms
         // Abrir CiudadDetalle para crear una nueva ciudad
         private void btnNuevaCiudad_Click(object sender, EventArgs e)
         {
-            CiudadDetalle ciudadDetalle = new CiudadDetalle(this);
+            CiudadDetalleForm ciudadDetalle = new CiudadDetalleForm(this);
             this.Hide();
             ciudadDetalle.Show();
         }
@@ -68,7 +68,7 @@ namespace WindowsForms
         // Abrir CiudadDetalle pasando la ciudad seleccionada para editar
         private void Item_OnEditarClicked(object? sender, CiudadDTO ciudadAEditar)
         {
-            CiudadDetalle ciudadDetalle = new CiudadDetalle(this, ciudadAEditar);
+            CiudadDetalleForm ciudadDetalle = new CiudadDetalleForm(this, ciudadAEditar);
             this.Hide();
             ciudadDetalle.Show();
         }

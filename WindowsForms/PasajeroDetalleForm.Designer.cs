@@ -1,6 +1,6 @@
 ﻿namespace WindowsForms
 {
-    public partial class PasajeroDetalle : Form
+    public partial class PasajeroDetalleForm : Form
     {
         private Label lblNombre;
         private Label lblApellido;
@@ -38,67 +38,67 @@
             // lblNombre
             // 
             lblNombre.AutoSize = true;
-            lblNombre.Location = new Point(24, 20);
+            lblNombre.Location = new Point(30, 29);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(54, 15);
+            lblNombre.Size = new Size(67, 20);
             lblNombre.TabIndex = 0;
             lblNombre.Text = "Nombre:";
             // 
             // lblApellido
             // 
             lblApellido.AutoSize = true;
-            lblApellido.Location = new Point(24, 56);
+            lblApellido.Location = new Point(30, 65);
             lblApellido.Name = "lblApellido";
-            lblApellido.Size = new Size(54, 15);
+            lblApellido.Size = new Size(69, 20);
             lblApellido.TabIndex = 1;
             lblApellido.Text = "Apellido:";
             // 
             // lblTipoDocumento
             // 
             lblTipoDocumento.AutoSize = true;
-            lblTipoDocumento.Location = new Point(24, 92);
+            lblTipoDocumento.Location = new Point(30, 101);
             lblTipoDocumento.Name = "lblTipoDocumento";
-            lblTipoDocumento.Size = new Size(114, 15);
+            lblTipoDocumento.Size = new Size(143, 20);
             lblTipoDocumento.TabIndex = 2;
             lblTipoDocumento.Text = "Tipo de documento:";
             // 
             // lblNroDocumento
             // 
             lblNroDocumento.AutoSize = true;
-            lblNroDocumento.Location = new Point(24, 128);
+            lblNroDocumento.Location = new Point(30, 137);
             lblNroDocumento.Name = "lblNroDocumento";
-            lblNroDocumento.Size = new Size(105, 15);
+            lblNroDocumento.Size = new Size(130, 20);
             lblNroDocumento.TabIndex = 3;
             lblNroDocumento.Text = "Nº de documento:";
             // 
             // lblTipoPasajero
             // 
             lblTipoPasajero.AutoSize = true;
-            lblTipoPasajero.Location = new Point(24, 164);
+            lblTipoPasajero.Location = new Point(30, 173);
             lblTipoPasajero.Name = "lblTipoPasajero";
-            lblTipoPasajero.Size = new Size(80, 15);
+            lblTipoPasajero.Size = new Size(103, 20);
             lblTipoPasajero.TabIndex = 4;
             lblTipoPasajero.Text = "Tipo pasajero:";
             // 
             // txtNombre
             // 
-            txtNombre.Location = new Point(140, 16);
+            txtNombre.Location = new Point(186, 25);
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(240, 23);
+            txtNombre.Size = new Size(267, 27);
             txtNombre.TabIndex = 0;
             // 
             // txtApellido
             // 
-            txtApellido.Location = new Point(140, 52);
+            txtApellido.Location = new Point(186, 61);
             txtApellido.Name = "txtApellido";
-            txtApellido.Size = new Size(240, 23);
+            txtApellido.Size = new Size(267, 27);
             txtApellido.TabIndex = 1;
             // 
             // txtNroDocumento
             // 
-            txtNroDocumento.Location = new Point(220, 127);
+            txtNroDocumento.Location = new Point(186, 136);
             txtNroDocumento.Name = "txtNroDocumento";
-            txtNroDocumento.Size = new Size(160, 23);
+            txtNroDocumento.Size = new Size(267, 27);
             txtNroDocumento.TabIndex = 3;
             txtNroDocumento.KeyPress += txtNroDocumento_KeyPress;
             // 
@@ -106,23 +106,23 @@
             // 
             cboTipoDocumento.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTipoDocumento.Items.AddRange(new object[] { "DNI", "DNI (Extranjero)", "Libreta Cívica (LC)", "Libreta de Enrolamiento (LE)" });
-            cboTipoDocumento.Location = new Point(220, 88);
+            cboTipoDocumento.Location = new Point(186, 97);
             cboTipoDocumento.Name = "cboTipoDocumento";
-            cboTipoDocumento.Size = new Size(160, 23);
+            cboTipoDocumento.Size = new Size(267, 28);
             cboTipoDocumento.TabIndex = 2;
             // 
             // cboTipoPasajero
             // 
             cboTipoPasajero.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTipoPasajero.Items.AddRange(new object[] { "Adulto", "Menor" });
-            cboTipoPasajero.Location = new Point(220, 164);
+            cboTipoPasajero.Location = new Point(186, 173);
             cboTipoPasajero.Name = "cboTipoPasajero";
-            cboTipoPasajero.Size = new Size(160, 23);
+            cboTipoPasajero.Size = new Size(267, 28);
             cboTipoPasajero.TabIndex = 4;
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(61, 295);
+            btnGuardar.Location = new Point(353, 247);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(100, 30);
             btnGuardar.TabIndex = 5;
@@ -132,7 +132,7 @@
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(298, 295);
+            btnVolver.Location = new Point(30, 247);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(100, 30);
             btnVolver.TabIndex = 6;
@@ -148,7 +148,7 @@
             // 
             AcceptButton = btnGuardar;
             CancelButton = btnVolver;
-            ClientSize = new Size(465, 374);
+            ClientSize = new Size(500, 305);
             Controls.Add(lblNombre);
             Controls.Add(txtNombre);
             Controls.Add(lblApellido);

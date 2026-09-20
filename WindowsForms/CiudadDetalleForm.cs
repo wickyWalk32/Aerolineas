@@ -16,14 +16,14 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 namespace WindowsForms
 {
     // Ventana para el alta y modificación de ciudades (reutilizable entre ambos)
-    public partial class CiudadDetalle : Form
+    public partial class CiudadDetalleForm : Form
     {
         public CiudadDTO? CiudadResultado { get; private set; }
         private bool _esEdicion = false;
-        private readonly CiudadAdminMenu _ciudadAdminMenu;
+        private readonly CiudadAdminMenuForm _ciudadAdminMenu;
 
         // Constructor para CREAR una nueva ciudad
-        public CiudadDetalle(CiudadAdminMenu ciudadAdminMenu)
+        public CiudadDetalleForm(CiudadAdminMenuForm ciudadAdminMenu)
         {
             InitializeComponent();
             _ciudadAdminMenu = ciudadAdminMenu;
@@ -35,7 +35,7 @@ namespace WindowsForms
         }
 
         // Constructor para EDITAR una ciudad existente
-        public CiudadDetalle(CiudadAdminMenu ciudadAdminMenu, CiudadDTO ciudadAEditar)// : this(ciudadAdminMenu)
+        public CiudadDetalleForm(CiudadAdminMenuForm ciudadAdminMenu, CiudadDTO ciudadAEditar)// : this(ciudadAdminMenu)
         {
             InitializeComponent();
             _ciudadAdminMenu = ciudadAdminMenu;

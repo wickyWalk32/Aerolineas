@@ -1,90 +1,20 @@
 ﻿using Application.Services;
+using Data;
 using Domain.Model;
 using DTOs;
-using Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Services
 {
     public class UsuarioService
     {
 
-        /*
-        Observación 1: quedaron ambos "IUsuarioRepository? _repo" y "UsuarioRepository? _repository" 
-        para ahorrar tiempo. Implementar solo uno.
-        Observación 2: UsuarioRepository? _repository tiene "?" para evitar errores y poder ejecutar
-        el código.
-        */
-
-
-        // Menu de Administrador - CRUD de Usuarios
         private readonly IUsuarioRepository _repository;
 
-
-        // Constructor agregado para Menu de Administrador - CRUD de Usuarios
         public UsuarioService(IUsuarioRepository usuarioRepository)
         {
             _repository = usuarioRepository;
         }
-
-        // LOGIN
-        public LoginResultDTO ValidarLoginAdmin(LoginRequestDTO loginDto)
-        {
-            var usuario = _repository.ObtenerPorEmail(loginDto.Email);
-
-            // 1. Validar si el usuario existe
-            if (usuario == null)
-            {
-                return new LoginResultDTO { Exitoso = false, Mensaje = "Credenciales inválidas." };
-            }
-
-            // 2. Validar contraseña
-            if (usuario.ContraseniaHash != loginDto.Contrasenia)
-            {
-                return new LoginResultDTO { Exitoso = false, Mensaje = "Credenciales inválidas." };
-            }
-
-            // 3. Validar que tenga Rol "admin" (insensible a mayúsculas/minúsculas)
-            if (string.IsNullOrEmpty(usuario.Rol) || !usuario.Rol.Equals("admin", StringComparison.OrdinalIgnoreCase))
-            {
-                return new LoginResultDTO { Exitoso = false, Mensaje = "Acceso denegado: Se requieren permisos de Administrador." };
-            }
-            
-            return new LoginResultDTO
-            {
-                Exitoso = true,
-                Mensaje = "Acceso concedido.",
-                Nombre = usuario.Nombre,
-                Apellido = usuario.Apellido,
-                Email = usuario.Email,
-                Rol = usuario.Rol
-            };
-
-        }
-
-
-        // Menu de Administrador - CRUD de Usuarios
-        public List<Usuario> ObtenerTodosLosUsuarios()
-        {
-            // Aquí irían reglas de negocio antes o después de consultar la BD
-            return _repository.ObtenerTodos();
-        }
-
-
-
-        // Menu de Administrador - CRUD de Usuarios
-        public void ActualizarUsuario(UsuarioDTO usuarioDto)
-        {
-            _repository.Actualizar(usuarioDto);
-        }
-
-        // Menu de Administrador - CRUD de Usuarios
-        public void EliminarUsuario(int id)
-        {
-            _repository.Eliminar(id);
-        }
-
-
-        
 
         public async Task<List<UsuarioDTO>> GetAllAsync()
         {
@@ -96,7 +26,7 @@ namespace Application.Services
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Email = usuario.Email,
-                ContraseniaHash = usuario.ContraseniaHash,
+                Contrasenia = usuario.ContraseniaHash,
                 Rol = usuario.Rol
             }).ToList();
         }
@@ -104,71 +34,120 @@ namespace Application.Services
         public async Task<UsuarioDTO?> GetByIdAsync(int id)
         {
             var usuario = await _repository.GetByIdAsync(id);
-            if (usuario == null) return null;
-            return  new UsuarioDTO
-                {
-                    Id = usuario.Id,
-                    Email = usuario.Email,
-                    ContraseniaHash = usuario.ContraseniaHash,
-                };
-        }
 
+            if (usuario == null) return null;
+            
+            return new UsuarioDTO
+            {
+                Id = usuario.Id,
+                Email = usuario.Email,
+                Contrasenia = usuario.ContraseniaHash,
+            };
+        }
+        
         public async Task<UsuarioDTO> AddAsync(UsuarioCreateDTO usuarioCreateDTO)
         {
+            // Aquí es donde se disparan todas las validaciones de los setters de Usuario.
             Usuario usuario = new Usuario(  usuarioCreateDTO.Nombre,
                                             usuarioCreateDTO.Apellido,
                                             usuarioCreateDTO.Email,
-                                            usuarioCreateDTO.ContraseniaHash,
+                                            usuarioCreateDTO.Contrasenia,
                                             usuarioCreateDTO.Rol);
-           await _repository.AddAsync(usuario);
+
+            await _repository.AddAsync(usuario);
+            
+            // Pregunta: es necesario que devuelva estainfo del usuario? se usa para algo en el front? o sacar?
             UsuarioDTO usuarioDTO = new UsuarioDTO
             {
                 Id = usuario.Id,
                 Email = usuario.Email,
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
-                ContraseniaHash = usuario.ContraseniaHash
+                Contrasenia = usuario.ContraseniaHash
             };
+
             return usuarioDTO;
         }
-        
-        // Ver que es esto
-        // var resultado = await _repo.AddAsync(usuarioDTO);
         
         public async Task<bool> UpdateAsync(int id, UsuarioUpdateDTO usuarioUpdateDTO)
         {
             var usuario = await _repository.GetByIdAsync(id);
+
             if (usuario == null)
             {
                 return false;
             }
+
             usuario.SetNombre(usuarioUpdateDTO.Nombre);
             usuario.SetApellido(usuarioUpdateDTO.Apellido);
             usuario.SetEmail(usuarioUpdateDTO.Email);
             usuario.SetRol(usuarioUpdateDTO.Rol);
 
             //Solo actualizar contraseña si se proporciona y es distinta a la actual
-            if (!string.IsNullOrWhiteSpace(usuarioUpdateDTO.ContraseniaHash) &&
-                usuarioUpdateDTO.ContraseniaHash!= usuario.ContraseniaHash)
+            if (!string.IsNullOrWhiteSpace(usuarioUpdateDTO.Contrasenia) &&
+                usuarioUpdateDTO.Contrasenia!= usuario.ContraseniaHash)
             {
-                usuario.SetContraseniaHash(usuarioUpdateDTO.ContraseniaHash);
+                usuario.SetContraseniaHash(usuarioUpdateDTO.Contrasenia);
             }
 
             await _repository.UpdateAsync(usuario);
+
             return true;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var user = await _repository.GetByIdAsync(id);
-            if (user == null) return false;
+            var usuario = await _repository.GetByIdAsync(id);
 
-            await _repository.DeleteAsync(user);
+            if (usuario == null) return false;
+
+            await _repository.DeleteAsync(usuario);
+
             return true;
         }
 
         public Task<bool> ExistsAsync(int id)
             => _repository.ExistsAsync(id);
+
+
+        // LOGIN
+        public UsuarioLoginResultDTO ValidarLogin(UsuarioLoginRequestDTO usuarioLoginRequestDto)
+        {
+            var usuario = _repository.GetByEmail(usuarioLoginRequestDto.Email);
+
+            // 1. Validar si el usuario existe
+            if (usuario == null)
+            {
+                return new UsuarioLoginResultDTO { Exitoso = false, Mensaje = "Credenciales inválidas." };
+            }
+
+            // 2. Validar contrasenia
+            PasswordHasher<Usuario> passwordHasher = new();
+
+            // Compara la contraseña que escribió el usuario con el hash de la base de datos
+            PasswordVerificationResult resultado = passwordHasher.VerifyHashedPassword(
+                usuario,
+                usuario.ContraseniaHash,
+                usuarioLoginRequestDto.Contrasenia // Contrasenia en texto plano
+            );
+
+            // Si falla por que la contrasenia es incorrecta, devolvemos el DTO con Exitoso = false
+            if (resultado == PasswordVerificationResult.Failed)
+            {
+                return new UsuarioLoginResultDTO { Exitoso = false, Mensaje = "Credenciales inválidas." };
+            }
+
+            // 3. Si llega aquí, el login fue exitoso! Generas el Token JWT o la sesión
+
+            return new UsuarioLoginResultDTO
+            {
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
+                Rol = usuario.Rol,
+                Exitoso = true,
+                Mensaje = "Acceso concedido."
+            };
+        }
 
     }
 }

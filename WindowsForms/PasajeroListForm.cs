@@ -70,7 +70,7 @@ namespace WindowsForms
 
 
             // Modificar Pasajero
-            var pasajeroDetalle = new PasajeroDetalle(pasajero);
+            var pasajeroDetalle = new PasajeroDetalleForm(pasajero);
             pasajeroDetalle.Show();
         }
     }

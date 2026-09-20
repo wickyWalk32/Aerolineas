@@ -1,6 +1,6 @@
 ﻿namespace WindowsForms
 {
-    partial class CiudadDetalle
+    partial class CiudadDetalleForm
     {
         /// <summary>
         /// Required designer variable.

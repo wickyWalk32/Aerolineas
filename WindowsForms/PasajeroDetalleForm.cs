@@ -4,18 +4,18 @@ using System.Threading.Tasks;
 
 namespace WindowsForms
 {
-    public partial class PasajeroDetalle : Form
+    public partial class PasajeroDetalleForm : Form
     {
         private bool _esEdicion = false;
         private int _pasajeroId = 0;
 
 
-        public PasajeroDetalle()
+        public PasajeroDetalleForm()
         {
             InitializeComponent();
         }
 
-        public PasajeroDetalle(PasajeroUpdateDTO pasajeroUpdateDTO)
+        public PasajeroDetalleForm(PasajeroUpdateDTO pasajeroUpdateDTO)
         {
             
             InitializeComponent();

@@ -14,20 +14,39 @@ namespace WindowsForms
 {
     public partial class LoginForm : Form
     {
+        public UsuarioLoginResultDTO? UsuarioAutenticado { get; private set; }
+
         public LoginForm()
         {
             InitializeComponent();
-        }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
+            // Configura el botón de ingresar como el botón por defecto del formulario
+            this.AcceptButton = btnIngresar;
+
+            /* 
+             * <<< INGRESO RÁPIDO >>>
+             * 
+             * Comentar y descomentar, según se quiera ingresar como admin o como usuario comun:
+             * 
+             */
+
+
+            /* Usuario de tipo 'usuario' aniadido a la bd: */
+
+            //textBoxEmail.Text = "usu@email.com";
+            //textBoxContrasenia.Text = "usu";
+
+            /* Usuario de tipo 'admin' aniadido a la bd: */
+
+            textBoxEmail.Text = "admin@email.com";
+            textBoxContrasenia.Text = "admin";
 
         }
 
         private async void btnIngresar_Click(object sender, EventArgs e)
         {
             string email = textBoxEmail.Text.Trim();
-            string contrasenia = textBoxPassword.Text.Trim();
+            string contrasenia = textBoxContrasenia.Text.Trim();
 
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(contrasenia))
             {
@@ -39,26 +58,22 @@ namespace WindowsForms
             {
                 using (var httpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7099/") })
                 {
-                    LoginRequestDTO loginRequestDto = new LoginRequestDTO
+                    UsuarioLoginRequestDTO usuarioLoginRequestDto = new UsuarioLoginRequestDTO
                     {
                         Email = email,
                         Contrasenia = contrasenia
                     };
 
-                    HttpResponseMessage response = await httpClient.PostAsJsonAsync("/usuarios/login", loginRequestDto);
+                    HttpResponseMessage response = await httpClient.PostAsJsonAsync("/usuarios/login", usuarioLoginRequestDto);
 
                     // Leemos la respuesta como LoginResultDTO (a resultado llega un DTO de Usuario)
-                    var resultado = await response.Content.ReadFromJsonAsync<LoginResultDTO>();
+                    var resultado = await response.Content.ReadFromJsonAsync<UsuarioLoginResultDTO>();
 
                     if (response.IsSuccessStatusCode && resultado != null && resultado.Exitoso)
                     {
-                        //MessageBox.Show("¡Bienvenido al sistema!", "Acceso Concedido", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        MenuPrincipalForm ventanaMenuPrincipal = new MenuPrincipalForm(this, resultado);
-                        ventanaMenuPrincipal.Show();
-
-                        // Ocultamos el formulario de Login actual, sin cerrarlo
-                        this.Hide();
+                        this.UsuarioAutenticado = resultado;
+                        this.DialogResult = DialogResult.OK;
+                        this.Close(); // Cierra y destruye la ventana de Login
                     }
                     else
                     {
@@ -73,12 +88,24 @@ namespace WindowsForms
             }
         }
 
-        private void LoginForm_Load(object sender, EventArgs e)
+        private void btnAutoregistroUsuario_Click(object sender, EventArgs e)
         {
 
+            // 1. Escondemos el formulario de login actual
+            this.Hide();
+
+            // 2. Abrimos el registro como diálogo pasando la instancia del login
+            using (var usuarioDetalleForm = new UsuarioDetalleForm(this))
+            {
+                usuarioDetalleForm.ShowDialog();
+            }
+
+            // 3. Al volver del registro, volvemos a mostrar el login
+            textBoxContrasenia.Clear();
+            this.Show();
         }
 
-        // Cierra la aplicación por completo y libera todos los procesos
+        // Cierra la aplicación por completo y libera todos los procesos.
         private void btnSalirSistema_Click(object sender, EventArgs e)
         {
 

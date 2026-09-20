@@ -9,11 +9,11 @@ namespace Application.Services
 {
     public interface IUsuarioService
     {
-        Task<UsuarioDTO> AddAsync(UsuarioDTO dto);
-        Task<bool> DeleteAsync(int id);
-        Task<UsuarioDTO?> GetAsync(int id);
         Task<List<UsuarioDTO>> GetAllAsync();
+        Task<UsuarioDTO?> GetAsync(int id);
+        Task<UsuarioDTO> AddAsync(UsuarioDTO dto);
         Task<bool> UpdateAsync(UsuarioDTO dto);
-
+        Task<bool> DeleteAsync(int id);
+        UsuarioLoginResultDTO ValidarLogin(UsuarioLoginRequestDTO usuariologinRequestDto);
     }
 }

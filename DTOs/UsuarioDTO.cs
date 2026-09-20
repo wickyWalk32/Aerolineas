@@ -2,22 +2,31 @@
 {
 
     // LOGIN: DTO para enviar las credenciales desde WinForms a la Web API
-    public class LoginRequestDTO
+    public class UsuarioLoginRequestDTO
     {
         public string Email { get; set; } = string.Empty;
         public string Contrasenia { get; set; } = string.Empty;
     }
 
     // LOGIN: DTO para responder el resultado de la autenticación
-    public class LoginResultDTO
-    {
-        public bool Exitoso { get; set; }
-        public string Mensaje { get; set; } = string.Empty;
+    public class UsuarioLoginResultDTO
+    {   
         public string Nombre { get; set; } = string.Empty;
         public string Apellido { get; set; } = string.Empty;
-        public string ContraseniaHash { get; set; } = string.Empty;
-        public string? Email { get; set; }
-        public string? Rol { get; set; }
+        public string Rol { get; set; } = string.Empty;
+        public bool Exitoso { get; set; }
+        public string Mensaje { get; set; } = string.Empty;
+    }
+
+    // DTO para lectura de la base de datos
+    public class UsuarioDTO
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Apellido { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string? Contrasenia { get; set; } // Opcional para actualizar
+        public string Rol { get; set; } = string.Empty;
     }
 
     public class UsuarioCreateDTO
@@ -25,7 +34,7 @@
         public string Nombre { get; set; } = string.Empty;
         public string Apellido { get; set; } = string.Empty;
         public required string Email { get; set; }
-        public required string ContraseniaHash { get; set; }
+        public required string Contrasenia { get; set; }
         public required string Rol { get; set; }
     }
     public class UsuarioUpdateDTO
@@ -34,17 +43,7 @@
         public string Nombre { get; set; } = string.Empty;
         public string Apellido { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string? ContraseniaHash { get; set; } // Opcional para actualizar
-        public string Rol { get; set; } = string.Empty;
-    }
-
-    public class UsuarioDTO
-    {
-        public int Id { get; set; }
-        public string Nombre { get; set; } = string.Empty;
-        public string Apellido { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string? ContraseniaHash { get; set; } // Opcional para actualizar
+        public string? Contrasenia { get; set; } // Opcional para actualizar
         public string Rol { get; set; } = string.Empty;
     }
 
