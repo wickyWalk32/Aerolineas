@@ -8,10 +8,10 @@ namespace Domain.Model
 {
     public class Avion
     {
-        public int Id { get; private set; }
-        public string Descripcion { get; private set; }
-        public int Capacidad { get; private set; }
-        public string EstadoDisponibilidad { get; private set; }
+        public int Id { get; set; }
+        public string Descripcion { get; set; }
+        public int Capacidad { get; set; }
+        public string EstadoDisponibilidad { get; set; }
 
         private readonly List<Asiento> _asientos = new();
 
@@ -29,14 +29,14 @@ namespace Domain.Model
             SetEstado(estado);
         }
 
-        private void SetDescripcion(string descripcion) { 
+        public void SetDescripcion(string descripcion) { 
             Descripcion = descripcion;
         }
-        private void SetCapacidad(int capacidad)
+        public void SetCapacidad(int capacidad)
         {
             Capacidad = capacidad;
         }
-        private void SetEstado(string estado)
+        public void SetEstado(string estado)
         {
             EstadoDisponibilidad = estado;
         }

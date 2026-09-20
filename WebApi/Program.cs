@@ -36,6 +36,9 @@ builder.Services.AddScoped<PaisService>();
 builder.Services.AddScoped<ICiudadRepository, CiudadRepository>();
 builder.Services.AddScoped<CiudadService>();
 
+builder.Services.AddScoped<IAvionRepository, AvionRepository>();
+builder.Services.AddScoped<AvionService>();
+
 
 // Add Dependency Injection
 
@@ -48,7 +51,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    //context.Database.EnsureDeleted();
+    context.Database.EnsureDeleted();
     context.Database.EnsureCreated(); // Crea la BD y aplica configuraciones iniciales
 }
 
