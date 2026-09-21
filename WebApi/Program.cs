@@ -39,6 +39,9 @@ builder.Services.AddScoped<CiudadService>();
 builder.Services.AddScoped<IPasajeroRepository, PasajeroRepository>();
 builder.Services.AddScoped<PasajeroService>();
 
+builder.Services.AddScoped<IAvionRepository, AvionRepository>();
+builder.Services.AddScoped<AvionService>();
+
 builder.Services.AddScoped<IServicioRepository, ServicioRepository>();
 builder.Services.AddScoped<ServicioService>();
 
@@ -93,7 +96,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    //context.Database.EnsureDeleted();
+    context.Database.EnsureDeleted();
     context.Database.EnsureCreated(); // Crea la BD y aplica configuraciones iniciales
 }
 

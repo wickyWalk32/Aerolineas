@@ -14,8 +14,7 @@ namespace Domain.Model
         public int Id { get; private set; }
         public string Descripcion { get; private set; } = string.Empty;
         public int Capacidad { get; private set; }
-
-        //public string EstadoDisponibilidad { get; private set; }
+        public string EstadoDisponibilidad { get; private set; }
 
         // <<< ATRIBUTOS DE NAVEGACION >>>
 
@@ -35,17 +34,19 @@ namespace Domain.Model
         {
         }
 
-        public Avion(string descripcion, int capacidad)
+        public Avion(string descripcion, int capacidad, string estadoDisponibilidad)
         {
             this.SetDescripcion(descripcion);
             this.SetCapacidad(capacidad);
+            this.SetEstadoDisponibilidad(estadoDisponibilidad);
         }
 
-        public Avion(int id, string descripcion, int capacidad)
+        public Avion(int id, string descripcion, int capacidad, string estadoDisponibilidad)
         {
             this.SetId(id);
             this.SetDescripcion(descripcion);
             this.SetCapacidad(capacidad);
+            this.SetEstadoDisponibilidad(estadoDisponibilidad);
         }
 
         // <<< MÉTODOS: SETTERS >>>
@@ -71,6 +72,13 @@ namespace Domain.Model
             if (capacidad > 1000)
                 throw new ArgumentException("Capacidad del avión debe ser menor a 1000.");
             this.Capacidad = capacidad;
+        }
+
+        public void SetEstadoDisponibilidad(string estadoDisponibilidad) 
+        {
+            if (string.IsNullOrWhiteSpace(estadoDisponibilidad))
+                throw new ArgumentException("Estado de disponibilidad del avión inválido.");
+            this.EstadoDisponibilidad = estadoDisponibilidad;
         }
 
         public void AddVuelo(Vuelo vuelo)

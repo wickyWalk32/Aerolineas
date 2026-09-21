@@ -245,6 +245,9 @@ namespace Data
                  entity.Property(e => e.Capacidad)
                     .IsRequired();
 
+                entity.Property(e => e.EstadoDisponibilidad)
+                    .IsRequired();
+
                 // 1 Avion > Muchos Vuelos
 
                 entity.Navigation(e => e.Vuelos)
