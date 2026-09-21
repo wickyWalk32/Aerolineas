@@ -14,7 +14,7 @@ namespace WindowsForms
     public partial class CiudadItemControl : UserControl
     {
 
-        // Eventos que escuchará el formulario padre (UsuarioAMForm.cs)
+        // Eventos que escuchará el formulario padre (CiudadDetalleForm.cs)
         public event EventHandler<CiudadDTO>? OnEditarClicked;
         public event EventHandler<CiudadDTO>? OnEliminarClicked;
 
@@ -37,7 +37,7 @@ namespace WindowsForms
             lblPais.Text = ciudad.PaisNombre;
         }
 
-        private void btnEditar_Click(object sender, EventArgs e)
+        private void btnEditarCiudad_Click(object sender, EventArgs e)
         {
             if (_ciudadActual != null)
             {
@@ -52,11 +52,6 @@ namespace WindowsForms
                 OnEliminarClicked?.Invoke(this, _ciudadActual);
             }
         }
-
-        /*private void CiudadItemControl_Load(object sender, EventArgs e)
-        {
-
-        }*/
 
     }
 }

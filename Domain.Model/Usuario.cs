@@ -31,6 +31,14 @@ namespace Domain.Model
         {
         }
 
+        public Usuario(string nombre, string apellido, string email, string rol) 
+        { 
+            this.SetNombre(nombre);
+            this.SetApellido(apellido);
+            this.SetEmail(email);
+            this.SetRol(rol);
+        }
+
         public Usuario(string nombre, string apellido, string email, string contrasenia, string rol) 
         {
             this.SetNombre(nombre);

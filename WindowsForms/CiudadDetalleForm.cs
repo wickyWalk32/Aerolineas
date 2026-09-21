@@ -20,14 +20,15 @@ namespace WindowsForms
     {
         public CiudadDTO? CiudadResultado { get; private set; }
         private bool _esEdicion = false;
-        private readonly CiudadAdminMenuForm _ciudadAdminMenu;
+        private readonly CiudadAdminMenuForm _ciudadAdminMenuForm;
 
         // Constructor para CREAR una nueva ciudad
-        public CiudadDetalleForm(CiudadAdminMenuForm ciudadAdminMenu)
+        public CiudadDetalleForm(CiudadAdminMenuForm ciudadAdminMenuForm)
         {
             InitializeComponent();
-            _ciudadAdminMenu = ciudadAdminMenu;
+            _ciudadAdminMenuForm = ciudadAdminMenuForm;
             lblTituloNuevoEditarCiudad.Text = "Nueva Ciudad";
+            lblId.Text = "";
             lblIdCiudad.Text = "";
             
             // Carga los países normalmente sin selección previa
@@ -38,7 +39,7 @@ namespace WindowsForms
         public CiudadDetalleForm(CiudadAdminMenuForm ciudadAdminMenu, CiudadDTO ciudadAEditar)// : this(ciudadAdminMenu)
         {
             InitializeComponent();
-            _ciudadAdminMenu = ciudadAdminMenu;
+            _ciudadAdminMenuForm = ciudadAdminMenu;
             _esEdicion = true;
             lblTituloNuevoEditarCiudad.Text = "Editar Ciudad";
             CiudadResultado = ciudadAEditar;
@@ -51,14 +52,6 @@ namespace WindowsForms
             
             // Cargamos los países y seleccionamos automáticamente el correspondiente
             _ = CargarPaisesAsync(ciudadAEditar.PaisId);
-
-        }
-
-        private void btnVolver_Click(object sender, EventArgs e)
-        {
-            _ciudadAdminMenu.Show();
-            this.Close();
-            _ciudadAdminMenu.CargarListaCiudadesEnItems();
 
         }
 
@@ -85,7 +78,7 @@ namespace WindowsForms
                 }
 
             }
-            else
+            else if (_esEdicion)
             {
                 CiudadUpdateDTO ciudad = new CiudadUpdateDTO
                 {
@@ -146,6 +139,13 @@ namespace WindowsForms
             textBoxCodigoPostal.Clear();
             textBoxCodigoAeropuerto.Clear();
             comboBoxPais.SelectedIndex = -1;
+        }
+
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            _ciudadAdminMenuForm.Show();
+            this.Close();
+            _ciudadAdminMenuForm.CargarListaCiudadesEnItems();
         }
 
     }    

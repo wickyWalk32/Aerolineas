@@ -20,13 +20,20 @@ namespace Domain.Model
 
         // 1 Servicio > Muchos Pasajes
 
-        private readonly List<Pasaje> _pasajes = new(); // new List<Pasaje>() ?
+        private readonly List<Pasaje> _pasajes = new();
         public IReadOnlyCollection<Pasaje> Pasajes => _pasajes.AsReadOnly();
 
         // <<< CONSTRUCTORES >>>
 
         public Servicio()
         {
+        }
+
+        public Servicio(string nombre, string descripcion, decimal precio)
+        {
+            this.SetNombre(nombre);
+            this.SetDescripcion(descripcion);
+            this.SetPrecio(precio);
         }
 
         public Servicio(int id, string nombre, string descripcion, decimal precio)
@@ -67,13 +74,13 @@ namespace Domain.Model
             this.Precio = precio;
         }
 
-        public void AddPasaje(Pasaje pasaje) // ?
+        public void AddPasaje(Pasaje pasaje)
         {
             ArgumentNullException.ThrowIfNull(pasaje);
             _pasajes.Add(pasaje);
         }
 
-        public void RemovePasaje(Pasaje pasaje) // ?
+        public void RemovePasaje(Pasaje pasaje)
         {
             ArgumentNullException.ThrowIfNull(pasaje);
             _pasajes.Remove(pasaje);

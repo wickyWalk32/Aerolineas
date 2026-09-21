@@ -43,6 +43,8 @@
             btnAutoregistroUsuario = new Button();
             panel2 = new Panel();
             lblInformacion = new Label();
+            btnCargarDatosAdmin = new Button();
+            btnCargarDatosUsuario = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
@@ -129,7 +131,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(51, 133);
+            label3.Location = new Point(51, 117);
             label3.Name = "label3";
             label3.Size = new Size(391, 20);
             label3.TabIndex = 9;
@@ -138,7 +140,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(51, 159);
+            label4.Location = new Point(51, 172);
             label4.Name = "label4";
             label4.Size = new Size(373, 20);
             label4.TabIndex = 10;
@@ -148,7 +150,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label5.Location = new Point(51, 104);
+            label5.Location = new Point(51, 88);
             label5.Name = "label5";
             label5.Size = new Size(128, 20);
             label5.TabIndex = 11;
@@ -158,7 +160,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label6.Location = new Point(51, 214);
+            label6.Location = new Point(51, 237);
             label6.Name = "label6";
             label6.Size = new Size(284, 20);
             label6.TabIndex = 12;
@@ -177,10 +179,12 @@
             // panel2
             // 
             panel2.BorderStyle = BorderStyle.FixedSingle;
+            panel2.Controls.Add(btnCargarDatosUsuario);
             panel2.Controls.Add(lblInformacion);
             panel2.Controls.Add(label4);
-            panel2.Controls.Add(label3);
+            panel2.Controls.Add(btnCargarDatosAdmin);
             panel2.Controls.Add(label6);
+            panel2.Controls.Add(label3);
             panel2.Controls.Add(label5);
             panel2.Location = new Point(661, 66);
             panel2.Name = "panel2";
@@ -191,11 +195,31 @@
             // 
             lblInformacion.AutoSize = true;
             lblInformacion.Font = new Font("Segoe UI", 22F);
-            lblInformacion.Location = new Point(51, 25);
+            lblInformacion.Location = new Point(132, 25);
             lblInformacion.Name = "lblInformacion";
             lblInformacion.Size = new Size(220, 50);
             lblInformacion.TabIndex = 13;
             lblInformacion.Text = "Información";
+            // 
+            // btnCargarDatosAdmin
+            // 
+            btnCargarDatosAdmin.Location = new Point(51, 140);
+            btnCargarDatosAdmin.Name = "btnCargarDatosAdmin";
+            btnCargarDatosAdmin.Size = new Size(128, 29);
+            btnCargarDatosAdmin.TabIndex = 14;
+            btnCargarDatosAdmin.Text = "Cargar en Login";
+            btnCargarDatosAdmin.UseVisualStyleBackColor = true;
+            btnCargarDatosAdmin.Click += btnCargarDatosAdmin_Click;
+            // 
+            // btnCargarDatosUsuario
+            // 
+            btnCargarDatosUsuario.Location = new Point(51, 195);
+            btnCargarDatosUsuario.Name = "btnCargarDatosUsuario";
+            btnCargarDatosUsuario.Size = new Size(128, 29);
+            btnCargarDatosUsuario.TabIndex = 15;
+            btnCargarDatosUsuario.Text = "Cargar en Login";
+            btnCargarDatosUsuario.UseVisualStyleBackColor = true;
+            btnCargarDatosUsuario.Click += btnCargarDatosUsuario_Click;
             // 
             // LoginForm
             // 
@@ -231,5 +255,7 @@
         private Button btnAutoregistroUsuario;
         private Panel panel2;
         private Label lblInformacion;
+        private Button btnCargarDatosUsuario;
+        private Button btnCargarDatosAdmin;
     }
 }

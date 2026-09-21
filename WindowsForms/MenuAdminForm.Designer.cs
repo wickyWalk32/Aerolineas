@@ -42,6 +42,7 @@ namespace WindowsForms
             btnSalirDelSistema = new Button();
             lblNombreApellido = new Label();
             lblAdmin = new Label();
+            btnAdministrarServicios = new Button();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -58,6 +59,7 @@ namespace WindowsForms
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(btnAdministrarServicios);
             panel1.Controls.Add(btnAdministrarCiudades);
             panel1.Controls.Add(lblTituloPanelAcciones);
             panel1.Controls.Add(btnAdministrarUsuarios);
@@ -135,11 +137,21 @@ namespace WindowsForms
             lblAdmin.TabIndex = 4;
             lblAdmin.Text = "Admin:";
             // 
+            // btnAdministrarServicios
+            // 
+            btnAdministrarServicios.Location = new Point(65, 181);
+            btnAdministrarServicios.Name = "btnAdministrarServicios";
+            btnAdministrarServicios.Size = new Size(165, 29);
+            btnAdministrarServicios.TabIndex = 5;
+            btnAdministrarServicios.Text = "Administrar Servicios";
+            btnAdministrarServicios.UseVisualStyleBackColor = true;
+            btnAdministrarServicios.Click += btnAdministrarServicios_Click;
+            // 
             // MenuAdminForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 542);
+            ClientSize = new Size(788, 542);
             Controls.Add(lblAdmin);
             Controls.Add(lblNombreApellido);
             Controls.Add(btnSalirDelSistema);
@@ -166,5 +178,6 @@ namespace WindowsForms
 
         // Botón para abrir formulario de Pasajeros
         private Button btnAdministrarPasajeros;
+        private Button btnAdministrarServicios;
     }
 }

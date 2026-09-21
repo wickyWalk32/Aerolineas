@@ -68,11 +68,11 @@ namespace Application.Services
             Pasajero pasajero = await _repo.GetByIdAsync(id);
 
             if (pasajero == null)return false;
-            pasajero.Nombre = dto.Nombre;
-            pasajero.Apellido = dto.Apellido;
-            pasajero.TipoDocumento = dto.TipoDocumento;
-            pasajero.NroDocumento = dto.NroDocumento;
-            pasajero.Tipo = dto.Tipo;
+            pasajero.SetNombre(dto.Nombre);
+            pasajero.SetApellido(dto.Apellido);
+            pasajero.SetTipoDocumento(dto.TipoDocumento);
+            pasajero.SetNroDocumento(dto.NroDocumento);
+            pasajero.SetTipo(dto.Tipo);
             await _repo.UpdateAsync(pasajero);
             return true;
         }

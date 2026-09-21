@@ -56,7 +56,7 @@ namespace WindowsForms
 
             try
             {
-                using (var httpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7099/") })
+                /*using (var httpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7099/") })
                 {
                     UsuarioLoginRequestDTO usuarioLoginRequestDto = new UsuarioLoginRequestDTO
                     {
@@ -66,7 +66,7 @@ namespace WindowsForms
 
                     HttpResponseMessage response = await httpClient.PostAsJsonAsync("/usuarios/login", usuarioLoginRequestDto);
 
-                    // Leemos la respuesta como LoginResultDTO (a resultado llega un DTO de Usuario)
+                    // Leemos la respuesta como UsuarioLoginResultDTO (a resultado llega un DTO de Usuario)
                     var resultado = await response.Content.ReadFromJsonAsync<UsuarioLoginResultDTO>();
 
                     if (response.IsSuccessStatusCode && resultado != null && resultado.Exitoso)
@@ -80,7 +80,41 @@ namespace WindowsForms
                         string mensajeError = resultado?.Mensaje ?? "Acceso denegado.";
                         MessageBox.Show(mensajeError, "Error de Autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                }*/
+
+                // Utilizamos el HttpClient global configurado en Program.cs
+
+                UsuarioLoginRequestDTO usuarioLoginRequestDto = new UsuarioLoginRequestDTO
+                {
+                    Email = email,
+                    Contrasenia = contrasenia
+                };
+
+                HttpResponseMessage response = await Program.HttpClient.PostAsJsonAsync("/usuarios/login", usuarioLoginRequestDto);
+
+                // Leemos la respuesta como UsuarioLoginResultDTO
+                var resultado = await response.Content.ReadFromJsonAsync<UsuarioLoginResultDTO>();
+
+                if (response.IsSuccessStatusCode && resultado != null && resultado.Exitoso)
+                {
+                    // === GUARDAMOS EL TOKEN JWT Y CONFIGURAMOS EL CLIENTE HTTP ===
+                    if (!string.IsNullOrEmpty(resultado.Token))
+                    {
+                        Program.TokenJwt = resultado.Token;
+                        Program.HttpClient.DefaultRequestHeaders.Authorization =
+                            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Program.TokenJwt);
+                    }
+
+                    this.UsuarioAutenticado = resultado;
+                    this.DialogResult = DialogResult.OK;
+                    this.Close(); // Cierra y destruye la ventana de Login
                 }
+                else
+                {
+                    string mensajeError = resultado?.Mensaje ?? "Acceso denegado.";
+                    MessageBox.Show(mensajeError, "Error de Autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
             }
             catch (Exception ex)
             {
@@ -120,6 +154,20 @@ namespace WindowsForms
             {
                 Application.Exit();
             }
+        }
+
+        // Botones para probar el ingreso en etapa de desarrollo.
+
+        private void btnCargarDatosAdmin_Click(object sender, EventArgs e)
+        {
+            textBoxEmail.Text = "admin@email.com";
+            textBoxContrasenia.Text = "admin";
+        }
+
+        private void btnCargarDatosUsuario_Click(object sender, EventArgs e)
+        {
+            textBoxEmail.Text = "usu@email.com";
+            textBoxContrasenia.Text = "usu";
         }
 
     }

@@ -60,17 +60,17 @@ namespace WindowsForms
         // Abrir CiudadDetalle para crear una nueva ciudad
         private void btnNuevaCiudad_Click(object sender, EventArgs e)
         {
-            CiudadDetalleForm ciudadDetalle = new CiudadDetalleForm(this);
+            CiudadDetalleForm ciudadDetalleForm = new CiudadDetalleForm(this);
             this.Hide();
-            ciudadDetalle.Show();
+            ciudadDetalleForm.Show();
         }
 
         // Abrir CiudadDetalle pasando la ciudad seleccionada para editar
         private void Item_OnEditarClicked(object? sender, CiudadDTO ciudadAEditar)
         {
-            CiudadDetalleForm ciudadDetalle = new CiudadDetalleForm(this, ciudadAEditar);
+            CiudadDetalleForm ciudadDetalleForm = new CiudadDetalleForm(this, ciudadAEditar);
             this.Hide();
-            ciudadDetalle.Show();
+            ciudadDetalleForm.Show();
         }
 
         // Eliminar ciudad seleccionada

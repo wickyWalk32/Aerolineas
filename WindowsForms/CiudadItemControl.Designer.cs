@@ -63,7 +63,7 @@
             btnEditarCiudad.TabIndex = 2;
             btnEditarCiudad.Text = "Editar";
             btnEditarCiudad.UseVisualStyleBackColor = true;
-            btnEditarCiudad.Click += btnEditar_Click;
+            btnEditarCiudad.Click += btnEditarCiudad_Click;
             // 
             // btnEliminarCiudad
             // 

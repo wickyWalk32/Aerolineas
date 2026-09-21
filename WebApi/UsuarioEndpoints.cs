@@ -1,5 +1,7 @@
 ﻿using Application.Services;
+using Domain.Model;
 using DTOs;
+using WebApi.Services;
 
 namespace WebApi
 {
@@ -15,7 +17,8 @@ namespace WebApi
             })
             .WithName("GetAllUsuarios")
             .Produces<List<UsuarioDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             // 2. CREAR UN NUEVO USUARIO (POST)
             app.MapPost("/usuarios", async (UsuarioCreateDTO dto, UsuarioService usuarioService) =>
@@ -34,6 +37,8 @@ namespace WebApi
             .Produces<UsuarioCreateDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi();
+            //.AllowAnonymous();
+            //.RequireAuthorization();
 
             // 3. EDITAR UN USUARIO (PUT)
             app.MapPut("/usuarios/{id}", async (int id, UsuarioUpdateDTO dto, UsuarioService usuarioService) =>
@@ -43,14 +48,15 @@ namespace WebApi
                 //    return Results.BadRequest(new { error = "Datos incoherentes o inválidos." });
                 //}
                 System.Console.Write(dto);
-                await usuarioService.UpdateAsync(id,dto);
+                await usuarioService.UpdateAsync(id, dto);
 
                 return Results.NoContent();
             })
             .WithName("UpdateUsuario")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             // 4. ELIMINAR UN USUARIO (DELETE)
             app.MapDelete("/usuarios/{id}", async (int id, UsuarioService usuarioService) =>
@@ -60,10 +66,11 @@ namespace WebApi
             })
             .WithName("DeleteUsuario")
             .Produces(StatusCodes.Status204NoContent)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             // 5. LOGIN DE USUARIOS
-            app.MapPost("/usuarios/login", (UsuarioLoginRequestDTO usuarioLoginRequestDto, UsuarioService usuarioService) =>
+            app.MapPost("/usuarios/login", (UsuarioLoginRequestDTO usuarioLoginRequestDto, UsuarioService usuarioService, JwtTokenService tokenService) =>
             {
                 try
                 {
@@ -78,6 +85,23 @@ namespace WebApi
                     {
                         return Results.Json(resultado, statusCode: StatusCodes.Status401Unauthorized);
                     }
+
+                    // Como el login fue exitoso, ya tenemos el Rol, Nombre y Apellido en 'resultado'.
+                    // Creamos una entidad temporal (o adaptada) para que el JwtTokenService pueda generar los claims.
+                    // (Nota: Si el JwtTokenService usa Id, Email y Rol, pasarle el email que vino en el request y el rol del resultado).
+                    var usuarioParaToken = new Usuario
+                    (
+                        resultado.Nombre,
+                        resultado.Apellido,
+                        usuarioLoginRequestDto.Email,
+                        resultado.Rol
+                    );
+
+                    // Generamos el Token JWT
+                    string token = tokenService.GenerarToken(usuarioParaToken);
+
+                    // Asignamos el token al resultado que se enviará al cliente de WindowsForms
+                    resultado.Token = token;
 
                     return Results.Ok(resultado);
                 }

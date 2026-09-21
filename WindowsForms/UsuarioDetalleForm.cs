@@ -36,6 +36,7 @@ namespace WindowsForms
         {
             InitializeComponent();
             lblTituloNuevoEditarUsuario.Text = "Registrarse en el sistema";
+            lblId.Text = "";
             lblIdUsuario.Text = "";
             _loginForm = loginForm;
 
@@ -53,6 +54,7 @@ namespace WindowsForms
         {
             InitializeComponent();
             lblTituloNuevoEditarUsuario.Text = "Nuevo Usuario";
+            lblId.Text = "";
             lblIdUsuario.Text = "";
             _usuarioAdminMenuForm = usuarioAdminMenuForm;
         }

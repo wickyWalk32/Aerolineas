@@ -9,6 +9,9 @@ namespace WindowsForms
         public static IConfiguration Configuration { get; private set; } = null!;
         public static HttpClient HttpClient { get; private set; } = null!;
 
+        // Aquí guardaremos el token del usuario logueado
+        public static string? TokenJwt { get; set; }
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>

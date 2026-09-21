@@ -41,7 +41,7 @@
             lblTituloNuevoEditarCiudad = new Label();
             panel1 = new Panel();
             lblIdCiudad = new Label();
-            lblTituloId = new Label();
+            lblId = new Label();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -150,7 +150,7 @@
             // 
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(lblIdCiudad);
-            panel1.Controls.Add(lblTituloId);
+            panel1.Controls.Add(lblId);
             panel1.Controls.Add(comboBoxPais);
             panel1.Controls.Add(btnGuardar);
             panel1.Controls.Add(textBoxNombre);
@@ -174,16 +174,16 @@
             lblIdCiudad.TabIndex = 10;
             lblIdCiudad.Text = "label6";
             // 
-            // lblTituloId
+            // lblId
             // 
-            lblTituloId.AutoSize = true;
-            lblTituloId.Location = new Point(28, 25);
-            lblTituloId.Name = "lblTituloId";
-            lblTituloId.Size = new Size(22, 20);
-            lblTituloId.TabIndex = 9;
-            lblTituloId.Text = "Id";
+            lblId.AutoSize = true;
+            lblId.Location = new Point(28, 25);
+            lblId.Name = "lblId";
+            lblId.Size = new Size(22, 20);
+            lblId.TabIndex = 9;
+            lblId.Text = "Id";
             // 
-            // CiudadDetalle
+            // CiudadDetalleForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -192,7 +192,7 @@
             Controls.Add(lblTituloNuevoEditarCiudad);
             Controls.Add(btnVolver);
             Margin = new Padding(3, 4, 3, 4);
-            Name = "CiudadDetalle";
+            Name = "CiudadDetalleForm";
             Text = "Administrador";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -215,6 +215,6 @@
         private Label lblTituloNuevoEditarCiudad;
         private Panel panel1;
         private Label lblIdCiudad;
-        private Label lblTituloId;
+        private Label lblId;
     }
 }

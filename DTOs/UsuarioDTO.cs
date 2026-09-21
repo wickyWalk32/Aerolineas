@@ -16,6 +16,9 @@
         public string Rol { get; set; } = string.Empty;
         public bool Exitoso { get; set; }
         public string Mensaje { get; set; } = string.Empty;
+
+        // Propiedad agregada para recibir el Token JWT generado por la WebApi
+        public string? Token { get; set; }
     }
 
     // DTO para lectura de la base de datos

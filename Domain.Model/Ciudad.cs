@@ -21,8 +21,8 @@ namespace Domain.Model
 
         // 1 Ciudad > 1 Pais
 
-        public int PaisId { get; private set; }         // Clave foránea
-        public Pais Pais { get; private set; }          // Propiedad de navegación
+        public int PaisId { get; private set; }                 // Clave foránea
+        public Pais Pais { get; private set; } = null!;         // Propiedad de navegación
 
         // 1 Ciudad > Muchos vuelos (siendo ciudad de origen)  >>>  * ciudado con el tema CiudadOrigen y CiudadDestino de un vuelo:
 
@@ -111,6 +111,18 @@ namespace Domain.Model
         {
             ArgumentNullException.ThrowIfNull(vueloOrigen);
             _vuelosOrigen.Remove(vueloOrigen);
+        }
+
+        public void AddVueloDestino(Vuelo vueloDestino)
+        {
+            ArgumentNullException.ThrowIfNull(vueloDestino);
+            _vuelosDestino.Add(vueloDestino);
+        }
+
+        public void RemoveVueloDestino(Vuelo vueloDestino)
+        {
+            ArgumentNullException.ThrowIfNull(vueloDestino);
+            _vuelosDestino.Remove(vueloDestino);
         }
 
         // <<< DEMÁS MÉTODOS >>>

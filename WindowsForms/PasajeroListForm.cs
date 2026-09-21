@@ -23,11 +23,9 @@ namespace WindowsForms
         {
             try
             {
-                // Construye opciones vacías: AppDbContext.OnConfiguring leerá appsettings.json si es necesari
-
+                // Construye opciones vacías: AppDbContext.OnConfiguring leerá appsettings.json si es necesario
                 var response = await Program.HttpClient.GetFromJsonAsync<List<PasajeroDTO>>("pasajeros");
                 
-
                 // Ordena por Apellido, luego Nombre
                 var ordenada = response?.OrderBy(p => p.Apellido).ThenBy(p => p.Nombre).ToList();
 
@@ -58,20 +56,25 @@ namespace WindowsForms
 
             var row = dgvPasajeros.Rows[e.RowIndex];
 
-            PasajeroUpdateDTO pasajero = new PasajeroUpdateDTO
+            // Como las columnas se autogeneran del DTO, extraemos el objeto directamente 
+            // usando DataBoundItem para evitar cualquier error de nombres de celdas:
+            if (row.DataBoundItem is PasajeroDTO pasajeroSeleccionado)
             {
-                Id = (int)Convert.ToInt32(row.Cells["colId"].Value),
-                Tipo = (char)row.Cells["colTipo"].Value,
-                Nombre = (string)row.Cells["colNombre"].Value,
-                Apellido = (string)row.Cells["colApellido"].Value,
-                TipoDocumento = (string)row.Cells["colTipoDoc"].Value,
-                NroDocumento = (string)row.Cells["colNroDoc"].Value
-            };
+                PasajeroUpdateDTO pasajero = new PasajeroUpdateDTO
+                {
+                    Id = pasajeroSeleccionado.Id,
+                    Tipo = pasajeroSeleccionado.Tipo,
+                    Nombre = pasajeroSeleccionado.Nombre,
+                    Apellido = pasajeroSeleccionado.Apellido,
+                    TipoDocumento = pasajeroSeleccionado.TipoDocumento,
+                    NroDocumento = pasajeroSeleccionado.NroDocumento
+                };
 
-
-            // Modificar Pasajero
-            var pasajeroDetalle = new PasajeroDetalleForm(pasajero);
-            pasajeroDetalle.Show();
+                // Modificar Pasajero
+                var pasajeroDetalle = new PasajeroDetalleForm(pasajero);
+                pasajeroDetalle.Show();
+            }
         }
+
     }
 }

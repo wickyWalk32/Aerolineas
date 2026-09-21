@@ -84,7 +84,7 @@
             Controls.Add(btnNuevaCiudad);
             Controls.Add(lblTituloAdminCiudades);
             Name = "CiudadAdminMenuForm";
-            Text = "CiudadAdminMenu";
+            Text = "Administrador";
             ResumeLayout(false);
             PerformLayout();
         }
