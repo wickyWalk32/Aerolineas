@@ -30,7 +30,7 @@ namespace WindowsForms
             lblTituloNuevoEditarCiudad.Text = "Nueva Ciudad";
             lblId.Text = "";
             lblIdCiudad.Text = "";
-            
+
             // Carga los países normalmente sin selección previa
             _ = CargarPaisesAsync();
         }
@@ -49,7 +49,7 @@ namespace WindowsForms
             textBoxNombre.Text = ciudadAEditar.Nombre;
             textBoxCodigoPostal.Text = ciudadAEditar.CodigoPostal;
             textBoxCodigoAeropuerto.Text = ciudadAEditar.CodigoAeropuerto;
-            
+
             // Cargamos los países y seleccionamos automáticamente el correspondiente
             _ = CargarPaisesAsync(ciudadAEditar.PaisId);
 
@@ -59,7 +59,7 @@ namespace WindowsForms
         {
             if (!_esEdicion)
             {
-               CiudadCreateDTO ciudad = new CiudadCreateDTO
+                CiudadCreateDTO ciudad = new CiudadCreateDTO
                 {
                     Nombre = textBoxNombre.Text,
                     CodigoPostal = textBoxCodigoPostal.Text,
@@ -70,11 +70,11 @@ namespace WindowsForms
                 if (response.IsSuccessStatusCode)
                 {
                     ClearForm();
-                    MessageBox.Show("Ciudad Guardada!","Success",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                    MessageBox.Show("Ciudad Guardada!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show("Failed to save.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to save.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
             }
@@ -148,5 +148,9 @@ namespace WindowsForms
             _ciudadAdminMenuForm.CargarListaCiudadesEnItems();
         }
 
-    }    
+        private void CiudadDetalleForm_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
 }

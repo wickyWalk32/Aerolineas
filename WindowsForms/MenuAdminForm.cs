@@ -55,7 +55,17 @@ namespace WindowsForms
             Application.Restart(); // Reinicia la aplicación y vuelve al Login
         }
 
-        
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var ventana = new MenuAvionesForm(this);
+            ventana.Show();
+            this.Hide();
+        }
+
+        private void MenuAdminForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 
