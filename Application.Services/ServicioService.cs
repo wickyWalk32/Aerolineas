@@ -51,10 +51,10 @@ namespace Application.Services
         {
             // Aquí se disparan las validaciones de los setters de Servicio.
             Servicio servicio = new Servicio(
-                                            servicioCreateDTO.Nombre,
-                                            servicioCreateDTO.Descripcion,
-                                            servicioCreateDTO.Precio
-                                            );
+                servicioCreateDTO.Nombre,
+                servicioCreateDTO.Descripcion,
+                servicioCreateDTO.Precio
+            );
 
             await _servicioRepository.AddAsync(servicio);
             return;

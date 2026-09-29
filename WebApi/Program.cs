@@ -45,6 +45,9 @@ builder.Services.AddScoped<AvionService>();
 builder.Services.AddScoped<IServicioRepository, ServicioRepository>();
 builder.Services.AddScoped<ServicioService>();
 
+builder.Services.AddScoped<IVueloRepository, VueloRepository>();
+builder.Services.AddScoped<VueloService>();
+
 builder.Services.AddScoped<IReservaRepository, ReservaRepository>();
 builder.Services.AddScoped<ReservaService>();
 
@@ -136,6 +139,7 @@ app.MapPaisEndpoints();
 app.MapCiudadEndpoints();
 app.MapPasajeroEndpoints();
 app.MapServicioEndpoints();
+app.MapVueloEndpoints();
 app.MapReservaEndpoints();
 
 //app.MapGet("/", () => "Hello, World!");       //?

@@ -36,7 +36,7 @@ namespace WindowsForms
             //textBoxEmail.Text = "usu@email.com";
             //textBoxContrasenia.Text = "usu";
 
-            /* Usuario de tipo 'admin' aniadido a la bd: */
+            /* Usuario de tipo 'admin' aniadido a la bd mediante el DbContext y el EnsureCrated(): */
 
             textBoxEmail.Text = "admin@email.com";
             textBoxContrasenia.Text = "admin";
@@ -56,32 +56,7 @@ namespace WindowsForms
 
             try
             {
-                /*using (var httpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7099/") })
-                {
-                    UsuarioLoginRequestDTO usuarioLoginRequestDto = new UsuarioLoginRequestDTO
-                    {
-                        Email = email,
-                        Contrasenia = contrasenia
-                    };
-
-                    HttpResponseMessage response = await httpClient.PostAsJsonAsync("/usuarios/login", usuarioLoginRequestDto);
-
-                    // Leemos la respuesta como UsuarioLoginResultDTO (a resultado llega un DTO de Usuario)
-                    var resultado = await response.Content.ReadFromJsonAsync<UsuarioLoginResultDTO>();
-
-                    if (response.IsSuccessStatusCode && resultado != null && resultado.Exitoso)
-                    {
-                        this.UsuarioAutenticado = resultado;
-                        this.DialogResult = DialogResult.OK;
-                        this.Close(); // Cierra y destruye la ventana de Login
-                    }
-                    else
-                    {
-                        string mensajeError = resultado?.Mensaje ?? "Acceso denegado.";
-                        MessageBox.Show(mensajeError, "Error de Autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }*/
-
+                
                 // Utilizamos el HttpClient global configurado en Program.cs
 
                 UsuarioLoginRequestDTO usuarioLoginRequestDto = new UsuarioLoginRequestDTO

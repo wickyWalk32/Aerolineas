@@ -1,8 +1,9 @@
 ﻿using Domain.Model;
 using DTOs;
-using Microsoft.EntityFrameworkCore;
 using Humanizer;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 
 namespace Data
 {
@@ -17,12 +18,14 @@ namespace Data
 
         public async Task<List<Usuario>> GetAllAsync()
         {
-            return await _context.Usuarios.ToListAsync();
+            List < Usuario > listaUsuarios = await _context.Usuarios.ToListAsync();
+            return listaUsuarios;
         }
 
         public async Task<Usuario?> GetByIdAsync(int id)
         { 
-            return await _context.Usuarios.FindAsync(id);
+            Usuario usu = await _context.Usuarios.FindAsync(id);
+            return usu;
         }
 
         // LOGIN
@@ -32,22 +35,28 @@ namespace Data
             return usuario;
         }
 
-        public async Task AddAsync(Usuario usuario)
+        public async Task<Usuario> AddAsync(Usuario usuario)
         {
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
+
+            // Como salio bien, lo devuelve y es oficialmente el usuario guardado en la bd. Y EF tiene este
+            // objeto en memoria y con su inteligencia ya le cargo ID autogenerado.
+            return usuario;
         }
 
-        public async Task UpdateAsync(Usuario usuario)
+        public async Task/*<Usuario>*/ UpdateAsync(Usuario usuario)
         {
             _context.Entry(usuario).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            /*return usuario;*/
         }
 
-        public async Task DeleteAsync(Usuario usuario)
+        public async Task/*<Usuario>*/ DeleteAsync(Usuario usuario)
         {
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
+            /*return usuario;*/
         }
 
         public async Task<bool> ExistsAsync(int id)

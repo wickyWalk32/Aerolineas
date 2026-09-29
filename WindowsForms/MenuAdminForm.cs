@@ -50,6 +50,13 @@ namespace WindowsForms
             this.Hide();
         }
 
+        private void btnAdministrarVuelos_Click(object sender, EventArgs e)
+        {
+            var ventana = new VueloAdminMenuForm(this);
+            ventana.Show();
+            this.Hide();
+        }
+
         private void btnSalirDelSistema_Click(object sender, EventArgs e)
         {
             Application.Restart(); // Reinicia la aplicación y vuelve al Login

@@ -15,13 +15,13 @@ namespace WindowsForms
     public partial class CiudadAdminMenuForm : Form
     {
 
-        private readonly MenuAdminForm _menuPrincipalForm;
+        private readonly MenuAdminForm _menuAdminForm;
 
 
-        public CiudadAdminMenuForm(MenuAdminForm menuPrincipalForm)
+        public CiudadAdminMenuForm(MenuAdminForm menuAdminForm)
         {
             InitializeComponent();
-            _menuPrincipalForm = menuPrincipalForm;
+            _menuAdminForm = menuAdminForm;
             CargarListaCiudadesEnItems();
         }
 
@@ -110,7 +110,7 @@ namespace WindowsForms
         private void btnVolver_Click(object sender, EventArgs e)
         {
             // Volvemos a mostrar el menú que teníamos oculto
-            _menuPrincipalForm.Show();
+            _menuAdminForm.Show();
 
             // Cerramos la pantalla actual de Administrar Ciudades
             this.Close();

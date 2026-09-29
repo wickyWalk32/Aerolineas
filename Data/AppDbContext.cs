@@ -187,13 +187,21 @@ namespace Data
 
                 // Datos iniciales (Seed Data)
                 entityCiudad.HasData(
-                    new Ciudad
-                    (1,
-                    "Rosario",
-                    "2000",
-                    "ROS",
-                    9
-                    )
+                    new Ciudad(1 , "Rosario"             , "2000"        , "ROS", 9),
+                    new Ciudad(2 , "Buenos Aires"        , "1802"        , "EZE", 9),
+                    new Ciudad(3 , "Córdoba"             , "5000"        , "COR", 9),
+                    new Ciudad(4 , "San Pablo"           , "07190-902"   , "GRU", 26),
+                    new Ciudad(5 , "Nueva York"          , "11430"       , "JFK", 60),
+                    new Ciudad(6 , "Los Ángeles"         , "90045"       , "LAX", 60),
+                    new Ciudad(7 , "Madrid"              , "28042"       , "MAD", 59),
+                    new Ciudad(8 , "Lima"                , "07031"       , "LIM", 141),
+                    new Ciudad(9 , "Roma"                , "00054"       , "FCO", 90),
+                    new Ciudad(10, "Pekín"               , "100621"      , "PEK", 39),
+                    new Ciudad(11, "Tokio"               , "282-8601"    , "NRT", 92),
+                    new Ciudad(12, "Dubái"               , "2525"        , "DBX", 55),
+                    new Ciudad(13, "París"               , "95700"       , "CDG", 66),
+                    new Ciudad(14, "Sídney"              , "2020"        , "SYD", 11),
+                    new Ciudad(15, "Ciudad del Cabo"     , "7490"        , "CPT", 168)
                 );
 
             });

@@ -54,9 +54,11 @@ namespace Application.Services
                                             usuarioCreateDTO.Contrasenia,
                                             usuarioCreateDTO.Rol);
 
-            await _repository.AddAsync(usuario);
+            Usuario usuarioGuardado = await _repository.AddAsync(usuario);
             
-            // Pregunta: es necesario que devuelva estainfo del usuario? se usa para algo en el front? o sacar?
+            // Pregunta: es necesario que devuelva esta info del usuario? se usa para algo en el front? o sacar?
+            // EF carga id autogenerado por la bd en 'usuario' xq es inteligente y lo tiene en memoria xq se paso al repositorio para
+            // hacer la operación en la bd.
             UsuarioDTO usuarioDTO = new UsuarioDTO
             {
                 Id = usuario.Id,

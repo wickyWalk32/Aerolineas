@@ -33,7 +33,7 @@ namespace Domain.Model
 
         public int IdAvion { get; private set; }
         public Avion? Avion { get; private set; }
-        
+
         // 1 Vuelo > Muchas Reservas
 
         private readonly List<Reserva> _reservas = new(); // new List<Reserva>() ?
@@ -42,13 +42,24 @@ namespace Domain.Model
 
         // <<< CONSTRUCTORES >>>
 
-        public Vuelo()
+
+        public Vuelo(DateTime fechaHoraVuelo, string aerolinea, decimal precio, int idCiudadOrigen, int idCiudadDestino, int idAvion)
         {
+            ValidarCiudades(idCiudadOrigen, idCiudadDestino);
+
+            this.SetFechaHoraVuelo(fechaHoraVuelo);
+            this.SetAerolinea(aerolinea);
+            this.SetPrecio(precio);
+            this.SetIdCiudadOrigen(idCiudadOrigen);
+            this.SetIdCiudadDestino(idCiudadDestino);
+            this.SetIdAvion(idAvion);
         }
 
         public Vuelo(DateTime fechaHoraVuelo, string aerolinea, decimal precio, Ciudad ciudadOrigen, int idCiudadOrigen,
             Ciudad ciudadDestino, int idCiudadDestino, Avion avion, int idAvion)
         {
+            ValidarCiudades(idCiudadOrigen, idCiudadDestino);
+
             this.SetFechaHoraVuelo(fechaHoraVuelo);
             this.SetAerolinea(aerolinea);
             this.SetPrecio(precio);
@@ -63,6 +74,8 @@ namespace Domain.Model
         public Vuelo(int id, DateTime fechaHoraVuelo, string aerolinea, decimal precio, Ciudad ciudadOrigen, int idCiudadOrigen,
             Ciudad ciudadDestino, int idCiudadDestino, Avion avion, int idAvion)
         {
+            ValidarCiudades(idCiudadOrigen, idCiudadDestino);
+
             this.SetId(id);
             this.SetFechaHoraVuelo(fechaHoraVuelo);
             this.SetAerolinea(aerolinea);
@@ -117,13 +130,17 @@ namespace Domain.Model
 
         public void SetIdCiudadOrigen(int idCiudadOrigen)
         {
+            ValidarCiudades(idCiudadOrigen, IdCiudadDestino);
+
             if (idCiudadOrigen < 0)
                 throw new ArgumentException("Id de ciudad de origen del vuelo inválido.");
             this.IdCiudadOrigen = idCiudadOrigen;
         }
-        
+
         public void SetCiudadOrigen(Ciudad ciudadOrigen)
         {
+            ValidarCiudades(ciudadOrigen.Id, IdCiudadDestino);
+
             if (ciudadOrigen == null)
                 throw new ArgumentException("Ciudad de origen del vuelo inválida.");
             this.CiudadOrigen = ciudadOrigen;
@@ -131,6 +148,8 @@ namespace Domain.Model
 
         public void SetIdCiudadDestino(int idCiudadDestino)
         {
+            ValidarCiudades(IdCiudadOrigen, idCiudadDestino);
+
             if (idCiudadDestino < 0)
                 throw new ArgumentException("Id de ciudad de destino del vuelo inválido.");
             this.IdCiudadDestino = idCiudadDestino;
@@ -138,6 +157,8 @@ namespace Domain.Model
 
         public void SetCiudadDestino(Ciudad ciudadDestino)
         {
+            ValidarCiudades(IdCiudadOrigen, ciudadDestino.Id);
+
             if (ciudadDestino == null)
                 throw new ArgumentException("Ciudad de destino del vuelo inválida.");
             this.CiudadDestino = ciudadDestino;
@@ -170,6 +191,14 @@ namespace Domain.Model
         }
 
         // <<< DEMÁS MÉTODOS >>>
+
+        private void ValidarCiudades(int origen, int destino)
+        {
+            if (origen == destino)
+            {
+                throw new InvalidOperationException("La ciudad de origen y la ciudad de destino no pueden ser la misma.");
+            }
+        }
 
     }
 }

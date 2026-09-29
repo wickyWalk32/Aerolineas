@@ -1,9 +1,8 @@
 ﻿using Application.Services;
-using Domain.Model; // O el using donde tengas tu entidad Servicio
-using DTOs;            // O donde tengas tus DTOs de servicio
+using DTOs;
 using Microsoft.AspNetCore.Authorization;
 
-namespace WebApi // O el namespace que uses para tus endpoints
+namespace WebApi
 {
     public static class ServicioEndpoints
     {
@@ -39,6 +38,7 @@ namespace WebApi // O el namespace que uses para tus endpoints
                 await servicioService.DeleteAsync(id);
                 return Results.NoContent();
             });
+
         }
     }
 }

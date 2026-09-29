@@ -107,5 +107,6 @@ namespace WindowsForms
             _menuAdminForm.Show();
             this.Close();
         }
+
     }
 }
