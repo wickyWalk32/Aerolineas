@@ -56,7 +56,7 @@
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(70, 430);
+            btnVolver.Location = new Point(70, 608);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(180, 30);
             btnVolver.TabIndex = 2;
@@ -70,7 +70,7 @@
             panelListaCiudades.FlowDirection = FlowDirection.TopDown;
             panelListaCiudades.Location = new Point(70, 100);
             panelListaCiudades.Name = "panelListaCiudades";
-            panelListaCiudades.Size = new Size(1100, 300);
+            panelListaCiudades.Size = new Size(1100, 469);
             panelListaCiudades.TabIndex = 3;
             panelListaCiudades.WrapContents = false;
             // 
@@ -78,7 +78,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1242, 503);
+            ClientSize = new Size(1242, 688);
             Controls.Add(panelListaCiudades);
             Controls.Add(btnVolver);
             Controls.Add(btnNuevaCiudad);

@@ -46,11 +46,11 @@
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(70, 595);
+            btnVolver.Location = new Point(70, 616);
             btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(140, 30);
+            btnVolver.Size = new Size(180, 30);
             btnVolver.TabIndex = 1;
-            btnVolver.Text = "Volver";
+            btnVolver.Text = "Volver al menú principal";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
             // 
@@ -67,11 +67,10 @@
             // panelListaVuelos
             // 
             panelListaVuelos.AutoScroll = true;
-            panelListaVuelos.BorderStyle = BorderStyle.FixedSingle;
             panelListaVuelos.FlowDirection = FlowDirection.TopDown;
             panelListaVuelos.Location = new Point(70, 100);
             panelListaVuelos.Name = "panelListaVuelos";
-            panelListaVuelos.Size = new Size(1100, 452);
+            panelListaVuelos.Size = new Size(1100, 477);
             panelListaVuelos.TabIndex = 3;
             panelListaVuelos.WrapContents = false;
             // 
@@ -79,7 +78,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1242, 686);
+            ClientSize = new Size(1242, 688);
             Controls.Add(panelListaVuelos);
             Controls.Add(label1);
             Controls.Add(btnVolver);

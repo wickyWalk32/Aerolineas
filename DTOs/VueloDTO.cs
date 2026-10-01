@@ -18,8 +18,8 @@ namespace DTOs
         public int IdCiudadDestino { get; set; }
         public string CiudadDestinoNombre { get; set; } = string.Empty;
         public int IdAvion { get; set; }
-        public string AvionDescripcion { get; private set; } = string.Empty;
-        public int AvionCapacidad { get; private set; }
+        public string AvionDescripcion { get; set; } = string.Empty;
+        public int AvionCapacidad { get; set; }
 
         private readonly List<Reserva> _reservas = new();
     }
@@ -53,7 +53,8 @@ namespace DTOs
 
     public class VueloDeleteDTO
     {
-        // Si se borra un vuelo, se necesita el avión para navegar hasta sus asientos y también borrarlos.
+        // Si se borra un vuelo, se necesita el avión para navegar hasta sus asientos y también borrarlos. ¿??? > NO! Xq asientos son
+        // del avión, y tienen un estado actual simplemente.
         // Si se borra un vuelo se necesita su listado de reservas para también borrarlas.
 
         public int Id { get; set; }

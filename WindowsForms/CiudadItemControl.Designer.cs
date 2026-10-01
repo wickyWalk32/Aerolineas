@@ -57,7 +57,7 @@
             // 
             // btnEditarCiudad
             // 
-            btnEditarCiudad.Location = new Point(868, 11);
+            btnEditarCiudad.Location = new Point(837, 11);
             btnEditarCiudad.Name = "btnEditarCiudad";
             btnEditarCiudad.Size = new Size(90, 29);
             btnEditarCiudad.TabIndex = 2;
@@ -67,7 +67,7 @@
             // 
             // btnEliminarCiudad
             // 
-            btnEliminarCiudad.Location = new Point(965, 11);
+            btnEliminarCiudad.Location = new Point(933, 11);
             btnEliminarCiudad.Name = "btnEliminarCiudad";
             btnEliminarCiudad.Size = new Size(90, 29);
             btnEliminarCiudad.TabIndex = 3;
@@ -96,7 +96,7 @@
             // lblPais
             // 
             lblPais.AutoSize = true;
-            lblPais.Location = new Point(658, 15);
+            lblPais.Location = new Point(640, 15);
             lblPais.Name = "lblPais";
             lblPais.Size = new Size(34, 20);
             lblPais.TabIndex = 6;
@@ -115,7 +115,7 @@
             Controls.Add(lblNombreCiudad);
             Controls.Add(lblIdCiudad);
             Name = "CiudadItemControl";
-            Size = new Size(1080, 50);
+            Size = new Size(1054, 50);
             ResumeLayout(false);
             PerformLayout();
         }

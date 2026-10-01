@@ -46,9 +46,14 @@ namespace WindowsForms
                     }
                 }
             } 
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"Error al conectar con la Web API: {ex.Message}");
+                MessageBox.Show(
+                    "Fallo al conectar, disculpe las molestias. ¡Inténtelo más tarde!",
+                    "Error de conexión",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
 
@@ -71,12 +76,8 @@ namespace WindowsForms
         // Eliminar servicio seleccionado
         private async void Item_OnEliminarClicked(object sender, ServicioDeleteDTO servicioDeleteDto) 
         {
-            var confirmacion = MessageBox.Show(
-                $"¿Está seguro de que desea eliminar el servicio {servicioDeleteDto.Nombre}?",
-                "Confirmar eliminación",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
+            var confirmacion = MessageBox.Show($"¿Está seguro de que desea eliminar el servicio {servicioDeleteDto.Nombre}?",
+                               "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (confirmacion == DialogResult.Yes)
             {
@@ -95,9 +96,10 @@ namespace WindowsForms
                         MessageBox.Show($"Error al eliminar: {response.ReasonPhrase}");
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    MessageBox.Show($"Error de conexión: {ex.Message}");
+                    MessageBox.Show("Fallo al conectar, disculpe las molestias. ¡Inténtelo más tarde!", "Error de conexión",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

@@ -98,9 +98,25 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.Database.EnsureDeleted();
-    context.Database.EnsureCreated(); // Crea la BD y aplica configuraciones iniciales
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+
+        // Ya no borramos la base de datos en cada arranque.
+        // await context.Database.EnsureDeletedAsync();
+
+        // Asegura que la base de datos esté creada sin borrarla en cada arranque.
+        await context.Database.EnsureCreatedAsync();
+
+        // Llamamos al inicializador seguro (carga de seed inicial) que verifica si los datos ya existen.
+        await DbInitializer.InitializeAsync(context);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Ocurrió un error al inicializar o poblar la base de datos.");
+    }
 }
 
 

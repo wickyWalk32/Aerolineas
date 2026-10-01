@@ -43,21 +43,23 @@
             // 
             // btnEditarVuelo
             // 
-            btnEditarVuelo.Location = new Point(1101, 11);
+            btnEditarVuelo.Location = new Point(885, 11);
             btnEditarVuelo.Name = "btnEditarVuelo";
             btnEditarVuelo.Size = new Size(90, 29);
             btnEditarVuelo.TabIndex = 0;
             btnEditarVuelo.Text = "Editar";
             btnEditarVuelo.UseVisualStyleBackColor = true;
+            btnEditarVuelo.Click += btnEditarVuelo_Click;
             // 
             // btnEliminarVuelo
             // 
-            btnEliminarVuelo.Location = new Point(1197, 11);
+            btnEliminarVuelo.Location = new Point(981, 11);
             btnEliminarVuelo.Name = "btnEliminarVuelo";
             btnEliminarVuelo.Size = new Size(90, 29);
             btnEliminarVuelo.TabIndex = 1;
             btnEliminarVuelo.Text = "Eliminar";
             btnEliminarVuelo.UseVisualStyleBackColor = true;
+            btnEliminarVuelo.Click += btnEliminarVuelo_Click;
             // 
             // lblId
             // 
@@ -80,7 +82,7 @@
             // lblCiudadDestino
             // 
             lblCiudadDestino.AutoSize = true;
-            lblCiudadDestino.Location = new Point(270, 15);
+            lblCiudadDestino.Location = new Point(319, 15);
             lblCiudadDestino.Name = "lblCiudadDestino";
             lblCiudadDestino.Size = new Size(107, 20);
             lblCiudadDestino.TabIndex = 4;
@@ -89,7 +91,7 @@
             // lblFecha
             // 
             lblFecha.AutoSize = true;
-            lblFecha.Location = new Point(490, 15);
+            lblFecha.Location = new Point(537, 15);
             lblFecha.Name = "lblFecha";
             lblFecha.Size = new Size(47, 20);
             lblFecha.TabIndex = 5;
@@ -98,7 +100,7 @@
             // lblHora
             // 
             lblHora.AutoSize = true;
-            lblHora.Location = new Point(600, 15);
+            lblHora.Location = new Point(659, 15);
             lblHora.Name = "lblHora";
             lblHora.Size = new Size(42, 20);
             lblHora.TabIndex = 6;
@@ -107,7 +109,7 @@
             // lblPrecio
             // 
             lblPrecio.AutoSize = true;
-            lblPrecio.Location = new Point(697, 15);
+            lblPrecio.Location = new Point(769, 15);
             lblPrecio.Name = "lblPrecio";
             lblPrecio.Size = new Size(50, 20);
             lblPrecio.TabIndex = 7;
@@ -116,7 +118,7 @@
             // lblAerolinea
             // 
             lblAerolinea.AutoSize = true;
-            lblAerolinea.Location = new Point(329, 35);
+            lblAerolinea.Location = new Point(537, 50);
             lblAerolinea.Name = "lblAerolinea";
             lblAerolinea.Size = new Size(73, 20);
             lblAerolinea.TabIndex = 8;
@@ -125,7 +127,7 @@
             // lblAvionDescripcion
             // 
             lblAvionDescripcion.AutoSize = true;
-            lblAvionDescripcion.Location = new Point(24, 50);
+            lblAvionDescripcion.Location = new Point(81, 50);
             lblAvionDescripcion.Name = "lblAvionDescripcion";
             lblAvionDescripcion.Size = new Size(47, 20);
             lblAvionDescripcion.TabIndex = 9;
@@ -134,7 +136,7 @@
             // lblAvionCapacidad
             // 
             lblAvionCapacidad.AutoSize = true;
-            lblAvionCapacidad.Location = new Point(177, 51);
+            lblAvionCapacidad.Location = new Point(319, 50);
             lblAvionCapacidad.Name = "lblAvionCapacidad";
             lblAvionCapacidad.Size = new Size(118, 20);
             lblAvionCapacidad.TabIndex = 10;
@@ -144,6 +146,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BorderStyle = BorderStyle.FixedSingle;
             Controls.Add(lblAvionCapacidad);
             Controls.Add(lblAvionDescripcion);
             Controls.Add(lblAerolinea);
@@ -156,7 +159,7 @@
             Controls.Add(btnEliminarVuelo);
             Controls.Add(btnEditarVuelo);
             Name = "VueloItemControl";
-            Size = new Size(1310, 90);
+            Size = new Size(1086, 88);
             ResumeLayout(false);
             PerformLayout();
         }

@@ -19,9 +19,9 @@ namespace Data
 
         public async Task<List<Ciudad>> GetAllAsync()
         {
-            return await _context.Ciudades.Include(c => c.Pais).ToListAsync();
+            return await _context.Ciudades.Include(c => c.Pais).OrderBy(c => c.Nombre).ToListAsync();
         }
-
+        
 
         public async Task<Ciudad?> GetByIdAsync(int id)
         { 

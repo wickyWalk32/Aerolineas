@@ -105,17 +105,23 @@ namespace WebApi
 
                     return Results.Ok(resultado);
                 }
-                catch (ArgumentException ex)
+                catch (Exception ex) when(ex is ArgumentException || ex is InvalidOperationException)
                 {
-                    return Results.BadRequest(new { error = ex.Message });
+                    // Unificamos las validaciones de negocio que devuelven un 400 Bad Request
+                    return Results.BadRequest(ex.Message);
+                }
+                catch (Exception)
+                {
+                    // Para cualquier otro error grave o inesperado del sistema (fallo de base de datos, etc.)
+                    return Results.Problem("Ocurrió un error interno en el servidor.", statusCode: 500);
                 }
 
-            })
+        })
             .WithName("LoginUsuario")
             .Produces<UsuarioLoginResultDTO>(StatusCodes.Status200OK)
             .Produces<UsuarioLoginResultDTO>(StatusCodes.Status401Unauthorized)
             .WithOpenApi();
-        
         }
+
     }
 }

@@ -49,7 +49,7 @@
             // lblNombre
             // 
             lblNombre.AutoSize = true;
-            lblNombre.Location = new Point(103, 15);
+            lblNombre.Location = new Point(90, 15);
             lblNombre.Name = "lblNombre";
             lblNombre.Size = new Size(64, 20);
             lblNombre.TabIndex = 1;
@@ -67,7 +67,7 @@
             // lblDescripcion
             // 
             lblDescripcion.AutoSize = true;
-            lblDescripcion.Location = new Point(140, 69);
+            lblDescripcion.Location = new Point(186, 45);
             lblDescripcion.Name = "lblDescripcion";
             lblDescripcion.Size = new Size(164, 20);
             lblDescripcion.TabIndex = 3;
@@ -96,7 +96,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(44, 69);
+            label1.Location = new Point(90, 45);
             label1.Name = "label1";
             label1.Size = new Size(90, 20);
             label1.TabIndex = 6;
@@ -115,7 +115,7 @@
             Controls.Add(lblNombre);
             Controls.Add(lblId);
             Name = "ServicioItemControl";
-            Size = new Size(1070, 148);
+            Size = new Size(1070, 82);
             ResumeLayout(false);
             PerformLayout();
         }

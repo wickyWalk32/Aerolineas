@@ -19,47 +19,215 @@ namespace WindowsForms
         public VueloUpdateDTO? VueloResultado { get; private set; }
         private bool _esEdicion = false;
         private readonly VueloAdminMenuForm _vueloAdminMenuForm;
+        
+        private VueloUpdateDTO? _vueloPendienteDeCarga;
 
         // Constructor para CREAR un nuevo vuelo
         public VueloDetalleForm(VueloAdminMenuForm vueloAdminMenuForm)
         {
             InitializeComponent();
+
+            // --- CONFIGURACIÓN PARA EL DATETIMEPICKER DE HORA ---
+            dateTimePickerHoraVuelo.Format = DateTimePickerFormat.Custom;
+            dateTimePickerHoraVuelo.CustomFormat = "HH:mm";
+
             _vueloAdminMenuForm = vueloAdminMenuForm;
             lblTituloNuevoEditarVuelo.Text = "Nuevo Vuelo";
             lblTituloId.Text = "";
             lblIdVuelo.Text = "";
 
-            CargarComboBoxesRelacionados();
+            _ = CargarComboBoxesRelacionados();
         }
 
         // Constructor para EDITAR un vuelo existente
         public VueloDetalleForm(VueloAdminMenuForm vueloAdminMenuForm, VueloUpdateDTO vueloAEditar)
         {
             InitializeComponent();
+            
+            // --- CONFIGURACIÓN PARA EL DATETIMEPICKER DE HORA ---
+            dateTimePickerHoraVuelo.Format = DateTimePickerFormat.Custom;
+            dateTimePickerHoraVuelo.CustomFormat = "HH:mm";
+
             _vueloAdminMenuForm = vueloAdminMenuForm;
             _esEdicion = true;
             lblTituloNuevoEditarVuelo.Text = "Editar Vuelo";
             VueloResultado = vueloAEditar;
 
             // Cargamos los datos de los ComboBoxes
-            CargarComboBoxesRelacionados();
+            //_ = CargarComboBoxesRelacionados();
 
+            // Guardamos los datos del vuelo para usarlos una vez que los combos respondan
+            _vueloPendienteDeCarga = vueloAEditar;
+
+            // Disparamos la carga asíncrona
+            _ = InicializarFormularioEdicionAsync(vueloAEditar);
+
+            /*
             // Cargamos los datos actuales del vuelo elegido en la pantalla anterior en las cajas de texto
             lblIdVuelo.Text = vueloAEditar.Id.ToString();
             textBoxPrecioVuelo.Text = vueloAEditar.Precio.ToString();
-            textBoxAerolinea.Text = vueloAEditar.Aerolinea;
+            //textBoxAerolinea.Text = vueloAEditar.Aerolinea;
+            comboBoxAerolinea.SelectedItem = vueloAEditar.Aerolinea;
 
             // Separamos el DateTime que viene del DTO hacia el DateTimePicker de fecha y el de hora
             dateTimePickerFechaVuelo.Value = vueloAEditar.FechaHoraVuelo.Date;
             dateTimePickerHoraVuelo.Value = vueloAEditar.FechaHoraVuelo;
-
+            
             // Seleccionamos los valores en los ComboBox
             comboBoxCiudadOrigen.SelectedValue = vueloAEditar.IdCiudadOrigen;
             comboBoxCiudadDestino.SelectedValue = vueloAEditar.IdCiudadDestino;
+            */
             /*comboBoxAvion.SelectedValue = vueloAEditar.IdAvion;*/
         }
 
-        private async void CargarComboBoxesRelacionados()
+        private async Task InicializarFormularioEdicionAsync(VueloUpdateDTO vueloAEditar)
+        {
+            // 1. Esperamos obligatoriamente a que se descarguen y carguen los combos
+            await CargarComboBoxesRelacionados();
+
+            // 2. UNA VEZ QUE TERMINÓ DE LLENARSE TODO, asignamos los valores con total seguridad:
+            lblIdVuelo.Text = vueloAEditar.Id.ToString();
+            textBoxPrecioVuelo.Text = vueloAEditar.Precio.ToString();
+            comboBoxAerolinea.SelectedItem = vueloAEditar.Aerolinea;
+
+            dateTimePickerFechaVuelo.Value = vueloAEditar.FechaHoraVuelo.Date;
+            dateTimePickerHoraVuelo.Value = vueloAEditar.FechaHoraVuelo;
+
+            // Ahora los ComboBox ya tienen elementos, por lo que el SelectedValue va a encontrar el ID perfecto
+            comboBoxCiudadOrigen.SelectedValue = vueloAEditar.IdCiudadOrigen;
+            comboBoxCiudadDestino.SelectedValue = vueloAEditar.IdCiudadDestino;
+        }
+
+        private async void btnGuardarVuelo_Click(object sender, EventArgs e)
+        {
+            
+            // Tomamos datos y los preparamos
+
+            DateTime soloFecha = dateTimePickerFechaVuelo.Value.Date;           // 1. Capturamos la fecha del primer DateTimePicker (ej: dtpFecha)
+            TimeSpan soloHora = dateTimePickerHoraVuelo.Value.TimeOfDay;        // 2. Capturamos la hora del segundo DateTimePicker (ej: dtpHora)
+            DateTime fechaHoraVueloCompleta = soloFecha.Add(soloHora);          // 3. Unimos ambas en una sola variable DateTime
+
+            // Validamos ingresos: que se haya seleccionado una opción real en los ComboBoxes (distinta de 0 / opción neutra) y decimal.
+
+            if (comboBoxCiudadOrigen.SelectedValue == null || (int)comboBoxCiudadOrigen.SelectedValue == 0)
+            {
+                MessageBox.Show("Debe seleccionar una ciudad de origen válida.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (comboBoxCiudadDestino.SelectedValue == null || (int)comboBoxCiudadDestino.SelectedValue == 0)
+            {
+                MessageBox.Show("Debe seleccionar una ciudad de destino válida.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if ((int)comboBoxCiudadOrigen.SelectedValue == (int)comboBoxCiudadDestino.SelectedValue)
+            {
+                MessageBox.Show("La ciudad de origen y la ciudad de destino no pueden ser la misma QWERTY.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            decimal? precioValidado = ObtenerPrecioDecimalValidado();
+            if (precioValidado == null) return;                                 // Frena la ejecución si dio error
+
+            if (comboBoxAerolinea.SelectedItem == null || comboBoxAerolinea.SelectedIndex == 0)
+            {
+                MessageBox.Show("Debe seleccionar una aerolínea válida.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            /*
+            if (comboBoxAvion.SelectedValue == null || (int)comboBoxAvion.SelectedValue == 0)
+            {
+                MessageBox.Show("Debe seleccionar un avión válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            */
+
+            if (!_esEdicion)
+            {
+                // Nuevo vuelo
+
+                VueloCreateDTO vueloCreateDto = new VueloCreateDTO
+                {
+                    FechaHoraVuelo = fechaHoraVueloCompleta,
+                    IdCiudadOrigen = (int)comboBoxCiudadOrigen.SelectedValue,
+                    IdCiudadDestino = (int)comboBoxCiudadDestino.SelectedValue,
+                    Precio = precioValidado.Value,
+                    //Aerolinea = textBoxAerolinea.Text,
+                    Aerolinea = comboBoxAerolinea.SelectedItem.ToString(),
+                    IdAvion = /*(int)comboBoxAvion.SelectedValue*/1
+                };
+
+                var response = await Program.HttpClient.PostAsJsonAsync("vuelos", vueloCreateDto);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    ClearForm();
+                    MessageBox.Show("Nuevo vuelo creado y guardado!", "Éxito al guardar", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Si hubo éxito al crear el vuelo, actualizamos la lista en el menú de admin de vuelos antes de mostrarlo, luego
+                    // lo mostramos luego cerramos esta ventana. Este patrón hace que el admin vea impactados sus cambios en la base
+                    // de datos.
+                    _vueloAdminMenuForm.CargarListaVuelosEnItems();
+                    _vueloAdminMenuForm.Show();
+                    this.Close();
+                }
+                else
+                {
+                    //Texto no personalizado dependiendo del error:
+                    //MessageBox.Show("Fallo al guardar el nuevo vuelo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    string mensajeError = await response.Content.ReadAsStringAsync();
+                    // Si la API devolvió un mensaje, lo mostramos; si viene vacío, usamos uno por defecto:
+                    string textoAlerta = string.IsNullOrWhiteSpace(mensajeError) ? "Fallo al guardar el nuevo vuelo." : mensajeError.Trim('"');
+                    MessageBox.Show("Error interno", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+            }
+            else if (_esEdicion)
+            {
+                // Editar vuelo
+
+                VueloUpdateDTO vueloUpdateDto = new VueloUpdateDTO
+                {
+                    Id = Convert.ToInt32(lblIdVuelo.Text),
+                    FechaHoraVuelo = fechaHoraVueloCompleta,
+                    IdCiudadOrigen = (int)comboBoxCiudadOrigen.SelectedValue,
+                    IdCiudadDestino = (int)comboBoxCiudadDestino.SelectedValue,
+                    Precio = precioValidado.Value,                                  // No usar Conver.ToDecimal() xq si ingresan letras se rompe
+                    //Aerolinea = textBoxAerolinea.Text,
+                    Aerolinea = comboBoxAerolinea.SelectedItem.ToString(),
+                    IdAvion = /*(int)comboBoxAvion.SelectedValue*/1
+                };
+
+                var response = await Program.HttpClient.PutAsJsonAsync($"vuelos/{vueloUpdateDto.Id}", vueloUpdateDto);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Vuelo editado y guardado!", "Éxito al guardar", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Si hubo éxito al editar, actualizamos la lista en el menú de admin de vuelos antes de mostrarlo, luego lo mostramos
+                    // luego cerramos esta ventana. Este patrón hace que el admin vea impactados sus cambios en la base de datos.
+                    _vueloAdminMenuForm.CargarListaVuelosEnItems();
+                    _vueloAdminMenuForm.Show();
+                    this.Close();
+                }
+                else
+                {
+                    //Texto no personalizado dependiendo del error:
+                    //MessageBox.Show("Fallo al editar el vuelo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    string mensajeError = await response.Content.ReadAsStringAsync();
+                    // Si la API devolvió un mensaje, lo mostramos; si viene vacío, usamos uno por defecto:
+                    string textoAlerta = string.IsNullOrWhiteSpace(mensajeError) ? "Fallo al editar el vuelo." : mensajeError.Trim('"');
+                    MessageBox.Show(textoAlerta, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+            }
+        }
+
+        private async Task CargarComboBoxesRelacionados()
         {
             try
             {
@@ -88,7 +256,20 @@ namespace WindowsForms
                     comboBoxCiudadDestino.DataSource = listaDestino;
                     comboBoxCiudadDestino.DisplayMember = "Nombre";     // Lo que ve el usuario
                     comboBoxCiudadDestino.ValueMember = "Id";           // Lo que vale por detrás (el ID)
+
                 }
+
+                // Creamos la lista de aerolíneas ficticias con una opción por defecto en la posición 0
+                var listaAerolineas = new List<string>
+                    {
+                        "-- Seleccione aerolínea --",
+                        "Aerolíneas Argentinas",
+                        "Emiratos Airlines",
+                        "Flybondi",
+                        "Global Wings Airlines",
+                        "Qatar Airways"
+                    };
+                comboBoxAerolinea.DataSource = listaAerolineas;
 
                 /*
                 // Cargar el ComboBox de Aviones desde su API, con opción por defecto (Id = 0):
@@ -107,93 +288,6 @@ namespace WindowsForms
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al cargar datos relacionados: {ex.Message}");
-            }
-        }
-
-        private async void btnGuardarVuelo_Click(object sender, EventArgs e)
-        {
-            
-            // Tomamos datos y los preparamos
-
-            DateTime soloFecha = dateTimePickerFechaVuelo.Value.Date;           // 1. Capturamos la fecha del primer DateTimePicker (ej: dtpFecha)
-            TimeSpan soloHora = dateTimePickerHoraVuelo.Value.TimeOfDay;        // 2. Capturamos la hora del segundo DateTimePicker (ej: dtpHora)
-            DateTime fechaHoraVueloCompleta = soloFecha.Add(soloHora);          // 3. Unimos ambas en una sola variable DateTime
-
-            // Validamos ingresos: que se haya seleccionado una opción real en los ComboBoxes (distinta de 0 / opción neutra) y decimal.
-
-            if (comboBoxCiudadOrigen.SelectedValue == null || (int)comboBoxCiudadOrigen.SelectedValue == 0)
-            {
-                MessageBox.Show("Debe seleccionar una ciudad de origen válida.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (comboBoxCiudadDestino.SelectedValue == null || (int)comboBoxCiudadDestino.SelectedValue == 0)
-            {
-                MessageBox.Show("Debe seleccionar una ciudad de destino válida.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            decimal? precioValidado = ObtenerPrecioDecimalValidado();
-            if (precioValidado == null) return;                                 // Frena la ejecución si dio error
-            /*
-            if (comboBoxAvion.SelectedValue == null || (int)comboBoxAvion.SelectedValue == 0)
-            {
-                MessageBox.Show("Debe seleccionar un avión válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            */
-            if (!_esEdicion)
-            {
-                // Nuevo vuelo
-
-                VueloCreateDTO vueloCreateDto = new VueloCreateDTO
-                {
-                    FechaHoraVuelo = fechaHoraVueloCompleta,
-                    IdCiudadOrigen = (int)comboBoxCiudadOrigen.SelectedValue,
-                    IdCiudadDestino = (int)comboBoxCiudadDestino.SelectedValue,
-                    Precio = precioValidado.Value,
-                    Aerolinea = textBoxAerolinea.Text,
-                    /*IdAvion = (int)comboBoxAvion.SelectedValue*/
-                };
-
-                var response = await Program.HttpClient.PostAsJsonAsync("vuelos", vueloCreateDto);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    ClearForm();
-                    MessageBox.Show("Nuevo Vuelo Creado y Guardado!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Fallo al guardar el nuevo vuelo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
-            }
-            else if (_esEdicion)
-            {
-                // Editar vuelo
-
-                VueloUpdateDTO vueloUpdateDto = new VueloUpdateDTO
-                {
-                    Id = Convert.ToInt32(lblIdVuelo.Text),
-                    FechaHoraVuelo = fechaHoraVueloCompleta,
-                    IdCiudadOrigen = (int)comboBoxCiudadOrigen.SelectedValue,
-                    IdCiudadDestino = (int)comboBoxCiudadDestino.SelectedValue,
-                    Precio = precioValidado.Value,                                  // No usar Conver.ToDecimal() xq si ingresan letras se rompe
-                    Aerolinea = textBoxAerolinea.Text,
-                    IdAvion = (int)comboBoxAvion.SelectedValue
-                };
-
-                var response = await Program.HttpClient.PutAsJsonAsync($"vuelos/{vueloUpdateDto.Id}", vueloUpdateDto);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    MessageBox.Show("Vuelo Editado y Guardado!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Fallo al editar el vuelo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
         }
 
@@ -216,18 +310,19 @@ namespace WindowsForms
 
         private void ClearForm()
         {
-            textBoxAerolinea.Clear();
+            //textBoxAerolinea.Clear();
+            comboBoxAerolinea.SelectedIndex = 0;
             textBoxPrecioVuelo.Clear();
             comboBoxCiudadOrigen.SelectedIndex = 0;
             comboBoxCiudadDestino.SelectedIndex = 0;
-            comboBoxAvion.SelectedIndex = 0;
+            //comboBoxAvion.SelectedIndex = 0;
         }
 
         private void btnVolver_Click(object sender, EventArgs e)
         {
+            _vueloAdminMenuForm.CargarListaVuelosEnItems();
             _vueloAdminMenuForm.Show();
             this.Close();
-            _vueloAdminMenuForm.CargarListaVuelosEnItems();
         }
 
     }

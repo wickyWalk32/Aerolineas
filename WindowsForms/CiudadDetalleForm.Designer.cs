@@ -47,7 +47,7 @@
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(119, 254);
+            btnGuardar.Location = new Point(153, 253);
             btnGuardar.Margin = new Padding(3, 4, 3, 4);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(94, 31);
@@ -61,7 +61,7 @@
             textBoxNombre.Location = new Point(172, 63);
             textBoxNombre.Margin = new Padding(3, 4, 3, 4);
             textBoxNombre.Name = "textBoxNombre";
-            textBoxNombre.Size = new Size(138, 27);
+            textBoxNombre.Size = new Size(207, 27);
             textBoxNombre.TabIndex = 1;
             // 
             // textBoxCodigoPostal
@@ -69,7 +69,7 @@
             textBoxCodigoPostal.Location = new Point(172, 108);
             textBoxCodigoPostal.Margin = new Padding(3, 4, 3, 4);
             textBoxCodigoPostal.Name = "textBoxCodigoPostal";
-            textBoxCodigoPostal.Size = new Size(138, 27);
+            textBoxCodigoPostal.Size = new Size(207, 27);
             textBoxCodigoPostal.TabIndex = 2;
             // 
             // label1
@@ -95,7 +95,7 @@
             textBoxCodigoAeropuerto.Location = new Point(172, 148);
             textBoxCodigoAeropuerto.Margin = new Padding(3, 4, 3, 4);
             textBoxCodigoAeropuerto.Name = "textBoxCodigoAeropuerto";
-            textBoxCodigoAeropuerto.Size = new Size(138, 27);
+            textBoxCodigoAeropuerto.Size = new Size(207, 27);
             textBoxCodigoAeropuerto.TabIndex = 5;
             // 
             // label3
@@ -129,11 +129,12 @@
             // 
             // comboBoxPais
             // 
+            comboBoxPais.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxPais.FormattingEnabled = true;
             comboBoxPais.Location = new Point(172, 192);
             comboBoxPais.Margin = new Padding(3, 4, 3, 4);
             comboBoxPais.Name = "comboBoxPais";
-            comboBoxPais.Size = new Size(138, 28);
+            comboBoxPais.Size = new Size(207, 28);
             comboBoxPais.TabIndex = 7;
             // 
             // lblTituloNuevoEditarCiudad
@@ -160,9 +161,9 @@
             panel1.Controls.Add(label2);
             panel1.Controls.Add(label3);
             panel1.Controls.Add(textBoxCodigoAeropuerto);
-            panel1.Location = new Point(253, 95);
+            panel1.Location = new Point(187, 95);
             panel1.Name = "panel1";
-            panel1.Size = new Size(337, 319);
+            panel1.Size = new Size(412, 319);
             panel1.TabIndex = 11;
             // 
             // lblIdCiudad

@@ -93,7 +93,19 @@ namespace WindowsForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error de conexión con la Web API: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show($"Error de conexión con la Web API: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Para seguir viendo el error en la consola de Visual Studio en el desarrollo
+                System.Diagnostics.Debug.WriteLine($"Error técnico interno: {ex.Message}");
+
+                // Mensaje limpio para el usuario
+                MessageBox.Show(
+                    "Fallo al conectar, disculpe las molestias. ¡Inténtelo más tarde!",
+                    "Error de conexión",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+
             }
         }
 

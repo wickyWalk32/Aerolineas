@@ -30,7 +30,6 @@
         {
             lblTituloNuevoEditarVuelo = new Label();
             panel1 = new Panel();
-            textBoxAerolinea = new TextBox();
             dateTimePickerHoraVuelo = new DateTimePicker();
             textBoxPrecioVuelo = new TextBox();
             lblTituloPrecioVuelo = new Label();
@@ -48,6 +47,7 @@
             lblTituloId = new Label();
             btnGuardarVuelo = new Button();
             btnVolver = new Button();
+            comboBoxAerolinea = new ComboBox();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -64,7 +64,7 @@
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.FixedSingle;
-            panel1.Controls.Add(textBoxAerolinea);
+            panel1.Controls.Add(comboBoxAerolinea);
             panel1.Controls.Add(dateTimePickerHoraVuelo);
             panel1.Controls.Add(textBoxPrecioVuelo);
             panel1.Controls.Add(lblTituloPrecioVuelo);
@@ -85,13 +85,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(544, 422);
             panel1.TabIndex = 1;
-            // 
-            // textBoxAerolinea
-            // 
-            textBoxAerolinea.Location = new Point(189, 268);
-            textBoxAerolinea.Name = "textBoxAerolinea";
-            textBoxAerolinea.Size = new Size(303, 27);
-            textBoxAerolinea.TabIndex = 15;
             // 
             // dateTimePickerHoraVuelo
             // 
@@ -120,6 +113,7 @@
             // 
             // comboBoxAvion
             // 
+            comboBoxAvion.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxAvion.FormattingEnabled = true;
             comboBoxAvion.Location = new Point(190, 312);
             comboBoxAvion.Name = "comboBoxAvion";
@@ -136,6 +130,7 @@
             // 
             // comboBoxCiudadDestino
             // 
+            comboBoxCiudadDestino.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxCiudadDestino.FormattingEnabled = true;
             comboBoxCiudadDestino.Location = new Point(190, 106);
             comboBoxCiudadDestino.Name = "comboBoxCiudadDestino";
@@ -144,6 +139,7 @@
             // 
             // comboBoxCiudadOrigen
             // 
+            comboBoxCiudadOrigen.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxCiudadOrigen.FormattingEnabled = true;
             comboBoxCiudadOrigen.Location = new Point(190, 66);
             comboBoxCiudadOrigen.Name = "comboBoxCiudadOrigen";
@@ -242,6 +238,15 @@
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
             // 
+            // comboBoxAerolinea
+            // 
+            comboBoxAerolinea.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxAerolinea.FormattingEnabled = true;
+            comboBoxAerolinea.Location = new Point(189, 268);
+            comboBoxAerolinea.Name = "comboBoxAerolinea";
+            comboBoxAerolinea.Size = new Size(304, 28);
+            comboBoxAerolinea.TabIndex = 15;
+            // 
             // VueloDetalleForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -279,6 +284,6 @@
         private TextBox textBoxPrecioVuelo;
         private Label lblTituloPrecioVuelo;
         private DateTimePicker dateTimePickerHoraVuelo;
-        private TextBox textBoxAerolinea;
+        private ComboBox comboBoxAerolinea;
     }
 }

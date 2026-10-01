@@ -22,10 +22,16 @@ namespace Data
             List<Avion> aviones = await _context.Aviones.ToListAsync();
             return aviones;
         }
-                                 
+
+        public async Task<List<Avion>> GetAllDisponibleAsync()
+        {
+            List<Avion> aviones = await _context.Aviones.Where(a => a.EstadoDisponibilidad == "Disponible").ToListAsync();
+            return aviones;
+        }
+
         public async Task<Avion?> GetByIdAsync(int id)
         {
-            return await _context.Aviones.FirstOrDefaultAsync(a=>a.Id==id); 
+            return await _context.Aviones.FirstOrDefaultAsync(a => a.Id == id); 
         }
 
         public async Task AddAsync(Avion avion)
@@ -43,7 +49,6 @@ namespace Data
             _context.Aviones.Remove(avion);
             await _context.SaveChangesAsync();
         }
-
 
     }
 }

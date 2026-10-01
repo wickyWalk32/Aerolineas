@@ -46,7 +46,7 @@
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(70, 430);
+            btnVolver.Location = new Point(70, 614);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(180, 30);
             btnVolver.TabIndex = 1;
@@ -60,7 +60,7 @@
             panelListaUsuarios.FlowDirection = FlowDirection.TopDown;
             panelListaUsuarios.Location = new Point(70, 100);
             panelListaUsuarios.Name = "panelListaUsuarios";
-            panelListaUsuarios.Size = new Size(1100, 300);
+            panelListaUsuarios.Size = new Size(1100, 482);
             panelListaUsuarios.TabIndex = 2;
             panelListaUsuarios.WrapContents = false;
             // 
@@ -78,7 +78,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1242, 503);
+            ClientSize = new Size(1242, 688);
             Controls.Add(btnNuevoUsuario);
             Controls.Add(panelListaUsuarios);
             Controls.Add(btnVolver);

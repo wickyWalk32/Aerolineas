@@ -1,6 +1,8 @@
 ﻿using Domain.Model;
+using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace Data
 {
@@ -43,9 +45,12 @@ namespace Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Archivos "Configuration"
+            //modelBuilder.ApplyConfiguration(new PaisConfiguration());
 
-            modelBuilder.ApplyConfiguration(new PaisConfiguration());
-
+            // Esto busca automáticamente todas las clases que implementen IEntityTypeConfiguration<T>
+            // dentro de este proyecto (Data) y las aplica sola. ¡Adiós a configurar entidad por entidad acá!
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
             modelBuilder.Entity<Usuario>(entity =>
             {
@@ -124,10 +129,10 @@ namespace Data
 
             });
 
-            modelBuilder.Entity<Pais>(entity =>
+            /*modelBuilder.Entity<Pais>(entity =>
             {
                 // Primary Key
-                entity.HasKey(entityPais => entityPais.Id);
+                entity.HasKey(pais => pais.Id);
 
                 entity.Property(entityPais => entityPais.Id)
                     .ValueGeneratedOnAdd();
@@ -140,8 +145,8 @@ namespace Data
 
                 entity.Navigation(entityPais => entityPais.Ciudades)
                     .HasField("_ciudades");
-
-            });
+                
+            });*/
 
             modelBuilder.Entity<Ciudad>(entityCiudad =>
             {
@@ -186,7 +191,7 @@ namespace Data
                     .HasField("_vuelosDestino");
 
                 // Datos iniciales (Seed Data)
-                entityCiudad.HasData(
+                /*entityCiudad.HasData(
                     new Ciudad(1 , "Rosario"             , "2000"        , "ROS", 9),
                     new Ciudad(2 , "Buenos Aires"        , "1802"        , "EZE", 9),
                     new Ciudad(3 , "Córdoba"             , "5000"        , "COR", 9),
@@ -202,7 +207,7 @@ namespace Data
                     new Ciudad(13, "París"               , "95700"       , "CDG", 66),
                     new Ciudad(14, "Sídney"              , "2020"        , "SYD", 11),
                     new Ciudad(15, "Ciudad del Cabo"     , "7490"        , "CPT", 168)
-                );
+                );*/
 
             });
 
@@ -265,6 +270,19 @@ namespace Data
 
                 entity.Navigation(e => e.Asientos)
                     .HasField("_asientos");
+                
+                /*entity.HasData(
+                    new Avion(1 , "AeroJet 320"         , 150   , "Disponible"),
+                    new Avion(2 , "Airbus A220-300"     , 120   , "Disponible"),
+                    new Avion(3 , "Apex A380"           , 525   , "No disponible"),
+                    new Avion(4 , "Breeze ATR72"        , 70    , "Disponible"),
+                    new Avion(5 , "EcoJet Q400"         , 74    , "Disponible"),
+                    new Avion(6 , "MetroExpress E190"   , 100   , "Disponible"),
+                    new Avion(7 , "Oceanic 350"         , 300   , "No disponible"),
+                    new Avion(8 , "SkyLinx 737"         , 160   , "Disponible"),
+                    new Avion(9 , "StratoCruiser 787"   , 240   , "Disponible"),
+                    new Avion(10, "Titan 777"           , 300   , "Disponible")
+                );*/
 
             });
 
@@ -320,15 +338,19 @@ namespace Data
                     .IsRequired()
                     .HasMaxLength(200);
 
+                // EF Core te avisa porque por defecto no sabe qué precisión usar para datos de tipo 'decimal' (p/ dinero x ejemplo) en
+                // la base de datos SQL Server y le asigna una genérica. Si guardás números muy grandes o con muchos decimales, te los
+                // podría redondear o truncar sin avisarte.
                 entityServicio.Property(e => e.Precio)
-                    .IsRequired();
+                    .IsRequired()
+                    .HasPrecision(18, 2); // 18 dígitos en total, de los cuales 2 son para los centavos/decimales
 
                 // 1 Servicio > Muchos Pasajes
 
                 entityServicio.Navigation(e => e.Pasajes)
                     .HasField("_pasajes");
 
-                entityServicio.HasData(
+                /*entityServicio.HasData(
                     new Servicio
                     (
                         1,                                                                  // id
@@ -342,131 +364,137 @@ namespace Data
                         "Comida",
                         "Una comida a eleción por persona durante el vuelo.",
                         (decimal)150.00
-
                     )
-                );
+                );*/
+
             });
 
             modelBuilder.Entity<Vuelo>(entity =>
-                {
-                    entity.HasKey(e => e.Id);
-                    entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                
+                entity.Property(e => e.FechaHoraVuelo)
+                    .IsRequired();
 
-                    entity.Property(e => e.FechaHoraVuelo)
-                        .IsRequired();
+                entity.Property(e => e.Aerolinea)
+                    .IsRequired()
+                    .HasMaxLength(100);
 
-                    entity.Property(e => e.Aerolinea)
-                        .IsRequired()
-                        .HasMaxLength(100);
+                entity.Property(e => e.Precio)
+                    .IsRequired()
+                    .HasPrecision(18, 2);
 
-                    entity.Property(e => e.Precio)
-                        .IsRequired();
+                // 1 Vuelo > 1 Ciudad de Origen
+                entity.HasOne(e => e.CiudadOrigen)
+                    .WithMany(c => c.VuelosOrigen)          // ¡Acá conectamos con la colección espejo de Ciudad!
+                    .HasForeignKey(e => e.IdCiudadOrigen)   // Coincide con tu propiedad IdCiudadOrigen
+                    .OnDelete(DeleteBehavior.Restrict);     // Evita borrados en cascada peligrosos
 
-                    // 1 Vuelo > 1 Ciudad de Origen
-                    entity.HasOne(e => e.CiudadOrigen)
-                        .WithMany(c => c.VuelosOrigen)          // ¡Acá conectamos con la colección espejo de Ciudad!
-                        .HasForeignKey(e => e.IdCiudadOrigen)   // Coincide con tu propiedad IdCiudadOrigen
-                        .OnDelete(DeleteBehavior.Restrict);     // Evita borrados en cascada peligrosos
+                // 1 Vuelo > 1 Ciudad de Destino
+                entity.HasOne(e => e.CiudadDestino)
+                    .WithMany(c => c.VuelosDestino)         // ¡Acá conectamos con la otra colección espejo de Ciudad!
+                    .HasForeignKey(e => e.IdCiudadDestino)  // Coincide con tu propiedad IdCiudadDestino
+                    .OnDelete(DeleteBehavior.Restrict);     // Evita borrados en cascada peligrosos
 
-                    // 1 Vuelo > 1 Ciudad de Destino
-                    entity.HasOne(e => e.CiudadDestino)
-                        .WithMany(c => c.VuelosDestino)         // ¡Acá conectamos con la otra colección espejo de Ciudad!
-                        .HasForeignKey(e => e.IdCiudadDestino)  // Coincide con tu propiedad IdCiudadDestino
-                        .OnDelete(DeleteBehavior.Restrict);     // Evita borrados en cascada peligrosos
+                // 1 Vuelo > 1 Avion
+                entity.HasOne(e => e.Avion)
+                    .WithMany(a => a.Vuelos)
+                    .HasForeignKey(e => e.IdAvion)
+                    .OnDelete(DeleteBehavior.Restrict);
 
-                    // 1 Vuelo > 1 Avion
-                    entity.HasOne(e => e.Avion)
-                        .WithMany(a => a.Vuelos)
-                        .HasForeignKey(e => e.IdAvion)
-                        .OnDelete(DeleteBehavior.Restrict);
+                // 1 Vuelo > Muchas Reservas (Mapeo explícito del campo privado / Backing Field)
+                // Como estamos aplicando un diseño profesional y encapsulado (DDD), EF Core necesita que le digamos: "Ey, cuando
+                // traigas las reservas de la base de datos, mételas a la fuerza dentro de este campo privado _reservas".
+                entity.Navigation(e => e.Reservas)
+                    .HasField("_reservas");
 
-                    // 1 Vuelo > Muchas Reservas (Mapeo explícito del campo privado / Backing Field)
-                    // Como estamos aplicando un diseño profesional y encapsulado (DDD), EF Core necesita que le digamos: "Ey, cuando
-                    // traigas las reservas de la base de datos, mételas a la fuerza dentro de este campo privado _reservas".
-                    entity.Navigation(e => e.Reservas)
-                        .HasField("_reservas");
+                /*entity.HasData
+                (
+                    new Vuelo(1, new DateTime(2026, 12, 20, 14, 30, 0), "Aerolíneas Argentinas", (decimal)125000.99, 3, 2, 3)
+                );*/
 
-                });
+            });
 
-                modelBuilder.Entity<Pasaje>(entity =>
-                {
-                    entity.HasKey(e => e.Id);
+            modelBuilder.Entity<Pasaje>(entity =>
+            {
+                entity.HasKey(e => e.Id);
 
-                    entity.Property(e => e.Id)
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Estado)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                // 1 Pasaje > 1 Pasajero
+
+                entity.HasOne(e => e.Pasajero)
+                    .WithMany(p => p.Pasajes)
+                    .HasForeignKey(e => e.IdPasajero);
+
+                // 1 Pasaje > 1 Asiento
+
+                entity.HasOne(e => e.Asiento)
+                    .WithMany(a => a.Pasajes)
+                    .HasForeignKey(e => new {e.IdAvion, e.CodigoAsiento});
+
+                // 1 Pasaje > Muchos Servicios
+
+                entity.Navigation(e => e.Servicios)
+                    .HasField("_servicios");
+
+            });
+
+            modelBuilder.Entity<Reserva>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id)
                         .ValueGeneratedOnAdd();
 
-                    entity.Property(e => e.Estado)
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    // 1 Pasaje > 1 Pasajero
-
-                    entity.HasOne(e => e.Pasajero)
-                        .WithMany(p => p.Pasajes)
-                        .HasForeignKey(e => e.IdPasajero);
-
-                    // 1 Pasaje > 1 Asiento
-
-                    entity.HasOne(e => e.Asiento)
-                        .WithMany(a => a.Pasajes)
-                        .HasForeignKey(e => new {e.IdAvion, e.CodigoAsiento});
-
-                    // 1 Pasaje > Muchos Servicios
-
-                    entity.Navigation(e => e.Servicios)
-                        .HasField("_servicios");
-
-                });
-
-                modelBuilder.Entity<Reserva>(entity =>
-                {
-                    entity.HasKey(e => e.Id);
-
-                    entity.Property(e => e.Id)
-                        .ValueGeneratedOnAdd();
-
-                    entity.Property(e => e.FechaHoraReserva)
+                entity.Property(e => e.FechaHoraReserva)
                         .IsRequired();
 
-                    // 1 Reserva > 1 Usuario
+                // 1 Reserva > 1 Usuario
 
-                    entity.HasOne(e => e.Usuario)
-                        .WithMany(u => u.Reservas)
-                        .HasForeignKey(e => e.UsuarioId);
+                entity.HasOne(e => e.Usuario)
+                    .WithMany(u => u.Reservas)
+                    .HasForeignKey(e => e.UsuarioId);
 
-                    // 1 Reserva > 1 TarjetaCliente
+                // 1 Reserva > 1 TarjetaCliente
 
-                    entity.HasOne(e => e.TarjetaCliente)
-                        .WithMany(t => t.Reservas)
-                        .HasForeignKey(e => e.IdTarjetaCliente);
+                entity.HasOne(e => e.TarjetaCliente)
+                    .WithMany(t => t.Reservas)
+                    .HasForeignKey(e => e.IdTarjetaCliente);
 
-                    // 1 Reserva > Muchos Pasajes
+                // 1 Reserva > Muchos Pasajes
 
-                    entity.Navigation(e => e.Pasajes)
-                        .HasField("_pasajes");
+                entity.Navigation(e => e.Pasajes)
+                    .HasField("_pasajes");
 
-                });
+            });
 
-                modelBuilder.Entity<TarjetaCliente>(entity =>
-                {
-                    entity.HasKey(e => e.Id);
+            modelBuilder.Entity<TarjetaCliente>(entity =>
+            {
+                entity.HasKey(e => e.Id);
 
-                    entity.Property(e => e.Id)
-                        .ValueGeneratedOnAdd();
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd();
 
-                    entity.Property(e => e.UltimosCuatroDigitos)
-                        .IsRequired()
-                        .HasMaxLength(4);
+                entity.Property(e => e.UltimosCuatroDigitos)
+                    .IsRequired()
+                    .HasMaxLength(4);
 
-                    entity.Property(e => e.FechaVencimiento)
-                        .IsRequired();
+                entity.Property(e => e.FechaVencimiento)
+                    .IsRequired();
 
-                    // 1 TarjetaCliente > Muchas Reservas
+                // 1 TarjetaCliente > Muchas Reservas
 
-                    entity.Navigation(e => e.Reservas)
-                        .HasField("_reservas");
+                entity.Navigation(e => e.Reservas)
+                    .HasField("_reservas");
 
-                });
+            });
 
         }
     }

@@ -56,7 +56,7 @@
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(70, 430);
+            btnVolver.Location = new Point(70, 620);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(180, 30);
             btnVolver.TabIndex = 2;
@@ -67,11 +67,10 @@
             // panelListaServicios
             // 
             panelListaServicios.AutoScroll = true;
-            panelListaServicios.BorderStyle = BorderStyle.FixedSingle;
             panelListaServicios.FlowDirection = FlowDirection.TopDown;
             panelListaServicios.Location = new Point(70, 100);
             panelListaServicios.Name = "panelListaServicios";
-            panelListaServicios.Size = new Size(1100, 300);
+            panelListaServicios.Size = new Size(1100, 487);
             panelListaServicios.TabIndex = 3;
             panelListaServicios.WrapContents = false;
             // 
@@ -79,7 +78,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1242, 503);
+            ClientSize = new Size(1242, 688);
             Controls.Add(panelListaServicios);
             Controls.Add(btnVolver);
             Controls.Add(lblTituloAdminServicios);

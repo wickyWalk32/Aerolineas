@@ -1,4 +1,5 @@
-﻿using DTOs;
+﻿using Domain.Model;
+using DTOs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -57,6 +58,10 @@ namespace WindowsForms
             lblId.Text = "";
             lblIdUsuario.Text = "";
             _usuarioAdminMenuForm = usuarioAdminMenuForm;
+
+            var roles = new List<string> { "-- Seleccione Rol --", "admin", "usuario" };
+            comboBoxRol.DataSource = roles;
+            comboBoxRol.DropDownStyle = ComboBoxStyle.DropDownList; // Para que no escriban a mano
         }
 
         // Constructor para editar (editado por admin)
@@ -66,6 +71,10 @@ namespace WindowsForms
             _esEdicion = true;
             lblTituloNuevoEditarUsuario.Text = "Editar Usuario";
             UsuarioResultado = usuarioAEditar;
+
+            var roles = new List<string> { "-- Seleccione Rol --", "Administrador", "Usuario" };
+            comboBoxRol.DataSource = roles;
+            comboBoxRol.DropDownStyle = ComboBoxStyle.DropDownList; // Para que no escriban a mano
 
             // Cargamos los datos actuales del usuario elegido en la pantalla anterior en las cajas de texto
             lblIdUsuario.Text = usuarioAEditar.Id.ToString();
@@ -84,10 +93,23 @@ namespace WindowsForms
                                         !string.IsNullOrWhiteSpace(textBoxApellido.Text) &&
                                         !string.IsNullOrWhiteSpace(textBoxEmail.Text);
 
+            /*
             // Si es Admin, exigimos también que el ComboBox tenga un rol seleccionado
             if (_usuarioAdminMenuForm != null && (!camposComunesValidos || comboBoxRol.SelectedItem == null))
             {
                 MessageBox.Show("Por favor complete los campos obligatorios.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            */
+
+            // Modificamos la validación del Admin en btnGuardar_Click:
+            bool rolValidoAdmin = _loginForm != null || (comboBoxRol.SelectedIndex > 0);
+            // Si es autoregistro (_loginForm != null) no importa el combo de rol. 
+            // Si es Admin, exigimos que el índice sea mayor a 0 (o sea, que haya elegido algo distinto a "--Seleccione Rol--").
+
+            if (_usuarioAdminMenuForm != null && (!camposComunesValidos || !rolValidoAdmin))
+            {
+                MessageBox.Show("Por favor complete los campos obligatorios y seleccione un rol válido.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -193,7 +215,13 @@ namespace WindowsForms
             textBoxApellido.Clear();
             textBoxEmail.Clear();
             textBoxContrasenia.Clear();
-            comboBoxRol.SelectedIndex = -1;
+            //comboBoxRol.SelectedIndex = -1;
+
+            if (comboBoxRol.Items.Count > 0)
+            {
+                comboBoxRol.SelectedIndex = 0; // Posiciona en "-- Seleccione Rol --"
+            }
+
         }
 
 

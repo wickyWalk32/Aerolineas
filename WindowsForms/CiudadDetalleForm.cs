@@ -57,6 +57,14 @@ namespace WindowsForms
 
         private async void btnGuardar_Click(object sender, EventArgs e)
         {
+
+            // --- VALIDACIÓN DEL COMBOBOX DE PAÍS ---
+            if (comboBoxPais.SelectedValue == null || Convert.ToInt32(comboBoxPais.SelectedValue) == 0)
+            {
+                MessageBox.Show("Por favor seleccione un país válido.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (!_esEdicion)
             {
                CiudadCreateDTO ciudad = new CiudadCreateDTO
@@ -66,15 +74,17 @@ namespace WindowsForms
                     CodigoAeropuerto = textBoxCodigoAeropuerto.Text,
                     PaisId = Convert.ToInt32(comboBoxPais.SelectedValue)
                 };
+
                 var response = await Program.HttpClient.PostAsJsonAsync("ciudades", ciudad);
+
                 if (response.IsSuccessStatusCode)
                 {
                     ClearForm();
-                    MessageBox.Show("Ciudad Guardada!","Success",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                    MessageBox.Show("Ciudad guardada!","Éxito",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show("Failed to save.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show("Error. La ciudad no fue guardada.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 }
 
             }
@@ -97,7 +107,7 @@ namespace WindowsForms
                 }
                 else
                 {
-                    MessageBox.Show("Failed to save.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error. Cambios no guardados.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -106,31 +116,41 @@ namespace WindowsForms
         {
             try
             {
-
                 var paises = await Program.HttpClient.GetFromJsonAsync<List<PaisDTO>>("https://localhost:7099/paises");
 
                 if (paises == null)
-                    return;
+                    paises = new List<PaisDTO>();
+
+                // Creamos la opción por defecto con Id = 0 (o -1) para que actúe como guía
+                var opcionDefault = new PaisDTO
+                {
+                    Id = 0,
+                    Nombre = "-- Seleccione País --"
+                };
+
+                // Insertamos la opción por defecto en la primera posición (índice 0)
+                paises.Insert(0, opcionDefault);
 
                 comboBoxPais.DataSource = paises;
                 comboBoxPais.DisplayMember = "Nombre";
                 comboBoxPais.ValueMember = "Id";
+                comboBoxPais.DropDownStyle = ComboBoxStyle.DropDownList; // Para que no escriban texto libre
 
-                // Si viene un ID de país, lo posicionamos inmediatamente después de enlazar los datos
+                // Si viene un ID de país (modo edición), lo seleccionamos; sino dejamos la opción 0 por defecto
                 if (paisIdASeleccionar.HasValue)
                 {
                     comboBoxPais.SelectedValue = paisIdASeleccionar.Value;
                 }
                 else
                 {
-                    comboBoxPais.SelectedIndex = -1;
+                    comboBoxPais.SelectedIndex = 0; // Selecciona "--Seleccione País--"
                 }
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al cargar países: {ex.Message}");
             }
+
         }
 
         private void ClearForm()
@@ -138,7 +158,13 @@ namespace WindowsForms
             textBoxNombre.Clear();
             textBoxCodigoPostal.Clear();
             textBoxCodigoAeropuerto.Clear();
-            comboBoxPais.SelectedIndex = -1;
+            //comboBoxPais.SelectedIndex = -1;
+
+            if (comboBoxPais.Items.Count > 0)
+            {
+                comboBoxPais.SelectedIndex = 0; // Vuelve a "-- Seleccione País --"
+            }
+
         }
 
         private void btnVolver_Click(object sender, EventArgs e)

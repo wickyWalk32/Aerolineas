@@ -29,8 +29,12 @@ namespace Application.Services
                 Aerolinea = vuelo.Aerolinea,
                 Precio = vuelo.Precio,
                 IdCiudadOrigen = vuelo.IdCiudadOrigen,
+                CiudadOrigenNombre = vuelo.CiudadOrigen.Nombre,
                 IdCiudadDestino = vuelo.IdCiudadDestino,
-                IdAvion = vuelo.IdAvion
+                CiudadDestinoNombre = vuelo.CiudadDestino.Nombre,
+                IdAvion = vuelo.IdAvion,
+                AvionDescripcion = vuelo.Avion.Descripcion,
+                AvionCapacidad = vuelo.Avion.Capacidad
             }).ToList();
         }
 
@@ -47,7 +51,9 @@ namespace Application.Services
                 Aerolinea = vuelo.Aerolinea,
                 Precio = vuelo.Precio,
                 IdCiudadOrigen = vuelo.IdCiudadOrigen,
+                CiudadOrigenNombre = vuelo.CiudadOrigen.Nombre,
                 IdCiudadDestino = vuelo.IdCiudadDestino,
+                CiudadDestinoNombre = vuelo.CiudadDestino.Nombre,
                 IdAvion = vuelo.IdAvion
             };
         }

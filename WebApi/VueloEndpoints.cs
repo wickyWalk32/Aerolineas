@@ -26,17 +26,43 @@ namespace WebApi
 
             // POST: Crear
             group.MapPost("/", async (VueloCreateDTO dto, VueloService vueloService) =>
-            {
-                /*var resultado =*/ await vueloService.AddAsync(dto);
-                return Results.Ok(/*resultado*/);
+            {   
+                try
+                {
+                    await vueloService.AddAsync(dto);
+                    return Results.Ok();
+                }
+                catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException)
+                {
+                    // Unificamos las validaciones de negocio que devuelven un 400 Bad Request
+                    return Results.BadRequest(ex.Message);
+                }
+                catch (Exception)
+                {
+                    // Para cualquier otro error grave o inesperado del sistema (fallo de base de datos, etc.)
+                    return Results.Problem("Ocurrió un error interno en el servidor.", statusCode: 500);
+                }
             });
 
             // PUT: Actualizar
             group.MapPut("/{id}", async (int id, VueloUpdateDTO dto, VueloService vueloService) =>
             {
-                dto.Id = id; // Aseguramos que coincida
-                var resultado = await vueloService.UpdateAsync(id, dto);
-                return Results.Ok(resultado);
+                try
+                {
+                    dto.Id = id; // Aseguramos que coincida
+                    var resultado = await vueloService.UpdateAsync(id, dto);
+                    return Results.Ok(resultado);
+                }
+                catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException)
+                {
+                    // Unificamos las validaciones de negocio que devuelven un 400 Bad Request
+                    return Results.BadRequest(ex.Message);
+                }
+                catch (Exception)
+                {
+                    // Para cualquier otro error grave o inesperado del sistema (fallo de base de datos, etc.)
+                    return Results.Problem("Ocurrió un error interno en el servidor.", statusCode: 500);
+                }
             });
 
             // DELETE: Eliminar

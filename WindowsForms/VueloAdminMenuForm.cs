@@ -73,9 +73,11 @@ namespace WindowsForms
         private async void Item_OnEliminarClicked(object sender, VueloDeleteDTO vueloDeleteDto)
         {
             var confirmacion = MessageBox.Show(
-                $"¿Está seguro de que desea eliminar el vuelo de {vueloDeleteDto.CiudadOrigenNombre } a " +
-                $"{vueloDeleteDto.CiudadDestinoNombre} del día {vueloDeleteDto.FechaHoraVuelo}, aerolínea " +
-                $"{vueloDeleteDto.Aerolinea}?",
+                $"¿Está seguro de que desea eliminar el vuelo desde " + 
+                $"{vueloDeleteDto.CiudadOrigenNombre } a {vueloDeleteDto.CiudadDestinoNombre} " +
+                $"del día: {vueloDeleteDto.FechaHoraVuelo.ToString("dd/MM/yyyy")}, " +
+                $"hora: {vueloDeleteDto.FechaHoraVuelo.ToString("HH:mm")}, " + 
+                $"aerolínea: {vueloDeleteDto.Aerolinea}?",
                 "Confirmar eliminación",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question

@@ -63,16 +63,16 @@
             panel1.Controls.Add(lblEmail);
             panel1.Controls.Add(lblApellido);
             panel1.Controls.Add(lblNombre);
-            panel1.Location = new Point(230, 96);
+            panel1.Location = new Point(222, 98);
             panel1.Name = "panel1";
-            panel1.Size = new Size(345, 322);
+            panel1.Size = new Size(379, 322);
             panel1.TabIndex = 0;
             // 
             // textBoxContrasenia
             // 
             textBoxContrasenia.Location = new Point(107, 179);
             textBoxContrasenia.Name = "textBoxContrasenia";
-            textBoxContrasenia.Size = new Size(207, 27);
+            textBoxContrasenia.Size = new Size(236, 27);
             textBoxContrasenia.TabIndex = 11;
             textBoxContrasenia.UseSystemPasswordChar = true;
             // 
@@ -105,16 +105,16 @@
             // 
             // comboBoxRol
             // 
+            comboBoxRol.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxRol.FormattingEnabled = true;
-            comboBoxRol.Items.AddRange(new object[] { "admin", "usuario" });
             comboBoxRol.Location = new Point(107, 219);
             comboBoxRol.Name = "comboBoxRol";
-            comboBoxRol.Size = new Size(207, 28);
+            comboBoxRol.Size = new Size(236, 28);
             comboBoxRol.TabIndex = 3;
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(120, 277);
+            btnGuardar.Location = new Point(138, 272);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(94, 29);
             btnGuardar.TabIndex = 8;
@@ -126,21 +126,21 @@
             // 
             textBoxEmail.Location = new Point(107, 139);
             textBoxEmail.Name = "textBoxEmail";
-            textBoxEmail.Size = new Size(207, 27);
+            textBoxEmail.Size = new Size(236, 27);
             textBoxEmail.TabIndex = 6;
             // 
             // textBoxApellido
             // 
             textBoxApellido.Location = new Point(107, 99);
             textBoxApellido.Name = "textBoxApellido";
-            textBoxApellido.Size = new Size(207, 27);
+            textBoxApellido.Size = new Size(236, 27);
             textBoxApellido.TabIndex = 5;
             // 
             // textBoxNombre
             // 
             textBoxNombre.Location = new Point(107, 59);
             textBoxNombre.Name = "textBoxNombre";
-            textBoxNombre.Size = new Size(207, 27);
+            textBoxNombre.Size = new Size(236, 27);
             textBoxNombre.TabIndex = 4;
             // 
             // lblRol

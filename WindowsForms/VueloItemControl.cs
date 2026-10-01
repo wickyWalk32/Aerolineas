@@ -31,14 +31,14 @@ namespace WindowsForms
             _vueloActual = vueloActual;
 
             lblId.Text = vueloActual.Id.ToString();
-            lblFecha.Text = vueloActual.FechaHoraVuelo.Date.ToString();
-            lblHora.Text = vueloActual.FechaHoraVuelo.GetDateTimeFormats().ToString();
-            lblAerolinea.Text = vueloActual.Aerolinea;
-            lblPrecio.Text = Convert.ToString(vueloActual.Precio);
-            lblCiudadOrigen.Text = vueloActual.CiudadOrigenNombre;
-            lblCiudadDestino.Text = vueloActual.CiudadDestinoNombre;
-            lblAvionDescripcion.Text = vueloActual.AvionDescripcion;
-            lblAvionCapacidad.Text = vueloActual.AvionCapacidad.ToString();
+            lblFecha.Text = vueloActual.FechaHoraVuelo.ToString("dd/MM/yyyy");
+            lblHora.Text = vueloActual.FechaHoraVuelo.ToString("HH:mm");
+            lblAerolinea.Text = "Aerolínea: " + vueloActual.Aerolinea;
+            lblPrecio.Text = "$ " + Convert.ToString(vueloActual.Precio);
+            lblCiudadOrigen.Text = "Origen: " + vueloActual.CiudadOrigenNombre;
+            lblCiudadDestino.Text = "Destino: " + vueloActual.CiudadDestinoNombre;
+            lblAvionDescripcion.Text = "Avión: " + vueloActual.AvionDescripcion;
+            lblAvionCapacidad.Text = "Capacidad: " + vueloActual.AvionCapacidad.ToString();
 
         }
 
@@ -68,7 +68,11 @@ namespace WindowsForms
             {
                 VueloDeleteDTO vueloDeleteDto = new VueloDeleteDTO
                 {
-                    Id = _vueloActual.Id
+                    Id = _vueloActual.Id,
+                    FechaHoraVuelo = _vueloActual.FechaHoraVuelo,
+                    Aerolinea = _vueloActual.Aerolinea,
+                    CiudadOrigenNombre = _vueloActual.CiudadOrigenNombre,
+                    CiudadDestinoNombre = _vueloActual.CiudadDestinoNombre
                 };
 
                 OnEliminarClicked?.Invoke(this, vueloDeleteDto);

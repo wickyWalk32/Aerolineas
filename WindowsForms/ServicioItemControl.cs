@@ -60,9 +60,7 @@ namespace WindowsForms
                 ServicioDeleteDTO servicioDeleteDto = new ServicioDeleteDTO
                 {
                     Id = _servicioActual.Id,
-                    //Nombre = _servicioActual.Nombre,
-                    //Descripcion = _servicioActual.Descripcion,
-                    //Precio = _servicioActual.Precio
+                    Nombre = _servicioActual.Nombre
                 }; 
                 
                 OnEliminarClicked?.Invoke(this, servicioDeleteDto);

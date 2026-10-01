@@ -55,6 +55,20 @@ namespace Domain.Model
             this.SetIdAvion(idAvion);
         }
 
+        // Para DbContext
+        public Vuelo(int id, DateTime fechaHoraVuelo, string aerolinea, decimal precio, int idCiudadOrigen, int idCiudadDestino, int idAvion)
+        {
+            ValidarCiudades(idCiudadOrigen, idCiudadDestino);
+
+            this.SetId(id);
+            this.SetFechaHoraVuelo(fechaHoraVuelo);
+            this.SetAerolinea(aerolinea);
+            this.SetPrecio(precio);
+            this.SetIdCiudadOrigen(idCiudadOrigen);
+            this.SetIdCiudadDestino(idCiudadDestino);
+            this.SetIdAvion(idAvion);
+        }
+
         public Vuelo(DateTime fechaHoraVuelo, string aerolinea, decimal precio, Ciudad ciudadOrigen, int idCiudadOrigen,
             Ciudad ciudadDestino, int idCiudadDestino, Avion avion, int idAvion)
         {

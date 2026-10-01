@@ -16,15 +16,6 @@ namespace DTOs
         //private List<Asiento> Asientos = new();
     }
 
-    public class AvionUpdateDTO
-    {
-        public int Id { get; private set; }
-        public string Descripcion { get; private set; }
-        public int Capacidad { get; private set; }
-        public string EstadoDisponibilidad { get; private set; }
-
-
-    }
     public class AvionCreateDTO
     {
         public required string Descripcion { get; set; }
@@ -32,4 +23,14 @@ namespace DTOs
         public string EstadoDisponibilidad { get; private set; }
 
     }
+
+    public class AvionUpdateDTO
+    {
+        public int Id { get; private set; }
+        public string Descripcion { get; private set; }
+        public int Capacidad { get; private set; }
+        public string EstadoDisponibilidad { get; private set; }
+
+    }
+    
 }
