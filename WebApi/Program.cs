@@ -157,6 +157,7 @@ app.MapPasajeroEndpoints();
 app.MapServicioEndpoints();
 app.MapVueloEndpoints();
 app.MapReservaEndpoints();
+app.MapAvionEndpoints();
 
 //app.MapGet("/", () => "Hello, World!");       //?
 app.MapSwagger()/*.RequireAuthorization()*/;    //Ver que es

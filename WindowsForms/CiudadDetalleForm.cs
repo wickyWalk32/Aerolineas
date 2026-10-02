@@ -30,7 +30,7 @@ namespace WindowsForms
             lblTituloNuevoEditarCiudad.Text = "Nueva Ciudad";
             lblId.Text = "";
             lblIdCiudad.Text = "";
-            
+
             // Carga los países normalmente sin selección previa
             _ = CargarPaisesAsync();
         }
@@ -49,7 +49,7 @@ namespace WindowsForms
             textBoxNombre.Text = ciudadAEditar.Nombre;
             textBoxCodigoPostal.Text = ciudadAEditar.CodigoPostal;
             textBoxCodigoAeropuerto.Text = ciudadAEditar.CodigoAeropuerto;
-            
+
             // Cargamos los países y seleccionamos automáticamente el correspondiente
             _ = CargarPaisesAsync(ciudadAEditar.PaisId);
 
@@ -67,7 +67,7 @@ namespace WindowsForms
 
             if (!_esEdicion)
             {
-               CiudadCreateDTO ciudad = new CiudadCreateDTO
+                CiudadCreateDTO ciudad = new CiudadCreateDTO
                 {
                     Nombre = textBoxNombre.Text,
                     CodigoPostal = textBoxCodigoPostal.Text,
@@ -103,7 +103,7 @@ namespace WindowsForms
 
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("Cambios Guardada!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Cambios guardados!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {

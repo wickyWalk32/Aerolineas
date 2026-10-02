@@ -53,49 +53,12 @@ namespace WindowsForms
             lblTituloNuevoEditarVuelo.Text = "Editar Vuelo";
             VueloResultado = vueloAEditar;
 
-            // Cargamos los datos de los ComboBoxes
-            //_ = CargarComboBoxesRelacionados();
-
             // Guardamos los datos del vuelo para usarlos una vez que los combos respondan
             _vueloPendienteDeCarga = vueloAEditar;
 
             // Disparamos la carga asíncrona
             _ = InicializarFormularioEdicionAsync(vueloAEditar);
 
-            /*
-            // Cargamos los datos actuales del vuelo elegido en la pantalla anterior en las cajas de texto
-            lblIdVuelo.Text = vueloAEditar.Id.ToString();
-            textBoxPrecioVuelo.Text = vueloAEditar.Precio.ToString();
-            //textBoxAerolinea.Text = vueloAEditar.Aerolinea;
-            comboBoxAerolinea.SelectedItem = vueloAEditar.Aerolinea;
-
-            // Separamos el DateTime que viene del DTO hacia el DateTimePicker de fecha y el de hora
-            dateTimePickerFechaVuelo.Value = vueloAEditar.FechaHoraVuelo.Date;
-            dateTimePickerHoraVuelo.Value = vueloAEditar.FechaHoraVuelo;
-            
-            // Seleccionamos los valores en los ComboBox
-            comboBoxCiudadOrigen.SelectedValue = vueloAEditar.IdCiudadOrigen;
-            comboBoxCiudadDestino.SelectedValue = vueloAEditar.IdCiudadDestino;
-            */
-            /*comboBoxAvion.SelectedValue = vueloAEditar.IdAvion;*/
-        }
-
-        private async Task InicializarFormularioEdicionAsync(VueloUpdateDTO vueloAEditar)
-        {
-            // 1. Esperamos obligatoriamente a que se descarguen y carguen los combos
-            await CargarComboBoxesRelacionados();
-
-            // 2. UNA VEZ QUE TERMINÓ DE LLENARSE TODO, asignamos los valores con total seguridad:
-            lblIdVuelo.Text = vueloAEditar.Id.ToString();
-            textBoxPrecioVuelo.Text = vueloAEditar.Precio.ToString();
-            comboBoxAerolinea.SelectedItem = vueloAEditar.Aerolinea;
-
-            dateTimePickerFechaVuelo.Value = vueloAEditar.FechaHoraVuelo.Date;
-            dateTimePickerHoraVuelo.Value = vueloAEditar.FechaHoraVuelo;
-
-            // Ahora los ComboBox ya tienen elementos, por lo que el SelectedValue va a encontrar el ID perfecto
-            comboBoxCiudadOrigen.SelectedValue = vueloAEditar.IdCiudadOrigen;
-            comboBoxCiudadDestino.SelectedValue = vueloAEditar.IdCiudadDestino;
         }
 
         private async void btnGuardarVuelo_Click(object sender, EventArgs e)
@@ -130,19 +93,20 @@ namespace WindowsForms
             decimal? precioValidado = ObtenerPrecioDecimalValidado();
             if (precioValidado == null) return;                                 // Frena la ejecución si dio error
 
+            /*
             if (comboBoxAerolinea.SelectedItem == null || comboBoxAerolinea.SelectedIndex == 0)
             {
                 MessageBox.Show("Debe seleccionar una aerolínea válida.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            /*
+            */
+            
             if (comboBoxAvion.SelectedValue == null || (int)comboBoxAvion.SelectedValue == 0)
             {
                 MessageBox.Show("Debe seleccionar un avión válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            */
+            
 
             if (!_esEdicion)
             {
@@ -154,9 +118,9 @@ namespace WindowsForms
                     IdCiudadOrigen = (int)comboBoxCiudadOrigen.SelectedValue,
                     IdCiudadDestino = (int)comboBoxCiudadDestino.SelectedValue,
                     Precio = precioValidado.Value,
-                    //Aerolinea = textBoxAerolinea.Text,
-                    Aerolinea = comboBoxAerolinea.SelectedItem.ToString(),
-                    IdAvion = /*(int)comboBoxAvion.SelectedValue*/1
+                    Aerolinea = textBoxAerolinea.Text,
+                    //Aerolinea = comboBoxAerolinea.SelectedItem.ToString(),
+                    IdAvion = (int)comboBoxAvion.SelectedValue
                 };
 
                 var response = await Program.HttpClient.PostAsJsonAsync("vuelos", vueloCreateDto);
@@ -175,9 +139,6 @@ namespace WindowsForms
                 }
                 else
                 {
-                    //Texto no personalizado dependiendo del error:
-                    //MessageBox.Show("Fallo al guardar el nuevo vuelo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                     string mensajeError = await response.Content.ReadAsStringAsync();
                     // Si la API devolvió un mensaje, lo mostramos; si viene vacío, usamos uno por defecto:
                     string textoAlerta = string.IsNullOrWhiteSpace(mensajeError) ? "Fallo al guardar el nuevo vuelo." : mensajeError.Trim('"');
@@ -196,9 +157,9 @@ namespace WindowsForms
                     IdCiudadOrigen = (int)comboBoxCiudadOrigen.SelectedValue,
                     IdCiudadDestino = (int)comboBoxCiudadDestino.SelectedValue,
                     Precio = precioValidado.Value,                                  // No usar Conver.ToDecimal() xq si ingresan letras se rompe
-                    //Aerolinea = textBoxAerolinea.Text,
-                    Aerolinea = comboBoxAerolinea.SelectedItem.ToString(),
-                    IdAvion = /*(int)comboBoxAvion.SelectedValue*/1
+                    Aerolinea = textBoxAerolinea.Text,
+                    //Aerolinea = comboBoxAerolinea.SelectedItem.ToString(),
+                    IdAvion = (int)comboBoxAvion.SelectedValue
                 };
 
                 var response = await Program.HttpClient.PutAsJsonAsync($"vuelos/{vueloUpdateDto.Id}", vueloUpdateDto);
@@ -215,9 +176,6 @@ namespace WindowsForms
                 }
                 else
                 {
-                    //Texto no personalizado dependiendo del error:
-                    //MessageBox.Show("Fallo al editar el vuelo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                     string mensajeError = await response.Content.ReadAsStringAsync();
                     // Si la API devolvió un mensaje, lo mostramos; si viene vacío, usamos uno por defecto:
                     string textoAlerta = string.IsNullOrWhiteSpace(mensajeError) ? "Fallo al editar el vuelo." : mensajeError.Trim('"');
@@ -225,6 +183,26 @@ namespace WindowsForms
                 }
 
             }
+        }
+
+        private async Task InicializarFormularioEdicionAsync(VueloUpdateDTO vueloAEditar)
+        {
+            // 1. Esperamos obligatoriamente a que se descarguen y carguen los combos
+            await CargarComboBoxesRelacionados();
+
+            // 2. UNA VEZ QUE TERMINÓ DE LLENARSE TODO, asignamos los valores de manera segura:
+            lblIdVuelo.Text = vueloAEditar.Id.ToString();
+            textBoxPrecioVuelo.Text = vueloAEditar.Precio.ToString();
+            textBoxAerolinea.Text = vueloAEditar.Aerolinea;
+            //comboBoxAerolinea.SelectedItem = vueloAEditar.Aerolinea;
+
+            dateTimePickerFechaVuelo.Value = vueloAEditar.FechaHoraVuelo.Date;
+            dateTimePickerHoraVuelo.Value = vueloAEditar.FechaHoraVuelo;
+
+            // Ahora los ComboBox ya tienen elementos, por lo que el SelectedValue va a encontrar el ID perfecto
+            comboBoxCiudadOrigen.SelectedValue = vueloAEditar.IdCiudadOrigen;
+            comboBoxCiudadDestino.SelectedValue = vueloAEditar.IdCiudadDestino;
+            comboBoxAvion.SelectedValue = vueloAEditar.IdAvion;
         }
 
         private async Task CargarComboBoxesRelacionados()
@@ -236,7 +214,8 @@ namespace WindowsForms
                 if (ciudades != null)
                 {
                     /*
-                     En el siguiete código usé "new List<CiudadCargaDTO>(ciudades)" para el origen y cree una nueva instancia 
+                     > IMPORTANTE:
+                     En el siguiente código usé "new List<CiudadCargaDTO>(ciudades)" para el origen y cree una nueva instancia 
                      separada para el destino "new List<CiudadCargaDTO>(ciudades)".
                      En Windows Forms, si le asignas exactamente la misma instancia de una lista a dos ComboBoxes distintos, suelen trabarse 
                      o compartir la selección (si cambias el origen se cambia el destino solo). Al crear una copia independiente de la lista 
@@ -259,7 +238,9 @@ namespace WindowsForms
 
                 }
 
-                // Creamos la lista de aerolíneas ficticias con una opción por defecto en la posición 0
+                // COMENTADO PARA USAR textBoxAerolinea en vez de un ComboBox con opciones
+                /*
+                // Creamos la lista de aerolíneas sugeridas (puede escribir otra) con una opción por defecto en la posición 0
                 var listaAerolineas = new List<string>
                     {
                         "-- Seleccione aerolínea --",
@@ -270,20 +251,19 @@ namespace WindowsForms
                         "Qatar Airways"
                     };
                 comboBoxAerolinea.DataSource = listaAerolineas;
+                */
 
-                /*
                 // Cargar el ComboBox de Aviones desde su API, con opción por defecto (Id = 0):
-                var aviones = await Program.HttpClient.GetFromJsonAsync<List<AvionCargaDTO>>("aviones");
+                var aviones = await Program.HttpClient.GetFromJsonAsync<List<AvionDTO>>("aviones");
                 if (aviones != null)
                 {   
-                    var listaAviones = new List<AvionCargaDTO>(aviones);
-                    listaAviones.Insert(0, new AvionCargaDTO { Id = 0, Descripcion = "-- Seleccione avión --" });
+                    var listaAviones = new List<AvionDTO>(aviones);
+                    listaAviones.Insert(0, new AvionDTO { Id = 0, Descripcion = "-- Seleccione avión --" });
                     comboBoxAvion.DataSource = listaAviones;
                     comboBoxAvion.DisplayMember = "Descripcion";
                     comboBoxAvion.ValueMember = "Id";
                 }
-                */
-
+                
             }
             catch (Exception ex)
             {
@@ -310,12 +290,12 @@ namespace WindowsForms
 
         private void ClearForm()
         {
-            //textBoxAerolinea.Clear();
-            comboBoxAerolinea.SelectedIndex = 0;
+            //comboBoxAerolinea.SelectedIndex = 0;
             textBoxPrecioVuelo.Clear();
             comboBoxCiudadOrigen.SelectedIndex = 0;
             comboBoxCiudadDestino.SelectedIndex = 0;
-            //comboBoxAvion.SelectedIndex = 0;
+            comboBoxAvion.SelectedIndex = 0;
+            textBoxAerolinea.Clear();
         }
 
         private void btnVolver_Click(object sender, EventArgs e)

@@ -192,7 +192,6 @@
             Controls.Add(panel1);
             Controls.Add(lblTituloNuevoEditarCiudad);
             Controls.Add(btnVolver);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "CiudadDetalleForm";
             Text = "Administrador";
             panel1.ResumeLayout(false);

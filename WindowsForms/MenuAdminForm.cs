@@ -22,10 +22,10 @@ namespace WindowsForms
             lblNombreApellido.Text = $"{usuarioAutenticado.Nombre} {usuarioAutenticado.Apellido}";
         }
 
-        private void btnAdministrarUsuarios_Click(object sender, EventArgs e)
+        private void btnAdministrarVuelos_Click(object sender, EventArgs e)
         {
-            UsuarioAdminMenuForm ventanaAdminUsuarios = new UsuarioAdminMenuForm(this);
-            ventanaAdminUsuarios.Show();
+            VueloAdminMenuForm ventanaAdminVuelos = new VueloAdminMenuForm(this);
+            ventanaAdminVuelos.Show();
             this.Hide();
         }
 
@@ -36,24 +36,31 @@ namespace WindowsForms
             this.Hide();
         }
 
-        private void btnAdministrarPasajeros_Click(object sender, EventArgs e)
+        private void btnAdministrarAviones_Click(object sender, EventArgs e)
         {
-            var ventana = new PasajeroAdminMenuForm(this);
-            ventana.Show();
+            AvionAdminMenuForm ventanaAdminAviones = new AvionAdminMenuForm(this);
+            ventanaAdminAviones.Show();
             this.Hide();
         }
 
         private void btnAdministrarServicios_Click(object sender, EventArgs e)
         {
-            var ventana = new ServicioAdminMenuForm(this);
-            ventana.Show();
+            ServicioAdminMenuForm ventanaAdminServicios = new ServicioAdminMenuForm(this);
+            ventanaAdminServicios.Show();
             this.Hide();
         }
 
-        private void btnAdministrarVuelos_Click(object sender, EventArgs e)
+        private void btnAdministrarUsuarios_Click(object sender, EventArgs e)
         {
-            var ventana = new VueloAdminMenuForm(this);
-            ventana.Show();
+            UsuarioAdminMenuForm ventanaAdminUsuarios = new UsuarioAdminMenuForm(this);
+            ventanaAdminUsuarios.Show();
+            this.Hide();
+        }
+
+        private void btnAdministrarPasajeros_Click(object sender, EventArgs e)
+        {
+            PasajeroAdminMenuForm ventanaAdminPasajeros = new PasajeroAdminMenuForm(this);
+            ventanaAdminPasajeros.Show();
             this.Hide();
         }
 
@@ -62,7 +69,6 @@ namespace WindowsForms
             Application.Restart(); // Reinicia la aplicación y vuelve al Login
         }
 
-        
     }
 }
 

@@ -48,8 +48,8 @@ namespace Data
             // Archivos "Configuration"
             //modelBuilder.ApplyConfiguration(new PaisConfiguration());
 
-            // Esto busca automáticamente todas las clases que implementen IEntityTypeConfiguration<T>
-            // dentro de este proyecto (Data) y las aplica sola. ¡Adiós a configurar entidad por entidad acá!
+            // Esto reemplaza a lo de arriba: busca automáticamente todas las clases que implementen IEntityTypeConfiguration<T>
+            // dentro de este proyecto (Data) y las aplica sola. Y no es necesario configurar entidad por entidad acá!
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
             modelBuilder.Entity<Usuario>(entity =>
@@ -129,25 +129,6 @@ namespace Data
 
             });
 
-            /*modelBuilder.Entity<Pais>(entity =>
-            {
-                // Primary Key
-                entity.HasKey(pais => pais.Id);
-
-                entity.Property(entityPais => entityPais.Id)
-                    .ValueGeneratedOnAdd();
-
-                entity.Property(entityPais => entityPais.Nombre)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                // 1 Pais > Muchas ciudades
-
-                entity.Navigation(entityPais => entityPais.Ciudades)
-                    .HasField("_ciudades");
-                
-            });*/
-
             modelBuilder.Entity<Ciudad>(entityCiudad =>
             {
                 // Primary Key
@@ -189,25 +170,6 @@ namespace Data
 
                 entityCiudad.Navigation(e => e.VuelosDestino)
                     .HasField("_vuelosDestino");
-
-                // Datos iniciales (Seed Data)
-                /*entityCiudad.HasData(
-                    new Ciudad(1 , "Rosario"             , "2000"        , "ROS", 9),
-                    new Ciudad(2 , "Buenos Aires"        , "1802"        , "EZE", 9),
-                    new Ciudad(3 , "Córdoba"             , "5000"        , "COR", 9),
-                    new Ciudad(4 , "San Pablo"           , "07190-902"   , "GRU", 26),
-                    new Ciudad(5 , "Nueva York"          , "11430"       , "JFK", 60),
-                    new Ciudad(6 , "Los Ángeles"         , "90045"       , "LAX", 60),
-                    new Ciudad(7 , "Madrid"              , "28042"       , "MAD", 59),
-                    new Ciudad(8 , "Lima"                , "07031"       , "LIM", 141),
-                    new Ciudad(9 , "Roma"                , "00054"       , "FCO", 90),
-                    new Ciudad(10, "Pekín"               , "100621"      , "PEK", 39),
-                    new Ciudad(11, "Tokio"               , "282-8601"    , "NRT", 92),
-                    new Ciudad(12, "Dubái"               , "2525"        , "DBX", 55),
-                    new Ciudad(13, "París"               , "95700"       , "CDG", 66),
-                    new Ciudad(14, "Sídney"              , "2020"        , "SYD", 11),
-                    new Ciudad(15, "Ciudad del Cabo"     , "7490"        , "CPT", 168)
-                );*/
 
             });
 
@@ -271,29 +233,13 @@ namespace Data
                 entity.Navigation(e => e.Asientos)
                     .HasField("_asientos");
                 
-                /*entity.HasData(
-                    new Avion(1 , "AeroJet 320"         , 150   , "Disponible"),
-                    new Avion(2 , "Airbus A220-300"     , 120   , "Disponible"),
-                    new Avion(3 , "Apex A380"           , 525   , "No disponible"),
-                    new Avion(4 , "Breeze ATR72"        , 70    , "Disponible"),
-                    new Avion(5 , "EcoJet Q400"         , 74    , "Disponible"),
-                    new Avion(6 , "MetroExpress E190"   , 100   , "Disponible"),
-                    new Avion(7 , "Oceanic 350"         , 300   , "No disponible"),
-                    new Avion(8 , "SkyLinx 737"         , 160   , "Disponible"),
-                    new Avion(9 , "StratoCruiser 787"   , 240   , "Disponible"),
-                    new Avion(10, "Titan 777"           , 300   , "Disponible")
-                );*/
-
             });
 
             modelBuilder.Entity<Asiento>(entity =>
             {
                 // Definimos la Clave Primaria Compuesta (Entidad Débil de Avión)
                 entity.HasKey(e => new {e.IdAvion, e.Codigo});
-
-                //entity.HasKey(entityAsiento => entityAsiento.Codigo);
-                //entity.Property(entityAsiento => entityAsiento.Codigo).ValueGeneratedOnAdd();
-
+                
                 entity.Property(e => e.Fila)
                     .IsRequired();
                     //.HasMaxLength(1);
@@ -350,23 +296,6 @@ namespace Data
                 entityServicio.Navigation(e => e.Pasajes)
                     .HasField("_pasajes");
 
-                /*entityServicio.HasData(
-                    new Servicio
-                    (
-                        1,                                                                  // id
-                        "Mantas",                                                           // nombre
-                        "Servicio de 1 manta por persona para abrigo durante el vuelo.",    // descripción
-                        (decimal)116.70                                                     // precio
-                    ),
-                    new Servicio
-                    (
-                        2,
-                        "Comida",
-                        "Una comida a eleción por persona durante el vuelo.",
-                        (decimal)150.00
-                    )
-                );*/
-
             });
 
             modelBuilder.Entity<Vuelo>(entity =>
@@ -404,15 +333,10 @@ namespace Data
                     .OnDelete(DeleteBehavior.Restrict);
 
                 // 1 Vuelo > Muchas Reservas (Mapeo explícito del campo privado / Backing Field)
-                // Como estamos aplicando un diseño profesional y encapsulado (DDD), EF Core necesita que le digamos: "Ey, cuando
+                // Como estamos aplicando un diseño encapsulado (DDD), EF Core necesita que le digamos: "Cuando
                 // traigas las reservas de la base de datos, mételas a la fuerza dentro de este campo privado _reservas".
                 entity.Navigation(e => e.Reservas)
                     .HasField("_reservas");
-
-                /*entity.HasData
-                (
-                    new Vuelo(1, new DateTime(2026, 12, 20, 14, 30, 0), "Aerolíneas Argentinas", (decimal)125000.99, 3, 2, 3)
-                );*/
 
             });
 

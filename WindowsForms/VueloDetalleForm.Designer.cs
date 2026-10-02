@@ -47,7 +47,7 @@
             lblTituloId = new Label();
             btnGuardarVuelo = new Button();
             btnVolver = new Button();
-            comboBoxAerolinea = new ComboBox();
+            textBoxAerolinea = new TextBox();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -64,7 +64,7 @@
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.FixedSingle;
-            panel1.Controls.Add(comboBoxAerolinea);
+            panel1.Controls.Add(textBoxAerolinea);
             panel1.Controls.Add(dateTimePickerHoraVuelo);
             panel1.Controls.Add(textBoxPrecioVuelo);
             panel1.Controls.Add(lblTituloPrecioVuelo);
@@ -238,14 +238,12 @@
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
             // 
-            // comboBoxAerolinea
+            // textBoxAerolinea
             // 
-            comboBoxAerolinea.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxAerolinea.FormattingEnabled = true;
-            comboBoxAerolinea.Location = new Point(189, 268);
-            comboBoxAerolinea.Name = "comboBoxAerolinea";
-            comboBoxAerolinea.Size = new Size(304, 28);
-            comboBoxAerolinea.TabIndex = 15;
+            textBoxAerolinea.Location = new Point(190, 271);
+            textBoxAerolinea.Name = "textBoxAerolinea";
+            textBoxAerolinea.Size = new Size(302, 27);
+            textBoxAerolinea.TabIndex = 15;
             // 
             // VueloDetalleForm
             // 
@@ -284,6 +282,6 @@
         private TextBox textBoxPrecioVuelo;
         private Label lblTituloPrecioVuelo;
         private DateTimePicker dateTimePickerHoraVuelo;
-        private ComboBox comboBoxAerolinea;
+        private TextBox textBoxAerolinea;
     }
 }

@@ -1,36 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DTOs
 {
+    // DTO para respuestas (GET)
     public class AvionDTO
     {
         public int Id { get; set; }
         public string Descripcion { get; set; }
         public int Capacidad { get; set; }
         public string EstadoDisponibilidad { get; set; }
-
-        //private List<Asiento> Asientos = new();
     }
 
+    // DTO para creación (POST)
     public class AvionCreateDTO
     {
-        public required string Descripcion { get; set; }
-        public required int Capacidad { get; set; }
-        public string EstadoDisponibilidad { get; private set; }
+        public string Descripcion { get; set; }
+        public int Capacidad { get; set; }
+        public string EstadoDisponibilidad { get; set; } // Cambiado de 'private set' a 'set'
 
     }
 
+    // DTO para actualización (PUT)
     public class AvionUpdateDTO
     {
-        public int Id { get; private set; }
-        public string Descripcion { get; private set; }
-        public int Capacidad { get; private set; }
-        public string EstadoDisponibilidad { get; private set; }
-
+        public int Id { get; set; } // Cambiado de 'private set' a 'set'
+        public string Descripcion { get; set; }
+        public int Capacidad { get; set; }
+        public string EstadoDisponibilidad { get; set; }
     }
-    
+
 }
