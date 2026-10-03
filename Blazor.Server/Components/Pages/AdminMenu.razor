@@ -2,51 +2,81 @@
 @attribute [Authorize(Roles = "admin")]
 @rendermode InteractiveServer
 
-<PageTitle>Panel de Administración - AeroReservas.com</PageTitle>
+<PageTitle>Menú de Administrador - AeroReservas</PageTitle>
 
-<div class="container mt-4">
-    <div class="card border-danger shadow-sm">
-        <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
-            <h3 class="mb-0">Panel de Control General (Admin)</h3>
-            <button class="btn btn-outline-light btn-sm" @onclick="CerrarSesion">Cerrar Sesión</button>
+<div class="container-fluid px-0" style="font-family: Segoe UI, sans-serif;">
+    <!-- Header Superior (Barra con título/usuario a la izquierda y salir a la derecha) -->
+    <header class="bg-white border-bottom shadow-sm px-4 py-3 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h3 fw-normal mb-0" style="color: #111;">Menú de Administrador</h1>
+                <AuthorizeView>
+                    <Authorized>
+                        <small class="text-secondary" style="font-size: 0.95rem;">
+                            Admin: @(context.User.Identity?.Name ?? "Pedro Gonzalez")
+                        </small>
+                    </Authorized>
+                </AuthorizeView>
+            </div>
+
+            <!-- Botón Salir del sistema arriba a la derecha en el Header -->
+            <div>
+                <button class="btn btn-light border text-dark px-3 py-1 shadow-sm"
+                        style="background-color: #fff; border-color: #ccc; font-size: 0.9rem;"
+                        @onclick="CerrarSesion">
+                    Salir del sistema
+                </button>
+            </div>
         </div>
-        <div class="card-body">
-            <AuthorizeView>
-                <Authorized>
-                    <h4>¡Bienvenido Administrador, @context.User.Identity?.Name!</h4>
-                    <p class="text-muted">Gestión integral de usuarios, flota y destinos.</p>
-                </Authorized>
-            </AuthorizeView>
+    </header>
 
-            <div class="row mt-4">
-                <div class="col-md-4 mb-3">
-                    <div class="card h-100 border-secondary">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Gestión de Usuarios</h5>
-                            <p class="card-text">Alta, baja y modificación de datos de usuarios registrados.</p>
-                            <button class="btn btn-danger" @onclick="IrAGestionUsuarios">Ir a Usuarios</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card h-100 border-secondary">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Gestión de Aviones</h5>
-                            <p class="card-text">Administración de la flota de aeronaves disponibles.</p>
-                            <button class="btn btn-outline-danger" disabled>Próximamente</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card h-100 border-secondary">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Gestión de Vuelos</h5>
-                            <p class="card-text">Programación de rutas, destinos, fechas y precios.</p>
-                            <button class="btn btn-outline-danger" disabled>Próximamente</button>
-                        </div>
+    <!-- Contenido Principal: Panel central "Acciones" en marco centrado -->
+    <main class="container">
+        <div class="d-flex justify-content-center mt-4">
+            <div class="card shadow-sm border" style="width: 100%; max-width: 380px; border-color: #888 !important; background-color: #fcfcfc;">
+                <div class="card-body p-4 text-center">
+                    <h3 class="fw-normal mb-4" style="font-size: 1.35rem; color: #222;">Acciones</h3>
+
+                    <div class="d-grid gap-2 col-11 mx-auto">
+                        <button class="btn btn-light border text-dark py-2 shadow-sm"
+                                style="background-color: #fff; border-color: #ccc;"
+                                @onclick="IrAGestionVuelos">
+                            Administrar Vuelos
+                        </button>
+
+                        <button class="btn btn-light border text-dark py-2 shadow-sm"
+                                style="background-color: #fff; border-color: #ccc;"
+                                @onclick="IrAGestionCiudades">
+                            Administrar Ciudades
+                        </button>
+
+                        <button class="btn btn-light border text-dark py-2 shadow-sm"
+                                style="background-color: #fff; border-color: #ccc;"
+                                @onclick="IrAGestionAviones">
+                            Administrar Aviones
+                        </button>
+
+                        <button class="btn btn-light border text-dark py-2 shadow-sm"
+                                style="background-color: #fff; border-color: #ccc;"
+                                @onclick="IrAGestionServicios">
+                            Administrar Servicios
+                        </button>
+
+                        <!-- Botón enfocado (borde azul como en Windows Forms) -->
+                        <button class="btn btn-light border text-dark py-2 shadow-sm"
+                                style="background-color: #fff; border-color: #0d6efd !important;"
+                                @onclick="IrAGestionUsuarios">
+                            Administrar Usuarios
+                        </button>
+
+                        <button class="btn btn-light border text-dark py-2 shadow-sm"
+                                style="background-color: #fff; border-color: #ccc;"
+                                @onclick="IrAGestionPasajeros">
+                            Administrar Pasajeros
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 </div>

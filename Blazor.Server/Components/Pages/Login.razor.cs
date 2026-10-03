@@ -20,8 +20,14 @@ namespace Blazor.Server.Components.Pages    // NombreProyecto.SubcarpetaComponen
         protected string? mensajeError;
         protected bool cargando = false;
         protected InputText? inputEmail;
-        
+
         // Se ejecutar al cargar la página.
+        protected override void OnInitialized()
+        {
+            loginModel.Email = "admin@email.com";
+            loginModel.Contrasenia = "admin";
+        }
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
 
