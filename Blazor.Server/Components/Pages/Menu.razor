@@ -1,0 +1,43 @@
+﻿@page "/menu"
+@attribute [Authorize(Roles = "usuario, admin")]
+@rendermode InteractiveServer
+
+<PageTitle>Menú Principal - AeroReservas.com</PageTitle>
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">Panel del Pasajero</h3>
+            <button class="btn btn-outline-light btn-sm" @onclick="CerrarSesion">Cerrar Sesión</button>
+        </div>
+        <div class="card-body">
+            <AuthorizeView>
+                <Authorized>
+                    <h4>¡Bienvenido, @context.User.Identity?.Name!</h4>
+                    <p class="text-muted">Seleccioná una opción para gestionar tus pasajes y reservas.</p>
+                </Authorized>
+            </AuthorizeView>
+
+            <div class="row mt-4">
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Buscar Vuelos</h5>
+                            <p class="card-text">Consulta disponibilidad de destinos, horarios y tarifas.</p>
+                            <button class="btn btn-outline-primary" disabled>Próximamente</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Mis Reservas</h5>
+                            <p class="card-text">Revisa el estado de tus pasajes comprados y gestiona tu itinerario.</p>
+                            <button class="btn btn-outline-primary" disabled>Próximamente</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

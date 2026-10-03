@@ -1,0 +1,51 @@
+﻿@page "/login"
+@layout EmptyLayout
+@rendermode InteractiveServer
+
+<PageTitle>Iniciar Sesión - AeroReservas.com</PageTitle>
+
+<div class="login-container">
+    <div class="login-card">
+        <!-- Título principal de la aplicación -->
+        <h1 class="brand-title">AeroReservas.com</h1>
+        <p class="subtitle">Ingresa tus credenciales para acceder</p>
+
+        @if (!string.IsNullOrEmpty(mensajeError))
+        {
+            <div class="alert alert-danger" role="alert">
+                @mensajeError
+            </div>
+        }
+
+        <EditForm FormName="LoginForm" Model="loginModel" OnValidSubmit="ProcesarLogin">
+            <DataAnnotationsValidator />
+
+            <div class="form-group mb-3">
+                <label for="email">Correo Electrónico</label>
+                <InputText @ref="inputEmail" @bind-Value="loginModel.Email" class="form-control" disabled="@cargando" id="email" placeholder="ejemplo@correo.com" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="contrasenia">Contraseña</label>
+                <InputText @bind-Value="loginModel.Contrasenia" class="form-control" disabled="@cargando" id="contrasenia" type="password" placeholder="••••••••" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mb-2" disabled="@cargando">
+                @if (cargando)
+                {
+                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                    <span>Ingresando...</span>
+                }
+                else
+                {
+                    <span>Iniciar Sesión</span>
+                }
+            </button>
+
+            <!-- Botón / Enlace para Registrarse -->
+            <button type="button" class="btn btn-outline-secondary w-100" @onclick="IrARegistro" disabled="@cargando">
+                Registrarse
+            </button>
+        </EditForm>
+    </div>
+</div>

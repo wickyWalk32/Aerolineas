@@ -21,7 +21,7 @@
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": false,    // Pasar a true. Ahora lo dejé en false para que no se abra swagger cada vez, dado que estoy en desarrollo. 
+      "launchBrowser": true,    // Se puede usar en false para que no levante swagger cada vez, al menos en el desarrollo. 
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7099;http://localhost:5091",
       "environmentVariables": {

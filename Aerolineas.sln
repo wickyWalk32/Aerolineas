@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsForms", "WindowsForm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Server", "Blazor.Server\Blazor.Server.csproj", "{EA048887-AAA2-416D-A975-93051313A003}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Server.Auth", "Blazor.Server.Auth\Blazor.Server.Auth.csproj", "{756E3776-812E-4EB9-8B88-46E85C7F7722}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{EA048887-AAA2-416D-A975-93051313A003}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA048887-AAA2-416D-A975-93051313A003}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA048887-AAA2-416D-A975-93051313A003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{756E3776-812E-4EB9-8B88-46E85C7F7722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{756E3776-812E-4EB9-8B88-46E85C7F7722}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{756E3776-812E-4EB9-8B88-46E85C7F7722}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{756E3776-812E-4EB9-8B88-46E85C7F7722}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

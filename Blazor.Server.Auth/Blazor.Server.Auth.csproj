@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+ <ItemGroup>
+	<!-- Incluye las referencias nativas de ASP.NET Core (Blazor Server, ProtectedBrowserStorage, etc.) -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+	
+  <ItemGroup>
+	  <!-- El único paquete NuGet externo necesario -->
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.30" />
+  </ItemGroup>
+
+</Project>

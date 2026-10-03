@@ -48,7 +48,7 @@ namespace WebApi
                 //    return Results.BadRequest(new { error = "Datos incoherentes o inválidos." });
                 //}
                 System.Console.Write(dto);
-                await usuarioService.UpdateAsync(id, dto);
+                var usuario = await usuarioService.UpdateAsync(id, dto);
 
                 return Results.NoContent();
             })
@@ -88,7 +88,8 @@ namespace WebApi
 
                     // Como el login fue exitoso, ya tenemos el Rol, Nombre y Apellido en 'resultado'.
                     // Creamos una entidad temporal (o adaptada) para que el JwtTokenService pueda generar los claims.
-                    // (Nota: Si el JwtTokenService usa Id, Email y Rol, pasarle el email que vino en el request y el rol del resultado).
+                    // Creamos la instancia asignando explícitamente el Id obtenido para que el JwtTokenService genere los Claims correctos.
+                    // Nota: Si el JwtTokenService usa Email y Rol, pasarle el email que vino en el request y el rol del resultado.
                     var usuarioParaToken = new Usuario
                     (
                         resultado.Nombre,
@@ -96,11 +97,12 @@ namespace WebApi
                         usuarioLoginRequestDto.Email,
                         resultado.Rol
                     );
+                    usuarioParaToken.SetId(resultado.Id);
 
                     // Generamos el Token JWT
                     string token = tokenService.GenerarToken(usuarioParaToken);
 
-                    // Asignamos el token al resultado que se enviará al cliente de WindowsForms
+                    // Asignamos el token al resultado que se enviará al cliente de WindowsForms o Blazor.Server
                     resultado.Token = token;
 
                     return Results.Ok(resultado);

@@ -1,0 +1,135 @@
+﻿/* Contenedor principal centrado con fondo suave */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 1rem;
+}
+
+/* Tarjeta flotante con sombra suave */
+.login-card {
+    background: #ffffff;
+    padding: 2.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+/* Título de la marca */
+.brand-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0d6efd;
+    text-align: center;
+    margin: 0 0 0.25rem 0;
+}
+
+/* Subtítulo */
+.subtitle {
+    font-size: 0.9rem;
+    color: #6c757d;
+    text-align: center;
+    margin-bottom: 1.75rem;
+}
+
+/* Agrupadores de etiquetas e inputs */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.25rem;
+}
+
+    .form-group label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #333333;
+        margin-bottom: 0.4rem;
+    }
+
+/* Estilos para los campos de texto (InputText) */
+.login-card input[type="text"],
+.login-card input[type="password"],
+.login-card .form-control {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.95rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+    .login-card input[type="text"]:focus,
+    .login-card input[type="password"]:focus,
+    .login-card .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+    }
+
+/* Botón principal (Iniciar Sesión) */
+.login-card button[type="submit"],
+.login-card .btn-primary {
+    width: 100%;
+    padding: 0.7rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #0d6efd;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+    .login-card button[type="submit"]:hover,
+    .login-card .btn-primary:hover {
+        background-color: #0b5ed7;
+    }
+
+    .login-card button[type="submit"]:active,
+    .login-card .btn-primary:active {
+        transform: scale(0.99);
+    }
+
+/* Botón secundario (Registrarse) */
+.login-card button[type="button"],
+.login-card .btn-outline-secondary {
+    width: 100%;
+    padding: 0.65rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #6c757d;
+    background-color: transparent;
+    border: 1px solid #6c757d;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .login-card button[type="button"]:hover,
+    .login-card .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: #ffffff;
+    }
+
+/* Alertas de error */
+.alert {
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+}
+
+.alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border: 1px solid #f5c2c7;
+}
