@@ -142,7 +142,7 @@ namespace WindowsForms
                     string mensajeError = await response.Content.ReadAsStringAsync();
                     // Si la API devolvió un mensaje, lo mostramos; si viene vacío, usamos uno por defecto:
                     string textoAlerta = string.IsNullOrWhiteSpace(mensajeError) ? "Fallo al guardar el nuevo vuelo." : mensajeError.Trim('"');
-                    MessageBox.Show("Error interno", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(textoAlerta, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
 
             }

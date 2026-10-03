@@ -72,7 +72,7 @@ namespace WindowsForms
             lblTituloNuevoEditarUsuario.Text = "Editar Usuario";
             UsuarioResultado = usuarioAEditar;
 
-            var roles = new List<string> { "-- Seleccione Rol --", "Administrador", "Usuario" };
+            var roles = new List<string> { "-- Seleccione Rol --", "admin", "usuario" };
             comboBoxRol.DataSource = roles;
             comboBoxRol.DropDownStyle = ComboBoxStyle.DropDownList; // Para que no escriban a mano
 

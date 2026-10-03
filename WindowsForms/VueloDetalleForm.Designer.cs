@@ -30,6 +30,7 @@
         {
             lblTituloNuevoEditarVuelo = new Label();
             panel1 = new Panel();
+            textBoxAerolinea = new TextBox();
             dateTimePickerHoraVuelo = new DateTimePicker();
             textBoxPrecioVuelo = new TextBox();
             lblTituloPrecioVuelo = new Label();
@@ -47,7 +48,6 @@
             lblTituloId = new Label();
             btnGuardarVuelo = new Button();
             btnVolver = new Button();
-            textBoxAerolinea = new TextBox();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -85,6 +85,13 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(544, 422);
             panel1.TabIndex = 1;
+            // 
+            // textBoxAerolinea
+            // 
+            textBoxAerolinea.Location = new Point(190, 271);
+            textBoxAerolinea.Name = "textBoxAerolinea";
+            textBoxAerolinea.Size = new Size(302, 27);
+            textBoxAerolinea.TabIndex = 15;
             // 
             // dateTimePickerHoraVuelo
             // 
@@ -237,13 +244,6 @@
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
-            // 
-            // textBoxAerolinea
-            // 
-            textBoxAerolinea.Location = new Point(190, 271);
-            textBoxAerolinea.Name = "textBoxAerolinea";
-            textBoxAerolinea.Size = new Size(302, 27);
-            textBoxAerolinea.TabIndex = 15;
             // 
             // VueloDetalleForm
             // 

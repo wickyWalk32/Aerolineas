@@ -136,8 +136,8 @@ if (!app.Environment.IsDevelopment())
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+     app.UseSwagger();
+     app.UseSwaggerUI();
     app.UseHttpLogging();
 }
 
@@ -159,8 +159,8 @@ app.MapVueloEndpoints();
 app.MapReservaEndpoints();
 app.MapAvionEndpoints();
 
-//app.MapGet("/", () => "Hello, World!");       //?
-app.MapSwagger()/*.RequireAuthorization()*/;    //Ver que es
+//app.MapGet("/", () => "Hello, World!"); // De prueba
+app.MapSwagger()/*.RequireAuthorization()*/;
 app.MapRazorPages();
 
 app.Run();
