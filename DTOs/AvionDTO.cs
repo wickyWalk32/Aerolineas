@@ -18,6 +18,7 @@ namespace DTOs
         public string Descripcion { get; set; }
         public int Capacidad { get; set; }
         public string EstadoDisponibilidad { get; set; } // Cambiado de 'private set' a 'set'
+        public List<AsientoCreateDTO>? AsientosCreateDTO { get; set; }
 
     }
 

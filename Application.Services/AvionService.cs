@@ -45,6 +45,10 @@ namespace Application.Services
         public async Task<AvionDTO> AddAsync(AvionCreateDTO dto)
         {
             Avion avion = new Avion(dto.Descripcion, dto.Capacidad, dto.EstadoDisponibilidad);
+            foreach (var asiento in dto.AsientosCreateDTO)
+            {
+                avion.AddAsiento(new Asiento(avion.Id, asiento.Codigo, asiento.Fila, asiento.Columna, asiento.Estado));
+            }
             await _repo.AddAsync(avion);
             AvionDTO avionDTO = new AvionDTO
             {

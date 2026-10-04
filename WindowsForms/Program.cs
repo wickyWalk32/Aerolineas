@@ -41,7 +41,8 @@ namespace WindowsForms
                 MessageBox.Show("No se encontró la URL de la API en el archivo de configuración.", "Error de configuración", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
+            //Application.Run(new AvionCreateForm());
+            
             // 3. Flujo de Login y redirección según el rol: se utiliza ShowDialog() para validar credenciales y destruye el formulario
             // de login antes de lanzar la ventana principal según el rol.
             using (LoginForm loginForm = new LoginForm())
@@ -60,6 +61,7 @@ namespace WindowsForms
                     }
                 }
             }
+            
 
         }
     }
