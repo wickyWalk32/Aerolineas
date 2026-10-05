@@ -33,23 +33,21 @@ namespace Domain.Model
         public Asiento()
         {
         }
-        public Asiento(char fila, int columna, string estado, int idAvion, Avion avion)
+        public Asiento(char fila, int columna, string estado, int idAvion)
         {
             this.SetFila(fila);
             this.SetColumna(columna);
             this.SetEstado(estado);
             this.SetIdAvion(idAvion);
-            this.SetAvion(avion);
         }
 
-        public Asiento(string codigo, char fila, int columna, string estado, int idAvion, Avion avion)
+        public Asiento(int idAvion,string codigo, char fila, int columna, string estado)
         {
             this.SetCodigo(codigo);
             this.SetFila(fila);
             this.SetColumna(columna);
             this.SetEstado(estado);
             this.SetIdAvion(idAvion);
-            this.SetAvion(avion);
         }
 
         // <<< MÉTODOS: SETTERS >>>
