@@ -1,0 +1,88 @@
+﻿@page "/admin/servicios/editar/{Id:int}"
+@attribute [Authorize(Roles = "admin")]
+@rendermode InteractiveServer
+
+<PageTitle>Editar Servicio - AeroReservas</PageTitle>
+
+<div class="container-fluid px-4 py-3" style="max-width: 800px; font-family: 'Segoe UI', sans-serif;">
+    <!-- Encabezado con Título y Botón Volver -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 fw-normal mb-0" style="color: #111;">Editar Servicio</h1>
+        <button class="btn btn-light border border-secondary text-dark px-3 py-1 shadow-sm"
+                style="background-color: #fff; font-size: 0.95rem;"
+                @onclick="VolverAlMenu">
+            Volver
+        </button>
+    </div>
+
+    <!-- Mensaje de Error si ocurre alguno -->
+    @if (!string.IsNullOrEmpty(mensajeError))
+    {
+        <div class="alert alert-danger shadow-sm mb-3" role="alert">
+            @mensajeError
+        </div>
+    }
+
+    @if (cargando)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando servicio...</span>
+            </div>
+            <p class="text-secondary mt-2">Cargando datos del servicio...</p>
+        </div>
+    }
+    else
+    {
+        <!-- Tarjeta Principal del Formulario -->
+        <div class="card shadow-sm border p-4" style="background-color: #f8f9fa; border-color: #777 !important; border-radius: 2px;">
+            <EditForm Model="servicioDto" OnValidSubmit="GuardarCambios">
+                <DataAnnotationsValidator />
+
+                <div class="d-flex flex-column gap-3 mx-auto" style="max-width: 550px;">
+
+                    <!-- Nombre -->
+                    <div class="row align-items-center">
+                        <label class="col-sm-4 col-form-label text-dark">Nombre</label>
+                        <div class="col-sm-8">
+                            <InputText @bind-Value="servicioDto.Nombre" class="form-control border-secondary-subtle" placeholder="Nombre del servicio" />
+                        </div>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="row align-items-center">
+                        <label class="col-sm-4 col-form-label text-dark">Descripción</label>
+                        <div class="col-sm-8">
+                            <InputTextArea @bind-Value="servicioDto.Descripcion" class="form-control border-secondary-subtle" rows="3" placeholder="Descripción detallada" />
+                        </div>
+                    </div>
+
+                    <!-- Precio -->
+                    <div class="row align-items-center">
+                        <label class="col-sm-4 col-form-label text-dark">Precio</label>
+                        <div class="col-sm-8">
+                            <InputText @bind-Value="precioTexto" class="form-control border-secondary-subtle" placeholder="Ej: 1500.00" />
+                        </div>
+                    </div>
+
+                    <!-- Botón Guardar Centrado -->
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-light border border-primary text-primary px-4 py-1 shadow-sm"
+                                style="background-color: #fff; font-size: 0.95rem;" disabled="@guardando">
+                            @if (guardando)
+                            {
+                                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                <span>Guardando...</span>
+                            }
+                            else
+                            {
+                                <span>Guardar</span>
+                            }
+                        </button>
+                    </div>
+
+                </div>
+            </EditForm>
+        </div>
+    }
+</div>

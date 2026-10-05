@@ -16,7 +16,8 @@ namespace WebApi
             })
             .WithName("GetAllPaises")
             .Produces<List<PaisDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             app.MapPost("/paises", async (PaisCreateDTO dto, PaisService paisService) =>
             {
@@ -35,7 +36,8 @@ namespace WebApi
             .WithName("AddPais")
             .Produces<PaisDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
 
             app.MapDelete("/paises/{id}", async (int id, PaisService paisService) =>
@@ -53,7 +55,8 @@ namespace WebApi
             .WithName("DeletePais")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
         }
     }
 }

@@ -114,7 +114,7 @@
             // cboTipoPasajero
             // 
             cboTipoPasajero.DropDownStyle = ComboBoxStyle.DropDownList;
-            cboTipoPasajero.Items.AddRange(new object[] { "Adulto", "Menor" });
+            cboTipoPasajero.Items.AddRange(new object[] { "Mayor", "Menor" });
             cboTipoPasajero.Location = new Point(186, 173);
             cboTipoPasajero.Name = "cboTipoPasajero";
             cboTipoPasajero.Size = new Size(267, 28);
@@ -144,7 +144,7 @@
             // 
             errorProviderNroDni.ContainerControl = this;
             // 
-            // PasajeroDetalle
+            // PasajeroDetalleForm
             // 
             AcceptButton = btnGuardar;
             CancelButton = btnVolver;
@@ -164,7 +164,7 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "PasajeroDetalle";
+            Name = "PasajeroDetalleForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Registro de Pasajero";
             ((System.ComponentModel.ISupportInitialize)errorProviderNroDni).EndInit();

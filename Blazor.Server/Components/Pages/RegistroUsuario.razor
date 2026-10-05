@@ -1,0 +1,84 @@
+﻿@page "/registro"
+@layout EmptyLayout
+@rendermode InteractiveServer
+
+<PageTitle>Registro - AeroReservas</PageTitle>
+
+<div class="container-fluid px-4 py-3" style="max-width: 800px; font-family: 'Segoe UI', sans-serif;">
+    <!-- Encabezado con Título y Botón Volver -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 fw-normal mb-0" style="color: #111;">Registro</h1>
+        <button class="btn btn-light border border-secondary text-dark px-3 py-1 shadow-sm"
+                style="background-color: #fff; font-size: 0.95rem;"
+                @onclick="VolverAlLogin">
+            Volver
+        </button>
+    </div>
+
+    <!-- Mensaje de Error -->
+    @if (!string.IsNullOrEmpty(mensajeError))
+    {
+        <div class="alert alert-danger shadow-sm mb-3" role="alert">
+            @mensajeError
+        </div>
+    }
+
+    <!-- Tarjeta Principal del Formulario -->
+    <div class="card shadow-sm border p-4" style="background-color: #f8f9fa; border-color: #777 !important; border-radius: 2px;">
+        <EditForm Model="usuarioDto" OnValidSubmit="RegistrarUsuario">
+            <DataAnnotationsValidator />
+
+            <div class="d-flex flex-column gap-3 mx-auto" style="max-width: 550px;">
+
+                <!-- Nombre -->
+                <div class="row align-items-center">
+                    <label class="col-sm-4 col-form-label text-dark">Nombre</label>
+                    <div class="col-sm-8">
+                        <InputText @bind-Value="usuarioDto.Nombre" class="form-control border-secondary-subtle" placeholder="Ej: Juan" />
+                    </div>
+                </div>
+
+                <!-- Apellido -->
+                <div class="row align-items-center">
+                    <label class="col-sm-4 col-form-label text-dark">Apellido</label>
+                    <div class="col-sm-8">
+                        <InputText @bind-Value="usuarioDto.Apellido" class="form-control border-secondary-subtle" placeholder="Ej: Pérez" />
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="row align-items-center">
+                    <label class="col-sm-4 col-form-label text-dark">Email</label>
+                    <div class="col-sm-8">
+                        <InputText @bind-Value="usuarioDto.Email" type="email" class="form-control border-secondary-subtle" placeholder="Ej: juan.perez@email.com" />
+                    </div>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="row align-items-center">
+                    <label class="col-sm-4 col-form-label text-dark">Contraseña</label>
+                    <div class="col-sm-8">
+                        <InputText @bind-Value="usuarioDto.Contrasenia" type="password" class="form-control border-secondary-subtle" placeholder="••••••••" />
+                    </div>
+                </div>
+
+                <!-- Botón Registrar Centrado -->
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-light border border-primary text-primary px-4 py-1 shadow-sm"
+                            style="background-color: #fff; font-size: 0.95rem;" disabled="@guardando">
+                        @if (guardando)
+                        {
+                            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                            <span>Registrando...</span>
+                        }
+                        else
+                        {
+                            <span>Registrarse</span>
+                        }
+                    </button>
+                </div>
+
+            </div>
+        </EditForm>
+    </div>
+</div>

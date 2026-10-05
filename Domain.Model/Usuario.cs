@@ -91,6 +91,8 @@ namespace Domain.Model
 
         public void SetContraseniaHash(string contrasenia)
         {
+            //if (contrasenia.Length < 4)
+            //    throw new ArgumentException("La contraseña debe ser tener al menos 4 caracteres.");
             this.ContraseniaHash = PasswordHasher.HashPassword(this, contrasenia);
         }
 

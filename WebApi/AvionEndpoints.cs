@@ -15,7 +15,8 @@ namespace WebApi
             })
             .WithName("GetAllAviones")
             .Produces<List<AvionDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             // GET: /aviones/{id} (Obtener por ID)
             app.MapGet("/aviones/{id:int}", async (int id, AvionService avionService) =>
@@ -32,7 +33,8 @@ namespace WebApi
             .WithName("GetAvionById")
             .Produces<AvionDTO>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             // POST: /aviones (Crear)
             app.MapPost("/aviones", async (AvionCreateDTO dto, AvionService avionService) =>
@@ -51,7 +53,8 @@ namespace WebApi
             .WithName("AddAvion")
             .Produces<AvionDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             // PUT: /aviones/{id} (Actualizar)
             app.MapPut("/aviones/{id:int}", async (int id, AvionUpdateDTO dto, AvionService avionService) =>
@@ -76,7 +79,8 @@ namespace WebApi
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             // DELETE: /aviones/{id} (Eliminar)
             app.MapDelete("/aviones/{id:int}", async (int id, AvionService avionService) =>
@@ -93,7 +97,8 @@ namespace WebApi
             .WithName("DeleteAvion")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
         }
     }
 }

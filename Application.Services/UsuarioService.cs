@@ -40,8 +40,11 @@ namespace Application.Services
             return new UsuarioDTO
             {
                 Id = usuario.Id,
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
                 Email = usuario.Email,
                 Contrasenia = usuario.ContraseniaHash,
+                Rol = usuario.Rol
             };
         }
         
@@ -64,7 +67,7 @@ namespace Application.Services
                 Email = usuario.Email,
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
-                Contrasenia = usuario.ContraseniaHash
+                Rol = usuario.Rol
             };
 
             return usuarioDTO;
@@ -109,46 +112,6 @@ namespace Application.Services
 
         public Task<bool> ExistsAsync(int id)
             => _repository.ExistsAsync(id);
-
-
-        // LOGIN
-        public UsuarioLoginResultDTO ValidarLogin(UsuarioLoginRequestDTO usuarioLoginRequestDto)
-        {
-            var usuario = _repository.GetByEmail(usuarioLoginRequestDto.Email);
-
-            // 1. Validar si el usuario existe
-            if (usuario == null)
-            {
-                return new UsuarioLoginResultDTO { Exitoso = false, Mensaje = "Credenciales inválidas." };
-            }
-
-            // 2. Validar contrasenia
-            PasswordHasher<Usuario> passwordHasher = new();
-
-            // Compara la contraseña que escribió el usuario con el hash de la base de datos
-            PasswordVerificationResult resultado = passwordHasher.VerifyHashedPassword(
-                usuario,
-                usuario.ContraseniaHash,
-                usuarioLoginRequestDto.Contrasenia // Contrasenia en texto plano
-            );
-
-            // Si falla por que la contrasenia es incorrecta, devolvemos el DTO con Exitoso = false
-            if (resultado == PasswordVerificationResult.Failed)
-            {
-                return new UsuarioLoginResultDTO { Exitoso = false, Mensaje = "Credenciales inválidas." };
-            }
-
-            // 3. Si llega aquí, el login fue exitoso! Generas el Token JWT o la sesión
-
-            return new UsuarioLoginResultDTO
-            {
-                Nombre = usuario.Nombre,
-                Apellido = usuario.Apellido,
-                Rol = usuario.Rol,
-                Exitoso = true,
-                Mensaje = "Acceso concedido."
-            };
-        }
 
     }
 }

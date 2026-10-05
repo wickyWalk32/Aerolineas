@@ -17,7 +17,8 @@ namespace WebApi
                 return Results.Ok(dtos);
             }).WithName("GetAllPasajeros")
             .Produces<List<PasajeroDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             app.MapGet("/pasajeros/{id}", async (int id, PasajeroService pasajeroService) =>
             {
@@ -33,7 +34,8 @@ namespace WebApi
             .WithName("GetPasajero")
             .Produces<UsuarioDTO>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
 
             app.MapPost("/pasajeros", async (PasajeroCreateDTO dto, PasajeroService pasajeroService) =>
@@ -53,7 +55,8 @@ namespace WebApi
             .WithName("AddPasajero")
             .Produces<UsuarioDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             app.MapPut("/pasajeros/{id}", async (int id, PasajeroUpdateDTO dto, PasajeroService pasajeroService) =>
             {
@@ -78,7 +81,8 @@ namespace WebApi
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
 
             app.MapDelete("/pasajeros/{id}", async (int id, PasajeroService pasajeroService) =>
@@ -96,7 +100,8 @@ namespace WebApi
             .WithName("DeletePasajero")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
         }
     

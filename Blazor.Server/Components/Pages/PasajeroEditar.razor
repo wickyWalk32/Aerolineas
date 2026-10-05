@@ -1,0 +1,114 @@
+﻿@page "/admin/pasajeros/editar/{Id:int}"
+@attribute [Authorize(Roles = "admin")]
+@rendermode InteractiveServer
+
+<PageTitle>Editar Pasajero - AeroReservas</PageTitle>
+
+<div class="container-fluid px-4 py-3" style="max-width: 800px; font-family: 'Segoe UI', sans-serif;">
+    <!-- Encabezado con Título y Botón Volver -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 fw-normal mb-0" style="color: #111;">Editar Pasajero</h1>
+        <button class="btn btn-light border border-secondary text-dark px-3 py-1 shadow-sm"
+                style="background-color: #fff; font-size: 0.95rem;"
+                @onclick="VolverAlMenu">
+            Volver
+        </button>
+    </div>
+
+    <!-- Mensaje de Error si ocurre alguno -->
+    @if (!string.IsNullOrEmpty(mensajeError))
+    {
+        <div class="alert alert-danger shadow-sm mb-3" role="alert">
+            @mensajeError
+        </div>
+    }
+
+    @if (cargando)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando pasajero...</span>
+            </div>
+            <p class="text-secondary mt-2">Cargando datos del pasajero...</p>
+        </div>
+    }
+    else
+    {
+        <!-- Tarjeta Principal del Formulario -->
+        <div class="card shadow-sm border p-4" style="background-color: #f8f9fa; border-color: #777 !important; border-radius: 2px;">
+            <EditForm Model="pasajeroDto" OnValidSubmit="GuardarCambios">
+                <DataAnnotationsValidator />
+
+                <div class="d-flex flex-column gap-3 mx-auto" style="max-width: 550px;">
+
+                    <!-- Nombre -->
+                    <div class="row align-items-center">
+                        <label class="col-sm-4 col-form-label text-dark">Nombre</label>
+                        <div class="col-sm-8">
+                            <InputText @bind-Value="pasajeroDto.Nombre" class="form-control border-secondary-subtle" placeholder="Ingrese el nombre" />
+                        </div>
+                    </div>
+
+                    <!-- Apellido -->
+                    <div class="row align-items-center">
+                        <label class="col-sm-4 col-form-label text-dark">Apellido</label>
+                        <div class="col-sm-8">
+                            <InputText @bind-Value="pasajeroDto.Apellido" class="form-control border-secondary-subtle" placeholder="Ingrese el apellido" />
+                        </div>
+                    </div>
+
+                    <!-- Tipo de Documento (Lista desplegable) -->
+                    <div class="row align-items-center">
+                        <label class="col-sm-4 col-form-label text-dark">Tipo Documento</label>
+                        <div class="col-sm-8">
+                            <InputSelect @bind-Value="pasajeroDto.TipoDocumento" class="form-select border-secondary-subtle">
+                                <option value="">Seleccione un tipo de documento...</option>
+                                <option value="DNI">DNI</option>
+                                <option value="DNI (Extranjero)">DNI (Extranjero)</option>
+                                <option value="Libreta Cívica (LC)">Libreta Cívica (LC)</option>
+                                <option value="Libreta de Enrolamiento (LE)">Libreta de Enrolamiento (LE)</option>
+                            </InputSelect>
+                        </div>
+                    </div>
+
+                    <!-- Nro Documento -->
+                    <div class="row align-items-center">
+                        <label class="col-sm-4 col-form-label text-dark">Nro Documento</label>
+                        <div class="col-sm-8">
+                            <InputText @bind-Value="pasajeroDto.NroDocumento" class="form-control border-secondary-subtle" placeholder="Número de documento" />
+                        </div>
+                    </div>
+
+                    <!-- Tipo de Pasajero (Lista desplegable) -->
+                    <div class="row align-items-center">
+                        <label class="col-sm-4 col-form-label text-dark">Tipo</label>
+                        <div class="col-sm-8">
+                            <InputSelect @bind-Value="pasajeroDto.Tipo" class="form-select border-secondary-subtle">
+                                <option value="">Seleccione el tipo...</option>
+                                <option value="Mayor">Mayor</option>
+                                <option value="Menor">Menor</option>
+                            </InputSelect>
+                        </div>
+                    </div>
+
+                    <!-- Botón Guardar Centrado -->
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-light border border-primary text-primary px-4 py-1 shadow-sm"
+                                style="background-color: #fff; font-size: 0.95rem;" disabled="@guardando">
+                            @if (guardando)
+                            {
+                                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                <span>Guardando...</span>
+                            }
+                            else
+                            {
+                                <span>Guardar</span>
+                            }
+                        </button>
+                    </div>
+
+                </div>
+            </EditForm>
+        </div>
+    }
+</div>

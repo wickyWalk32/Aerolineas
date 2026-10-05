@@ -17,8 +17,8 @@ namespace WebApi
             })
             .WithName("GetAllCiudades")
             .Produces<List<CiudadDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi();
-            //.RequireAuthorization("CiudadesLeer");
+            .WithOpenApi()
+            .RequireAuthorization(/*"CiudadesLeer"*/);
 
             app.MapGet("/ciudades/{id}", async (int id, CiudadService ciudadService) =>
             {
@@ -34,8 +34,8 @@ namespace WebApi
             .WithName("GetCiudad")
             .Produces<CiudadDTO>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
-            //.RequireAuthorization("CiudadesLeer");
+            .WithOpenApi()
+            .RequireAuthorization(/*"CiudadesLeer"*/);
 
             app.MapPost("/ciudades", async (CiudadCreateDTO dto, CiudadService ciudadService) =>
             {
@@ -54,8 +54,8 @@ namespace WebApi
             .WithName("AddCiudad")
             .Produces<CiudadDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithOpenApi();
-            //.RequireAuthorization("CiudadesAgregar");
+            .WithOpenApi()
+            .RequireAuthorization(/*"CiudadesAgregar"*/);
 
             app.MapPut("/ciudades/{id}", async (int id, CiudadUpdateDTO dto, CiudadService ciudadService) =>
             {
@@ -80,8 +80,8 @@ namespace WebApi
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithOpenApi();
-            //.RequireAuthorization("CiudadesActualizar");
+            .WithOpenApi()
+            .RequireAuthorization(/*"CiudadesActualizar"*/);
 
             app.MapDelete("/ciudades/{id}", async (int id, CiudadService ciudadService) =>
             {
@@ -98,8 +98,8 @@ namespace WebApi
             .WithName("DeleteCiudad")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
-            //.RequireAuthorization("CiudadesEliminar");
+            .WithOpenApi()
+            .RequireAuthorization(/*"CiudadesEliminar"*/);
         }
     }
 }

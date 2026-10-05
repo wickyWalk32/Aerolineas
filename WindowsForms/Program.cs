@@ -1,16 +1,18 @@
 using DTOs;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
+using WindowsForms.Auth.Services;
+using WindowsForms.Auth.Session; // Importamos la sesión
 
 namespace WindowsForms
 {
     internal static class Program
     {
         public static IConfiguration Configuration { get; private set; } = null!;
-        public static HttpClient HttpClient { get; private set; } = null!;
 
-        // Aquí guardaremos el token del usuario logueado
-        public static string? TokenJwt { get; set; }
+        // Mantenemos una propiedad pública o accedemos directamente a UserSession.HttpClient y UserSession.TokenJwt
+        public static HttpClient HttpClient => UserSession.HttpClient;
+        public static string? TokenJwt => UserSession.TokenJwt;
 
         /// <summary>
         ///  The main entry point for the application.
@@ -26,14 +28,11 @@ namespace WindowsForms
                 .AddJsonFile("Configuracion/appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            // 2. Inicializar HttpClient antes de usarlo en cualquier formulario
+            // 2. Inicializar HttpClient utilizando la librería de autenticación (UserSession)
             string? apiBaseUrl = Configuration["Api:BaseUrl"];
             if (!string.IsNullOrEmpty(apiBaseUrl))
             {
-                HttpClient = new HttpClient
-                {
-                    BaseAddress = new Uri(apiBaseUrl)
-                };
+                UserSession.ConfigureClient(apiBaseUrl);
             }
             else
             {
@@ -60,7 +59,6 @@ namespace WindowsForms
                     }
                 }
             }
-
         }
     }
 }

@@ -8,7 +8,7 @@ namespace WebApi
     {
         public static void MapVueloEndpoints(this IEndpointRouteBuilder routes)
         {
-            var group = routes.MapGroup("vuelos");//.RequireAuthorization(); // Protegidos con JWT
+            var group = routes.MapGroup("vuelos").RequireAuthorization(); // Protegidos con JWT
 
             // GET: Listar todos
             group.MapGet("/", async (VueloService vueloService) =>

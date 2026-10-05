@@ -1,33 +1,31 @@
 using Blazor.Server.Auth;
 using Blazor.Server.Components;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container ( Registrar servicios de Blazor Server )
+// Add services to the container
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Extensión del proyecto Blazor.Server.Auth
+// 1. Invocamos de forma limpia la extensión de autenticación
 builder.Services.AddBlazorServerAuth();
 
-// 1. Configuración de autorización y estado en cascada para Blazor
-builder.Services.AddAuthorizationCore();
-builder.Services.AddCascadingAuthenticationState();
+// 2. Registramos el handler personalizado para que el sistema maneje su ciclo de vida
+builder.Services.AddTransient<CustomAuthorizationMessageHandler>();
 
-// 2. Registrar nuestro proveedor de autenticación personalizado (desde la librería Blazor.Server.Auth)
-builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-builder.Services.AddScoped<CustomAuthenticationStateProvider>(sp =>
-    (CustomAuthenticationStateProvider)sp.GetRequiredService<AuthenticationStateProvider>());
-
-// Registrar ProtectedLocalStorage para manejo de sesión
-builder.Services.AddScoped<ProtectedLocalStorage>();
-
-// Registrar HttpClient apuntando a la dirección base de la Web API (puerto 7099)
-builder.Services.AddScoped(sp => new HttpClient
+// 3. Registramos el HttpClient configurando la BaseAddress y enlazándole automáticamente el Handler
+// Esto soluciona el error "The inner handler has not been assigned" y permite usar [Inject] HttpClient Http en las páginas.
+builder.Services.AddScoped(sp =>
 {
-    BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7099/")
+    var handler = sp.GetRequiredService<CustomAuthorizationMessageHandler>();
+    // Asignamos el manejador HTTP predeterminado del sistema como el inner handler final de la cadena
+    handler.InnerHandler = new HttpClientHandler();
+
+    return new HttpClient(handler)
+    {
+        BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7099/")
+    };
 });
 
 var app = builder.Build();

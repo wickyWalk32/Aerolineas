@@ -5,7 +5,7 @@
 <PageTitle>Menú de Administrador - AeroReservas</PageTitle>
 
 <div class="container-fluid px-0" style="font-family: Segoe UI, sans-serif;">
-    <!-- Header Superior (Barra con título/usuario a la izquierda y salir a la derecha) -->
+    <!-- Header Superior -->
     <header class="bg-white border-bottom shadow-sm px-4 py-3 mb-4">
         <div class="d-flex justify-content-between align-items-center">
             <div>
@@ -19,7 +19,6 @@
                 </AuthorizeView>
             </div>
 
-            <!-- Botón Salir del sistema arriba a la derecha en el Header -->
             <div>
                 <button class="btn btn-light border text-dark px-3 py-1 shadow-sm"
                         style="background-color: #fff; border-color: #ccc; font-size: 0.9rem;"
@@ -30,7 +29,7 @@
         </div>
     </header>
 
-    <!-- Contenido Principal: Panel central "Acciones" en marco centrado -->
+    <!-- Contenido Principal -->
     <main class="container">
         <div class="d-flex justify-content-center mt-4">
             <div class="card shadow-sm border" style="width: 100%; max-width: 380px; border-color: #888 !important; background-color: #fcfcfc;">
@@ -38,8 +37,12 @@
                     <h3 class="fw-normal mb-4" style="font-size: 1.35rem; color: #222;">Acciones</h3>
 
                     <div class="d-grid gap-2 col-11 mx-auto">
-                        <button class="btn btn-light border text-dark py-2 shadow-sm"
-                                style="background-color: #fff; border-color: #ccc;"
+                        <!-- AQUÍ se agrega ref="botonAdministrarVuelos" y el borde azul por defecto de foco -->
+                        <button @ref="botonAdministrarVuelos"
+                                id="botonAdministrarVuelos"
+                                name="botonAdministrarVuelos"
+                                class="btn btn-light border text-dark py-2 shadow-sm"
+                                style="background-color: #fff; border-color: #0d6efd !important;"
                                 @onclick="IrAGestionVuelos">
                             Administrar Vuelos
                         </button>
@@ -62,9 +65,8 @@
                             Administrar Servicios
                         </button>
 
-                        <!-- Botón enfocado (borde azul como en Windows Forms) -->
                         <button class="btn btn-light border text-dark py-2 shadow-sm"
-                                style="background-color: #fff; border-color: #0d6efd !important;"
+                                style="background-color: #fff; border-color: #ccc;"
                                 @onclick="IrAGestionUsuarios">
                             Administrar Usuarios
                         </button>

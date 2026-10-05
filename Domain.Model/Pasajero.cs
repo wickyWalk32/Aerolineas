@@ -17,7 +17,7 @@ namespace Domain.Model
         public string Apellido { get; private set; } = string.Empty;
         public string TipoDocumento { get; private set; } = string.Empty;
         public string NroDocumento { get; private set; } = string.Empty;
-        public char Tipo { get; set; }
+        public string Tipo { get; set; }
 
         // <<< ATRIBUTOS DE NAVEGACIÓN DEL MODELO >>>
 
@@ -40,7 +40,7 @@ namespace Domain.Model
             this.NroDocumento = nroDocumento;
         }
 
-        public Pasajero(string nombre, string apellido, string tipoDocumento, string nroDocumento, char tipo)
+        public Pasajero(string nombre, string apellido, string tipoDocumento, string nroDocumento, string tipo)
         {
             this.Nombre = nombre;
             this.Apellido = apellido;
@@ -86,8 +86,10 @@ namespace Domain.Model
             this.NroDocumento = nroDocumento;
         }
 
-        public void SetTipo(char tipo)
+        public void SetTipo(string tipo)
         {
+            if (string.IsNullOrWhiteSpace(tipo))
+                throw new ArgumentException("Tipo de pasajero inválido.");
             this.Tipo = tipo;
         }
 

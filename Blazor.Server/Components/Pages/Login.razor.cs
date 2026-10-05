@@ -58,7 +58,7 @@ namespace Blazor.Server.Components.Pages    // NombreProyecto.SubcarpetaComponen
 
             try
             {
-                var response = await Http.PostAsJsonAsync("usuarios/login", loginModel);
+                var response = await Http.PostAsJsonAsync("/usuarios/login", loginModel);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -115,7 +115,7 @@ namespace Blazor.Server.Components.Pages    // NombreProyecto.SubcarpetaComponen
         // Botón Registrarse.
         protected void IrARegistro()
         {
-            Navigation.NavigateTo("/usuarios");
+            Navigation.NavigateTo("/registro");
         }
 
     }

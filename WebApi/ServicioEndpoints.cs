@@ -17,6 +17,13 @@ namespace WebApi
                 return Results.Ok(servicios);
             });
 
+            // GET by id: traer uno
+            group.MapGet("/{id}", async (int id, ServicioService servicioService) =>
+            {
+                var servicioDto = await servicioService.GetByIdAsync(id);
+                return servicioDto is not null ? Results.Ok(servicioDto) : Results.NotFound();
+            });
+
             // POST: Crear
             group.MapPost("/", async (ServicioCreateDTO dto, ServicioService servicioService) =>
             {

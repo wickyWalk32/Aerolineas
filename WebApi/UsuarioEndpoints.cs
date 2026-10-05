@@ -20,7 +20,19 @@ namespace WebApi
             .WithOpenApi()
             .RequireAuthorization();
 
-            // 2. CREAR UN NUEVO USUARIO (POST)
+            // 2. OBTENER UN USUARIO POR ID (GET)
+            app.MapGet("/usuarios/{id}", async (int id, UsuarioService usuarioService) =>
+            {
+                var usuarioDto = await usuarioService.GetByIdAsync(id);
+                return usuarioDto is not null ? Results.Ok(usuarioDto) : Results.NotFound();
+            })
+            .WithName("GetUsuarioById")
+            .Produces<UsuarioDTO>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .WithOpenApi()
+            .RequireAuthorization();
+
+            // 3. CREAR UN NUEVO USUARIO (POST) - Para el Auto Registro está en LoginEndpoints.cs
             app.MapPost("/usuarios", async (UsuarioCreateDTO dto, UsuarioService usuarioService) =>
             {
                 try
@@ -36,11 +48,11 @@ namespace WebApi
             .WithName("AddUsuario")
             .Produces<UsuarioCreateDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithOpenApi();
+            .WithOpenApi()
             //.AllowAnonymous();
-            //.RequireAuthorization();
+            .RequireAuthorization();
 
-            // 3. EDITAR UN USUARIO (PUT)
+            // 4. EDITAR UN USUARIO (PUT)
             app.MapPut("/usuarios/{id}", async (int id, UsuarioUpdateDTO dto, UsuarioService usuarioService) =>
             {
                 //if (dto == null || dto.Id != id)
@@ -58,7 +70,7 @@ namespace WebApi
             .WithOpenApi()
             .RequireAuthorization();
 
-            // 4. ELIMINAR UN USUARIO (DELETE)
+            // 5. ELIMINAR UN USUARIO (DELETE)
             app.MapDelete("/usuarios/{id}", async (int id, UsuarioService usuarioService) =>
             {
                 await usuarioService.DeleteAsync(id);
@@ -68,62 +80,7 @@ namespace WebApi
             .Produces(StatusCodes.Status204NoContent)
             .WithOpenApi()
             .RequireAuthorization();
-
-            // 5. LOGIN DE USUARIOS
-            app.MapPost("/usuarios/login", (UsuarioLoginRequestDTO usuarioLoginRequestDto, UsuarioService usuarioService, JwtTokenService tokenService) =>
-            {
-                try
-                {
-                    if (string.IsNullOrWhiteSpace(usuarioLoginRequestDto.Email) || string.IsNullOrWhiteSpace(usuarioLoginRequestDto.Contrasenia))
-                    {
-                        return Results.BadRequest(new UsuarioLoginResultDTO { Exitoso = false, Mensaje = "Debe ingresar email y contraseña." });
-                    }
-
-                    UsuarioLoginResultDTO resultado = usuarioService.ValidarLogin(usuarioLoginRequestDto);
-
-                    if (!resultado.Exitoso)
-                    {
-                        return Results.Json(resultado, statusCode: StatusCodes.Status401Unauthorized);
-                    }
-
-                    // Como el login fue exitoso, ya tenemos el Rol, Nombre y Apellido en 'resultado'.
-                    // Creamos una entidad temporal (o adaptada) para que el JwtTokenService pueda generar los claims.
-                    // Creamos la instancia asignando explícitamente el Id obtenido para que el JwtTokenService genere los Claims correctos.
-                    // Nota: Si el JwtTokenService usa Email y Rol, pasarle el email que vino en el request y el rol del resultado.
-                    var usuarioParaToken = new Usuario
-                    (
-                        resultado.Nombre,
-                        resultado.Apellido,
-                        usuarioLoginRequestDto.Email,
-                        resultado.Rol
-                    );
-                    usuarioParaToken.SetId(resultado.Id);
-
-                    // Generamos el Token JWT
-                    string token = tokenService.GenerarToken(usuarioParaToken);
-
-                    // Asignamos el token al resultado que se enviará al cliente de WindowsForms o Blazor.Server
-                    resultado.Token = token;
-
-                    return Results.Ok(resultado);
-                }
-                catch (Exception ex) when(ex is ArgumentException || ex is InvalidOperationException)
-                {
-                    // Unificamos las validaciones de negocio que devuelven un 400 Bad Request
-                    return Results.BadRequest(ex.Message);
-                }
-                catch (Exception)
-                {
-                    // Para cualquier otro error grave o inesperado del sistema (fallo de base de datos, etc.)
-                    return Results.Problem("Ocurrió un error interno en el servidor.", statusCode: 500);
-                }
-
-        })
-            .WithName("LoginUsuario")
-            .Produces<UsuarioLoginResultDTO>(StatusCodes.Status200OK)
-            .Produces<UsuarioLoginResultDTO>(StatusCodes.Status401Unauthorized)
-            .WithOpenApi();
+        
         }
-
     }
 }
