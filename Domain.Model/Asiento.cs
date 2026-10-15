@@ -33,13 +33,6 @@ namespace Domain.Model
         public Asiento()
         {
         }
-        public Asiento(char fila, int columna, string estado, int idAvion)
-        {
-            this.SetFila(fila);
-            this.SetColumna(columna);
-            this.SetEstado(estado);
-            this.SetIdAvion(idAvion);
-        }
 
         public Asiento(int idAvion,string codigo, char fila, int columna, string estado)
         {
