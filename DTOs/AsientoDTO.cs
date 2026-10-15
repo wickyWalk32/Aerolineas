@@ -8,7 +8,7 @@ namespace DTOs
 {
     public class AsientoDTO
     {
-        public int IdAvion {  get;private set; }
+        public int AvionId {  get;set; }
         public string Codigo {  get; set; }
         public char Fila { get; set; }
         public int Columna { get; set; }
@@ -21,6 +21,12 @@ namespace DTOs
         public char Fila { get; set; }
         public int Columna { get; set; }
         public string Estado { get; set; }
-
+    }
+    public class AsientoUpdateDTO
+    {
+        public string Codigo { get; set; }
+        public char Fila { get; set; }
+        public int Columna { get; set; }
+        public string Estado { get; set; }
     }
 }

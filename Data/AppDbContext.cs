@@ -238,7 +238,7 @@ namespace Data
             modelBuilder.Entity<Asiento>(entity =>
             {
                 // Definimos la Clave Primaria Compuesta (Entidad Débil de Avión)
-                entity.HasKey(e => new {e.IdAvion, e.Codigo});
+                entity.HasKey(e => new {e.AvionId, e.Codigo});
                 
                 entity.Property(e => e.Fila)
                     .IsRequired();
@@ -256,7 +256,7 @@ namespace Data
 
                 entity.HasOne(e => e.Avion)
                     .WithMany(a => a.Asientos)
-                    .HasForeignKey(e => e.IdAvion);
+                    .HasForeignKey(e => e.AvionId);
 
                 // 1 Asiento > Muchos Pasajes
 

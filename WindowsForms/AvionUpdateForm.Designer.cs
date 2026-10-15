@@ -22,8 +22,9 @@ namespace WindowsForms
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            btnBuscar = new Button();
-            numIdBusqueda = new NumericUpDown();
+            lblID = new Label();
+            comboBoxFilas = new ComboBox();
+            labelFilas = new Label();
             lblIdBusqueda = new Label();
             comboBoxDisponibilidad = new ComboBox();
             btnGuardar = new Button();
@@ -34,15 +35,16 @@ namespace WindowsForms
             label2 = new Label();
             lblTitulo = new Label();
             btnVolver = new Button();
+            avionControl = new AvionControl();
             panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numIdBusqueda).BeginInit();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.FixedSingle;
-            panel1.Controls.Add(btnBuscar);
-            panel1.Controls.Add(numIdBusqueda);
+            panel1.Controls.Add(lblID);
+            panel1.Controls.Add(comboBoxFilas);
+            panel1.Controls.Add(labelFilas);
             panel1.Controls.Add(lblIdBusqueda);
             panel1.Controls.Add(comboBoxDisponibilidad);
             panel1.Controls.Add(btnGuardar);
@@ -51,35 +53,46 @@ namespace WindowsForms
             panel1.Controls.Add(label4);
             panel1.Controls.Add(label1);
             panel1.Controls.Add(label2);
-            panel1.Location = new Point(152, 105);
+            panel1.Location = new Point(12, 61);
             panel1.Name = "panel1";
             panel1.Size = new Size(413, 260);
             panel1.TabIndex = 0;
             // 
-            // btnBuscar
+            // lblID
             // 
-            btnBuscar.Location = new Point(264, 23);
-            btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(107, 33);
-            btnBuscar.TabIndex = 0;
-            btnBuscar.Text = "Buscar";
+            lblID.AutoSize = true;
+            lblID.Location = new Point(150, 26);
+            lblID.Name = "lblID";
+            lblID.Size = new Size(18, 15);
+            lblID.TabIndex = 12;
+            lblID.Text = "ID";
             // 
-            // numIdBusqueda
+            // comboBoxFilas
             // 
-            numIdBusqueda.Location = new Point(150, 25);
-            numIdBusqueda.Maximum = new decimal(new int[] { 99999, 0, 0, 0 });
-            numIdBusqueda.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numIdBusqueda.Name = "numIdBusqueda";
-            numIdBusqueda.Size = new Size(87, 27);
-            numIdBusqueda.TabIndex = 1;
-            numIdBusqueda.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            comboBoxFilas.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxFilas.FormattingEnabled = true;
+            comboBoxFilas.Items.AddRange(new object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" });
+            comboBoxFilas.Location = new Point(150, 191);
+            comboBoxFilas.Name = "comboBoxFilas";
+            comboBoxFilas.Size = new Size(221, 23);
+            comboBoxFilas.TabIndex = 10;
+            comboBoxFilas.SelectedIndexChanged += comboBoxFilas_SelectedIndexChanged;
+            // 
+            // labelFilas
+            // 
+            labelFilas.AutoSize = true;
+            labelFilas.Location = new Point(20, 194);
+            labelFilas.Name = "labelFilas";
+            labelFilas.Size = new Size(30, 15);
+            labelFilas.TabIndex = 11;
+            labelFilas.Text = "Filas";
             // 
             // lblIdBusqueda
             // 
             lblIdBusqueda.AutoSize = true;
             lblIdBusqueda.Location = new Point(20, 25);
             lblIdBusqueda.Name = "lblIdBusqueda";
-            lblIdBusqueda.Size = new Size(69, 20);
+            lblIdBusqueda.Size = new Size(55, 15);
             lblIdBusqueda.TabIndex = 2;
             lblIdBusqueda.Text = "ID Avión:";
             // 
@@ -87,14 +100,15 @@ namespace WindowsForms
             // 
             comboBoxDisponibilidad.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxDisponibilidad.FormattingEnabled = true;
+            comboBoxDisponibilidad.Items.AddRange(new object[] { "Disponible", "En Mantenimiento", "Inactivo" });
             comboBoxDisponibilidad.Location = new Point(150, 150);
             comboBoxDisponibilidad.Name = "comboBoxDisponibilidad";
-            comboBoxDisponibilidad.Size = new Size(221, 28);
+            comboBoxDisponibilidad.Size = new Size(221, 23);
             comboBoxDisponibilidad.TabIndex = 3;
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(160, 204);
+            btnGuardar.Location = new Point(156, 225);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(100, 30);
             btnGuardar.TabIndex = 4;
@@ -104,14 +118,15 @@ namespace WindowsForms
             // 
             textBoxDescripcion.Location = new Point(150, 70);
             textBoxDescripcion.Name = "textBoxDescripcion";
-            textBoxDescripcion.Size = new Size(221, 27);
+            textBoxDescripcion.Size = new Size(221, 23);
             textBoxDescripcion.TabIndex = 5;
             // 
             // textBoxCapacidad
             // 
             textBoxCapacidad.Location = new Point(150, 110);
             textBoxCapacidad.Name = "textBoxCapacidad";
-            textBoxCapacidad.Size = new Size(221, 27);
+            textBoxCapacidad.ReadOnly = true;
+            textBoxCapacidad.Size = new Size(221, 23);
             textBoxCapacidad.TabIndex = 6;
             // 
             // label4
@@ -119,7 +134,7 @@ namespace WindowsForms
             label4.AutoSize = true;
             label4.Location = new Point(20, 153);
             label4.Name = "label4";
-            label4.Size = new Size(110, 20);
+            label4.Size = new Size(86, 15);
             label4.TabIndex = 7;
             label4.Text = "Disponibilidad:";
             // 
@@ -128,7 +143,7 @@ namespace WindowsForms
             label1.AutoSize = true;
             label1.Location = new Point(20, 73);
             label1.Name = "label1";
-            label1.Size = new Size(90, 20);
+            label1.Size = new Size(72, 15);
             label1.TabIndex = 8;
             label1.Text = "Descripción:";
             // 
@@ -137,7 +152,7 @@ namespace WindowsForms
             label2.AutoSize = true;
             label2.Location = new Point(20, 113);
             label2.Name = "label2";
-            label2.Size = new Size(83, 20);
+            label2.Size = new Size(66, 15);
             label2.TabIndex = 9;
             label2.Text = "Capacidad:";
             // 
@@ -147,7 +162,7 @@ namespace WindowsForms
             lblTitulo.Font = new System.Drawing.Font("Segoe UI", 16F);
             lblTitulo.Location = new Point(103, 28);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(204, 37);
+            lblTitulo.Size = new Size(166, 30);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Modificar Avión";
             // 
@@ -159,18 +174,24 @@ namespace WindowsForms
             btnVolver.TabIndex = 1;
             btnVolver.Text = "Volver";
             // 
+            // avionControl
+            // 
+            avionControl.Location = new Point(440, 40);
+            avionControl.Name = "avionControl";
+            avionControl.Size = new Size(254, 640);
+            avionControl.TabIndex = 12;
+            // 
             // AvionUpdateForm
             // 
-            ClientSize = new Size(700, 484);
+            ClientSize = new Size(711, 749);
+            Controls.Add(avionControl);
             Controls.Add(lblTitulo);
             Controls.Add(panel1);
             Controls.Add(btnVolver);
             Name = "AvionUpdateForm";
-            Text = "Modificar Avión";
             Load += AvionUpdateForm_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numIdBusqueda).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -179,8 +200,6 @@ namespace WindowsForms
 
         private Panel panel1;
         private Label lblIdBusqueda;
-        private NumericUpDown numIdBusqueda;
-        private Button btnBuscar;
         private TextBox textBoxDescripcion;
         private TextBox textBoxCapacidad;
         private ComboBox comboBoxDisponibilidad;
@@ -190,5 +209,9 @@ namespace WindowsForms
         private Button btnGuardar;
         private Label lblTitulo;
         private Button btnVolver;
+        private ComboBox comboBoxFilas;
+        private Label labelFilas;
+        private AvionControl avionControl;
+        private Label lblID;
     }
 }

@@ -19,7 +19,7 @@ namespace Domain.Model
         // <<< ATRIBUTOS DE NAVEGACIÓN DEL MODELO>>>
 
         // 1 Asiento > 1 Avión
-        public int IdAvion { get; private set; }
+        public int AvionId { get; private set; }
         public Avion Avion { get; private set; }
 
         // 1 Asiento > Muchos Pasajes
@@ -82,7 +82,7 @@ namespace Domain.Model
         {
             if (idAvion < 0)
                 throw new ArgumentException("Id de avión del asiento es inválida.");
-            this.Columna = idAvion;
+            this.AvionId = idAvion;
         }
 
         public void SetAvion(Avion avion)

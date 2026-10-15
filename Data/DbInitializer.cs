@@ -252,16 +252,16 @@ namespace Data
             // Insertar Aviones (10 ejemplos ficticios)
             var avionesIniciales = new List<Avion>
             {
-                new Avion("AeroJet 320"         , 150   , "Disponible"),
-                new Avion("Airbus A220-300"     , 120   , "Disponible"),
-                new Avion("Apex A380"           , 525   , "No disponible"),
-                new Avion("Breeze ATR72"        , 70    , "Disponible"),
-                new Avion("EcoJet Q400"         , 74    , "Disponible"),
-                new Avion("MetroExpress E190"   , 100   , "Disponible"),
-                new Avion("Oceanic 350"         , 300   , "No disponible"),
-                new Avion("SkyLinx 737"         , 160   , "Disponible"),
-                new Avion("StratoCruiser 787"   , 240   , "Disponible"),
-                new Avion("Titan 777"           , 300   , "Disponible")
+                new Avion("AeroJet 320"         , 16   , "Disponible"),
+                new Avion("Airbus A220-300"     , 12   , "Disponible"),
+                new Avion("Apex A380"           , 52   , "No disponible"),
+                new Avion("Breeze ATR72"        , 24    , "Disponible"),
+                new Avion("EcoJet Q400"         , 44    , "Disponible"),
+                new Avion("MetroExpress E190"   , 40   , "Disponible"),
+                new Avion("Oceanic 350"         , 36   , "No disponible"),
+                new Avion("SkyLinx 737"         , 16   , "Disponible"),
+                new Avion("StratoCruiser 787"   , 24   , "Disponible"),
+                new Avion("Titan 777"           , 32   , "Disponible")
             };
 
             await context.Set<Avion>().AddRangeAsync(avionesIniciales);

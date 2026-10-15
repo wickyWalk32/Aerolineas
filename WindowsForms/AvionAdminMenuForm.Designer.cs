@@ -30,89 +30,59 @@
         {
             lblTitulo = new Label();
             btnNuevoAvion = new Button();
-            btnEditarAvion = new Button();
-            btnMostrarAviones = new Button();
-            btnEliminarAvion = new Button();
             btnVolver = new Button();
+            flowLayoutPanelAviones = new FlowLayoutPanel();
             SuspendLayout();
             // 
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 14F);
-            lblTitulo.Location = new Point(346, 109);
+            lblTitulo.Location = new Point(251, 9);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(227, 32);
+            lblTitulo.Size = new Size(181, 25);
             lblTitulo.TabIndex = 6;
             lblTitulo.Text = "Administrar Aviones";
             // 
             // btnNuevoAvion
             // 
-            btnNuevoAvion.Location = new Point(311, 183);
-            btnNuevoAvion.Margin = new Padding(3, 4, 3, 4);
+            btnNuevoAvion.Location = new Point(210, 50);
             btnNuevoAvion.Name = "btnNuevoAvion";
-            btnNuevoAvion.Size = new Size(297, 48);
+            btnNuevoAvion.Size = new Size(260, 36);
             btnNuevoAvion.TabIndex = 7;
             btnNuevoAvion.Text = "Crear Aviones";
             btnNuevoAvion.UseVisualStyleBackColor = true;
             btnNuevoAvion.Click += btnNuevoAvion_Click;
             // 
-            // btnEditarAvion
-            // 
-            btnEditarAvion.Location = new Point(311, 247);
-            btnEditarAvion.Margin = new Padding(3, 4, 3, 4);
-            btnEditarAvion.Name = "btnEditarAvion";
-            btnEditarAvion.Size = new Size(297, 48);
-            btnEditarAvion.TabIndex = 8;
-            btnEditarAvion.Text = "Modificar Aviones";
-            btnEditarAvion.UseVisualStyleBackColor = true;
-            btnEditarAvion.Click += btnEditarAvion_Click;
-            // 
-            // btnMostrarAviones
-            // 
-            btnMostrarAviones.Location = new Point(311, 311);
-            btnMostrarAviones.Margin = new Padding(3, 4, 3, 4);
-            btnMostrarAviones.Name = "btnMostrarAviones";
-            btnMostrarAviones.Size = new Size(297, 48);
-            btnMostrarAviones.TabIndex = 9;
-            btnMostrarAviones.Text = "Mostrar Aviones";
-            btnMostrarAviones.UseVisualStyleBackColor = true;
-            btnMostrarAviones.Click += btnMostrarAviones_Click;
-            // 
-            // btnEliminarAvion
-            // 
-            btnEliminarAvion.Location = new Point(311, 375);
-            btnEliminarAvion.Margin = new Padding(3, 4, 3, 4);
-            btnEliminarAvion.Name = "btnEliminarAvion";
-            btnEliminarAvion.Size = new Size(297, 48);
-            btnEliminarAvion.TabIndex = 10;
-            btnEliminarAvion.Text = "Eliminar Aviones";
-            btnEliminarAvion.UseVisualStyleBackColor = true;
-            btnEliminarAvion.Click += btnEliminarAvion_Click;
-            // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(311, 484);
-            btnVolver.Margin = new Padding(3, 4, 3, 4);
+            btnVolver.Location = new Point(112, 488);
             btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(100, 30);
+            btnVolver.Size = new Size(88, 22);
             btnVolver.TabIndex = 11;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
             // 
+            // flowLayoutPanelAviones
+            // 
+            flowLayoutPanelAviones.AutoScroll = true;
+            flowLayoutPanelAviones.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanelAviones.Location = new Point(12, 92);
+            flowLayoutPanelAviones.Name = "flowLayoutPanelAviones";
+            flowLayoutPanelAviones.Size = new Size(669, 345);
+            flowLayoutPanelAviones.TabIndex = 15;
+            flowLayoutPanelAviones.WrapContents = false;
+            // 
             // AvionAdminMenuForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(914, 600);
+            ClientSize = new Size(692, 578);
+            Controls.Add(flowLayoutPanelAviones);
             Controls.Add(lblTitulo);
             Controls.Add(btnNuevoAvion);
-            Controls.Add(btnEditarAvion);
-            Controls.Add(btnMostrarAviones);
-            Controls.Add(btnEliminarAvion);
             Controls.Add(btnVolver);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "AvionAdminMenuForm";
             Text = "Administrador";
             ResumeLayout(false);
@@ -123,9 +93,7 @@
 
         private Label lblTitulo;
         private Button btnNuevoAvion;
-        private Button btnEditarAvion;
-        private Button btnMostrarAviones;
-        private Button btnEliminarAvion;
         private Button btnVolver;
+        private FlowLayoutPanel flowLayoutPanelAviones;
     }
 }

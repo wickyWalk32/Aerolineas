@@ -1,6 +1,7 @@
 using DTOs;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
+using System.Net.Http.Json;
 
 namespace WindowsForms
 {
@@ -41,10 +42,16 @@ namespace WindowsForms
                 MessageBox.Show("No se encontró la URL de la API en el archivo de configuración.", "Error de configuración", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            // AvionDTO avion = await Program.HttpClient.GetFromJsonAsync<AvionDTO>("/aviones/1");
+            //AvionDTO avion = new AvionDTO {Id=1,EstadoDisponibilidad="Disponible" , Capacidad =20,Descripcion = "avion de condado"};
+            //Application.Run(new AvionUpdateForm(avion));
             //Application.Run(new AvionCreateForm());
-            
+
+
+
             // 3. Flujo de Login y redirección según el rol: se utiliza ShowDialog() para validar credenciales y destruye el formulario
             // de login antes de lanzar la ventana principal según el rol.
+            
             using (LoginForm loginForm = new LoginForm())
             {
                 if (loginForm.ShowDialog() == DialogResult.OK && loginForm.UsuarioAutenticado != null)
@@ -62,6 +69,7 @@ namespace WindowsForms
                 }
             }
             
+
 
         }
     }

@@ -175,7 +175,7 @@
             // 
             panelAvion.Location = new Point(351, 41);
             panelAvion.Name = "panelAvion";
-            panelAvion.Size = new Size(286, 514);
+            panelAvion.Size = new Size(286, 539);
             panelAvion.TabIndex = 15;
             panelAvion.Paint += panelAvion_Paint;
             // 
@@ -183,7 +183,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(649, 592);
+            ClientSize = new Size(651, 592);
             Controls.Add(panelAvion);
             Controls.Add(panel1);
             Controls.Add(lblTituloNuevoEditarAvion);

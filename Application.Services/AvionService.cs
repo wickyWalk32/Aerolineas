@@ -26,6 +26,15 @@ namespace Application.Services
                 Descripcion = avion.Descripcion,
                 Capacidad = avion.Capacidad,
                 EstadoDisponibilidad = avion.EstadoDisponibilidad,
+                Asientos = avion.Asientos.Select(asiento => new AsientoDTO
+                {
+                    AvionId = asiento.AvionId,
+                    Codigo = asiento.Codigo,
+                    Fila = asiento.Fila,
+                    Columna = asiento.Columna,
+                    Estado = asiento.Estado,
+
+                }).ToList(),
             }).ToList();
         }
 
@@ -66,6 +75,27 @@ namespace Application.Services
             if (avion == null)
             {
                 return false;
+            }
+            if(avion.Capacidad == dto.Capacidad)
+            {
+
+            }
+            else if (avion.Capacidad < dto.Capacidad)
+            {
+                var agregarAsientos = dto.Asientos.Where(a1 => !avion.Asientos.Select(a2 => a2.Codigo).Contains(a1.Codigo))
+                    .Select(a3 => new Asiento(avion.Id,a3.Codigo,a3.Fila,a3.Columna,a3.Estado )).ToList();
+                foreach (var asiento in agregarAsientos)
+                {
+                    avion.AddAsiento(asiento);
+                }
+            }
+            else if (avion.Capacidad > dto.Capacidad)
+            {
+                var eliminarAsientos = avion.Asientos.Where(a1 => !dto.Asientos.Select(a2 => a2.Codigo).Contains(a1.Codigo)).ToList();
+                foreach (var asiento in eliminarAsientos)
+                {
+                    avion.RemoveAsiento(asiento);
+                }
             }
             avion.SetDescripcion(dto.Descripcion);
             avion.SetEstadoDisponibilidad(dto.EstadoDisponibilidad);

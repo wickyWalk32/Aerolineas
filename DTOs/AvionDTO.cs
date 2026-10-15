@@ -10,6 +10,7 @@ namespace DTOs
         public string Descripcion { get; set; }
         public int Capacidad { get; set; }
         public string EstadoDisponibilidad { get; set; }
+        public List<AsientoDTO>? Asientos { get; set; }
     }
 
     // DTO para creación (POST)
@@ -29,6 +30,7 @@ namespace DTOs
         public string Descripcion { get; set; }
         public int Capacidad { get; set; }
         public string EstadoDisponibilidad { get; set; }
+        public List<AsientoCreateDTO>? Asientos { get; set; }
     }
 
 }

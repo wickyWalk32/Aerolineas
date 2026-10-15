@@ -19,19 +19,19 @@ namespace Data
 
         public async Task<List<Avion>> GetAllAsync()
         {
-            List<Avion> aviones = await _context.Aviones.ToListAsync();
+            List<Avion> aviones = await _context.Aviones.Include(a => a.Asientos).ToListAsync();
             return aviones;
         }
 
         public async Task<List<Avion>> GetAllDisponibleAsync()
         {
-            List<Avion> aviones = await _context.Aviones.Where(a => a.EstadoDisponibilidad == "Disponible").ToListAsync();
+            List<Avion> aviones = await _context.Aviones.Include(a => a.Asientos).Where(a => a.EstadoDisponibilidad == "Disponible").ToListAsync();
             return aviones;
         }
 
         public async Task<Avion?> GetByIdAsync(int id)
         {
-            return await _context.Aviones.FirstOrDefaultAsync(a => a.Id == id); 
+            return await _context.Aviones.Include(a=>a.Asientos).FirstOrDefaultAsync(a => a.Id == id); 
         }
 
         public async Task AddAsync(Avion avion)

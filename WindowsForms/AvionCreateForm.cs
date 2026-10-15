@@ -197,7 +197,7 @@ namespace WindowsForms
 
         private void AgregarAsiento(int x, int y, int fila, int columna, string codAsiento)
         {
-            var asiento = new AvionItemControl(codAsiento);
+            var asiento = new AvionAsientoItemControl(codAsiento);
             asiento.Location = new Point(x, y);
             asiento.Size = new Size(30, 30);
             panelAvion.Controls.Add(asiento);
@@ -216,7 +216,7 @@ namespace WindowsForms
             asientosCreateDTO.Clear();
 
             foreach (var asiento in panelAvion.Controls
-            .OfType<AvionItemControl>()
+            .OfType<AvionAsientoItemControl>()
             .ToList())
             {
                 panelAvion.Controls.Remove(asiento);
