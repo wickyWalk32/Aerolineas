@@ -16,7 +16,8 @@ namespace WebApi
             })
             .WithName("GetAllReservas")
             .Produces<List<ReservaDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
 
             app.MapPost("/reservas", async (ReservaCreateDTO dto, ReservaService reservaService) =>
             {
@@ -35,7 +36,8 @@ namespace WebApi
             .WithName("AddReserva")
             .Produces<UsuarioDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization();
         }
     }
 }

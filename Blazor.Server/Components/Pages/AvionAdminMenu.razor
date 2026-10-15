@@ -1,0 +1,123 @@
+﻿@page "/admin/aviones"
+@attribute [Authorize(Roles = "admin")]
+@rendermode InteractiveServer
+
+<PageTitle>Administrar Aviones - AeroReservas</PageTitle>
+
+<div class="container-fluid px-4 py-3" style="max-width: 1250px; font-family: 'Segoe UI', sans-serif;">
+    <!-- Encabezado con Título y Botones -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 fw-normal mb-0" style="color: #111;">Administrar Aviones</h1>
+        <div class="d-flex gap-2">
+            <button class="btn btn-light border border-primary text-primary px-3 py-1 shadow-sm"
+                    style="background-color: #fff; font-size: 0.95rem;"
+                    @onclick="IrANuevoAvion">
+                Nuevo Avión
+            </button>
+
+            <button class="btn btn-light border border-secondary text-secondary px-3 py-1 shadow-sm"
+                    style="background-color: #fff; font-size: 0.95rem;"
+                    @onclick="VolverAlMenuAdmin">
+                Volver al Menú Principal
+            </button>
+        </div>
+    </div>
+
+    <!-- Mensaje de Error si ocurre alguno -->
+    @if (!string.IsNullOrEmpty(mensajeError))
+    {
+        <div class="alert alert-danger shadow-sm mb-3" role="alert">
+            @mensajeError
+        </div>
+    }
+
+    <!-- Estado de Carga -->
+    @if (cargando)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando aviones...</span>
+            </div>
+            <p class="text-secondary mt-2">Cargando listado de aviones...</p>
+        </div>
+    }
+    else if (aviones == null || !aviones.Any())
+    {
+        <div class="alert alert-info text-center shadow-sm" role="alert">
+            No hay aviones registrados en el sistema.
+        </div>
+    }
+    else
+    {
+        <!-- Contenedor con Scroll y Virtualización -->
+        <div style="max-height: 75vh; overflow-y: auto;" class="pe-1">
+            <Virtualize Items="aviones" Context="avion">
+                <div class="card mb-2 shadow-sm border" style="background-color: #f2f2f2; border-color: #666 !important; border-radius: 1px;">
+                    <div class="card-body p-3 style-winforms">
+
+                        <!-- Fila de Datos del Avión -->
+                        <div class="d-flex align-items-center text-nowrap" style="font-size: 0.95rem; color: #000;">
+                            <!-- ID -->
+                            <div class="text-center" style="width: 50px;">
+                                @avion.Id
+                            </div>
+
+                            <!-- Descripción -->
+                            <div style="width: 320px;" class="ps-2 fw-semibold text-truncate">
+                                @avion.Descripcion
+                            </div>
+
+                            <!-- Capacidad -->
+                            <div style="width: 140px;" class="ps-2">
+                                <span class="fw-bold">Capacidad:</span> @avion.Capacidad
+                            </div>
+
+                            <!-- Estado de Disponibilidad -->
+                            <div style="width: 200px;" class="ps-2 text-truncate">
+                                <span class="badge bg-secondary fw-normal" style="font-size: 0.85rem;">@avion.EstadoDisponibilidad</span>
+                            </div>
+
+                            <!-- Botones de Acción -->
+                            <div class="d-flex gap-2 ms-auto">
+                                <button class="btn btn-sm btn-light border text-dark shadow-sm"
+                                        style="background-color: #fff; border-color: #bbb; font-size: 0.88rem; width: 72px; padding: 2px 0;"
+                                        @onclick="() => EditarAvion(avion.Id)">
+                                    Editar
+                                </button>
+
+                                <button class="btn btn-sm btn-light border text-dark shadow-sm"
+                                        style="background-color: #fff; border-color: #bbb; font-size: 0.88rem; width: 72px; padding: 2px 0;"
+                                        @onclick="() => SolicitarEliminacion(avion)">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </Virtualize>
+        </div>
+    }
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+@if (avionAEliminar != null)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fs-6 fw-bold text-dark">Confirmar eliminación - AeroReservas.com</h5>
+                    <button type="button" class="btn-close" @onclick="CancelarEliminacion"></button>
+                </div>
+                <div class="modal-body text-dark" style="font-size: 0.95rem;">
+                    ¿Está seguro de que desea eliminar el avión <strong>@avionAEliminar.Descripcion</strong>?
+                </div>
+                <div class="modal-footer bg-light p-2">
+                    <button type="button" class="btn btn-secondary btn-sm px-3" @onclick="CancelarEliminacion">Cancelar</button>
+                    <button type="button" class="btn btn-danger btn-sm px-3" @onclick="ConfirmarEliminacion">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -197,7 +197,8 @@ namespace Data
                     .HasMaxLength(25);
 
                 entity.Property(e => e.Tipo)
-                    .IsRequired();
+                    .IsRequired()
+                    .HasMaxLength(40);
 
                 // 1 Pasajero > Muchos Pasajes
 

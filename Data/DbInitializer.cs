@@ -298,6 +298,16 @@ namespace Data
             await context.Set<Vuelo>().AddRangeAsync(vuelosIniciales);
             await context.SaveChangesAsync();
 
+            // Insertar Pasajeros iniciales
+            var pasajerosIniciales = new List<Pasajero>
+            {
+                new Pasajero("Marta" ,"Díaz"     ,"DNI","35488657","Mayor"),
+                new Pasajero("Miguel","Sanchez"  ,"DNI","53444857","Menor")
+            };
+
+            await context.Set<Pasajero>().AddRangeAsync(pasajerosIniciales);
+            await context.SaveChangesAsync();
+
         }
 
     }

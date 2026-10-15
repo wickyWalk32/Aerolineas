@@ -28,10 +28,11 @@ namespace Blazor.Server.Components.Pages
                 cargando = true;
                 mensajeError = null;
 
-                var resultado = await Http.GetFromJsonAsync<List<VueloCargaDTO>>("vuelos");
-                if (resultado != null)
+                var listaVuelos = await Http.GetFromJsonAsync<List<VueloCargaDTO>>("vuelos");
+
+                if (listaVuelos != null)
                 {
-                    vuelos = resultado;
+                    vuelos = listaVuelos;
                 }
             }
             catch (Exception ex)

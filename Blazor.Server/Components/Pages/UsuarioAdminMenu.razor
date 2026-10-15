@@ -1,0 +1,123 @@
+﻿@page "/admin/usuarios"
+@attribute [Authorize(Roles = "admin")]
+@rendermode InteractiveServer
+
+<PageTitle>Administrar Usuarios - AeroReservas</PageTitle>
+
+<div class="container-fluid px-4 py-3" style="max-width: 1250px; font-family: 'Segoe UI', sans-serif;">
+    <!-- Encabezado con Título y Botones -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 fw-normal mb-0" style="color: #111;">Administrar Usuarios</h1>
+        <div class="d-flex gap-2">
+            <button class="btn btn-light border border-primary text-primary px-3 py-1 shadow-sm"
+                    style="background-color: #fff; font-size: 0.95rem;"
+                    @onclick="IrANuevoUsuario">
+                Nuevo Usuario
+            </button>
+
+            <button class="btn btn-light border border-secondary text-secondary px-3 py-1 shadow-sm"
+                    style="background-color: #fff; font-size: 0.95rem;"
+                    @onclick="VolverAlMenuAdmin">
+                Volver al Menú Principal
+            </button>
+        </div>
+    </div>
+
+    <!-- Mensaje de Error si ocurre alguno -->
+    @if (!string.IsNullOrEmpty(mensajeError))
+    {
+        <div class="alert alert-danger shadow-sm mb-3" role="alert">
+            @mensajeError
+        </div>
+    }
+
+    <!-- Estado de Carga -->
+    @if (cargando)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando usuarios...</span>
+            </div>
+            <p class="text-secondary mt-2">Cargando listado de usuarios...</p>
+        </div>
+    }
+    else if (usuarios == null || !usuarios.Any())
+    {
+        <div class="alert alert-info text-center shadow-sm" role="alert">
+            No hay usuarios registrados en el sistema.
+        </div>
+    }
+    else
+    {
+        <!-- Contenedor con Scroll y Virtualización -->
+        <div style="max-height: 75vh; overflow-y: auto;" class="pe-1">
+            <Virtualize Items="usuarios" Context="usuario">
+                <div class="card mb-2 shadow-sm border" style="background-color: #f2f2f2; border-color: #666 !important; border-radius: 1px;">
+                    <div class="card-body p-3 style-winforms">
+
+                        <!-- Fila de Datos del Usuario -->
+                        <div class="d-flex align-items-center text-nowrap" style="font-size: 0.95rem; color: #000;">
+                            <!-- ID -->
+                            <div class="text-center" style="width: 50px;">
+                                @usuario.Id
+                            </div>
+
+                            <!-- Nombre y Apellido -->
+                            <div style="width: 280px;" class="ps-2 fw-semibold text-truncate">
+                                @usuario.Nombre @usuario.Apellido
+                            </div>
+
+                            <!-- Email -->
+                            <div style="width: 320px;" class="ps-2 text-truncate text-secondary">
+                                @usuario.Email
+                            </div>
+
+                            <!-- Rol -->
+                            <div style="width: 120px;" class="ps-2">
+                                <span class="badge bg-secondary fw-normal" style="font-size: 0.85rem;">@usuario.Rol</span>
+                            </div>
+
+                            <!-- Botones de Acción -->
+                            <div class="d-flex gap-2 ms-auto">
+                                <button class="btn btn-sm btn-light border text-dark shadow-sm"
+                                        style="background-color: #fff; border-color: #bbb; font-size: 0.88rem; width: 72px; padding: 2px 0;"
+                                        @onclick="() => EditarUsuario(usuario.Id)">
+                                    Editar
+                                </button>
+
+                                <button class="btn btn-sm btn-light border text-dark shadow-sm"
+                                        style="background-color: #fff; border-color: #bbb; font-size: 0.88rem; width: 72px; padding: 2px 0;"
+                                        @onclick="() => SolicitarEliminacion(usuario)">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </Virtualize>
+        </div>
+    }
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+@if (usuarioAEliminar != null)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fs-6 fw-bold text-dark">Confirmar eliminación - AeroReservas.com</h5>
+                    <button type="button" class="btn-close" @onclick="CancelarEliminacion"></button>
+                </div>
+                <div class="modal-body text-dark" style="font-size: 0.95rem;">
+                    ¿Está seguro de que desea eliminar al usuario <strong>@usuarioAEliminar.Nombre @usuarioAEliminar.Apellido</strong> (@usuarioAEliminar.Email)?
+                </div>
+                <div class="modal-footer bg-light p-2">
+                    <button type="button" class="btn btn-secondary btn-sm px-3" @onclick="CancelarEliminacion">Cancelar</button>
+                    <button type="button" class="btn btn-danger btn-sm px-3" @onclick="ConfirmarEliminacion">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

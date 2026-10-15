@@ -25,7 +25,10 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer( builder.Configuration.GetConnectionString("DefaultConnection") ) );
 
-// Add Dependency Injection
+// Add Dependency Injection:
+// Registro de servicios en el contenedor de Inyección de Dependencias (DI) de la aplicación
+
+builder.Services.AddScoped <LoginService>();
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
@@ -150,6 +153,7 @@ app.UseAuthorization();  // 2. Después autorizamos (¿Tenés permiso?)
 
 // Map endpoints (Minimal APIs)
 
+app.MapLoginEndpoints();
 app.MapUsuarioEndpoints();
 app.MapPaisEndpoints();
 app.MapCiudadEndpoints();

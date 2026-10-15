@@ -9,16 +9,27 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DTOs;
 using System.Net.Http.Json;
+using WindowsForms.Auth.Services;
+using WindowsForms.Auth.Session;
 
 namespace WindowsForms
 {
     public partial class LoginForm : Form
     {
+        
+        // Propiedad pública que Program.cs necesita para saber el rol y datos del usuario logueado
         public UsuarioLoginResultDTO? UsuarioAutenticado { get; private set; }
+
+        private readonly AuthApiClient _authApiClient;
 
         public LoginForm()
         {
             InitializeComponent();
+
+            // Configuramos la URL base de la WebApi
+            UserSession.ConfigureClient("https://localhost:7099/");
+
+            _authApiClient = new AuthApiClient();
 
             // Configura el botón de ingresar como el botón por defecto del formulario
             this.AcceptButton = btnIngresar;
@@ -54,59 +65,48 @@ namespace WindowsForms
                 return;
             }
 
+            // Deshabilitar botón para evitar doble clic mientras procesa
+            btnIngresar.Enabled = false;
+
             try
             {
                 
-                // Utilizamos el HttpClient global configurado en Program.cs
+                var resultado = await _authApiClient.LoginAsync(email, contrasenia);
 
-                UsuarioLoginRequestDTO usuarioLoginRequestDto = new UsuarioLoginRequestDTO
+                if (resultado != null && !string.IsNullOrEmpty(resultado.Token))
                 {
-                    Email = email,
-                    Contrasenia = contrasenia
-                };
+                    // 1. Guardamos el token en la sesión centralizada de la librería
+                    UserSession.SetToken(resultado.Token);
 
-                HttpResponseMessage response = await Program.HttpClient.PostAsJsonAsync("/usuarios/login", usuarioLoginRequestDto);
+                    // 2. Asignamos el resultado a la propiedad para que Program.cs lo reciba (rol, nombre, etc.)
+                    UsuarioAutenticado = resultado;
 
-                // Leemos la respuesta como UsuarioLoginResultDTO
-                var resultado = await response.Content.ReadFromJsonAsync<UsuarioLoginResultDTO>();
-
-                if (response.IsSuccessStatusCode && resultado != null && resultado.Exitoso)
-                {
-                    // === GUARDAMOS EL TOKEN JWT Y CONFIGURAMOS EL CLIENTE HTTP ===
-                    if (!string.IsNullOrEmpty(resultado.Token))
-                    {
-                        Program.TokenJwt = resultado.Token;
-                        Program.HttpClient.DefaultRequestHeaders.Authorization =
-                            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Program.TokenJwt);
-                    }
-
-                    this.UsuarioAutenticado = resultado;
                     this.DialogResult = DialogResult.OK;
-                    this.Close(); // Cierra y destruye la ventana de Login
+                    this.Close();
                 }
                 else
                 {
-                    string mensajeError = resultado?.Mensaje ?? "Acceso denegado.";
-                    MessageBox.Show(mensajeError, "Error de Autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Credenciales incorrectas o usuario no autorizado.", "Error de Autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
             }
             catch (Exception ex)
             {
-                //MessageBox.Show($"Error de conexión con la Web API: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                 // Para seguir viendo el error en la consola de Visual Studio en el desarrollo
                 System.Diagnostics.Debug.WriteLine($"Error técnico interno: {ex.Message}");
 
-                // Mensaje limpio para el usuario
+                // Mensaje para el usuario
                 MessageBox.Show(
                     "Fallo al conectar, disculpe las molestias. ¡Inténtelo más tarde!",
                     "Error de conexión",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );
-
             }
+            finally
+            {
+                btnIngresar.Enabled = true;
+            }
+
         }
 
         private void btnAutoregistroUsuario_Click(object sender, EventArgs e)
@@ -126,6 +126,20 @@ namespace WindowsForms
             this.Show();
         }
 
+        // Botones para probar el ingreso en etapa de desarrollo.
+        
+        private void btnCargarDatosAdmin_Click(object sender, EventArgs e)
+        {
+            textBoxEmail.Text = "admin@email.com";
+            textBoxContrasenia.Text = "admin";
+        }
+
+        private void btnCargarDatosUsuario_Click(object sender, EventArgs e)
+        {
+            textBoxEmail.Text = "usu@email.com";
+            textBoxContrasenia.Text = "usu";
+        }
+
         // Cierra la aplicación por completo y libera todos los procesos.
         private void btnSalirSistema_Click(object sender, EventArgs e)
         {
@@ -141,20 +155,6 @@ namespace WindowsForms
             {
                 Application.Exit();
             }
-        }
-
-        // Botones para probar el ingreso en etapa de desarrollo.
-
-        private void btnCargarDatosAdmin_Click(object sender, EventArgs e)
-        {
-            textBoxEmail.Text = "admin@email.com";
-            textBoxContrasenia.Text = "admin";
-        }
-
-        private void btnCargarDatosUsuario_Click(object sender, EventArgs e)
-        {
-            textBoxEmail.Text = "usu@email.com";
-            textBoxContrasenia.Text = "usu";
         }
 
     }
