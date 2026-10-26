@@ -7,19 +7,16 @@ using Domain.Model;
 
 namespace DTOs
 {
-    public class VueloCargaDTO
+    public class VueloDTO
     {
         public int Id { get; set; }
         public DateTime FechaHoraVuelo { get; set; }
         public string Aerolinea { get; set; } = string.Empty;
         public decimal Precio { get; set; }
-        public int IdCiudadOrigen { get; set; }
-        public string CiudadOrigenNombre { get; set; } = string.Empty;
-        public int IdCiudadDestino { get; set; }
-        public string CiudadDestinoNombre { get; set; } = string.Empty;
-        public int IdAvion { get; set; }
-        public string AvionDescripcion { get; set; } = string.Empty;
-        public int AvionCapacidad { get; set; }
+        public required CiudadDTO CiudadOrigen   { get; set; }
+        public required CiudadDTO CiudadDestino { get; set; }
+        public AvionDTO? Avion { get; set; }
+        public int? Capacidad { get; set; }
 
         private readonly List<Reserva> _reservas = new();
     }

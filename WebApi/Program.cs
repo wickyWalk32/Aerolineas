@@ -134,7 +134,7 @@ using (var scope = app.Services.CreateScope())
         var context = services.GetRequiredService<AppDbContext>();
 
         // Ya no borramos la base de datos en cada arranque.
-        // await context.Database.EnsureDeletedAsync();
+        //await context.Database.EnsureDeletedAsync();
 
         // Asegura que la base de datos esté creada sin borrarla en cada arranque.
         await context.Database.EnsureCreatedAsync();

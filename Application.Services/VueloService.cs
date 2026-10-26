@@ -18,43 +18,73 @@ namespace Application.Services
             _vueloRepository = vueloRepository;
         }
 
-        public async Task<List<VueloCargaDTO>> GetAllAsync()
+        public async Task<List<VueloDTO>> GetAllAsync()
         {
             var vuelos = await _vueloRepository.GetAllAsync();
 
-            return vuelos.Select(vuelo => new VueloCargaDTO
+            return vuelos.Select(vuelo => new VueloDTO
             {
                 Id = vuelo.Id,
                 FechaHoraVuelo = vuelo.FechaHoraVuelo,
                 Aerolinea = vuelo.Aerolinea,
                 Precio = vuelo.Precio,
-                IdCiudadOrigen = vuelo.IdCiudadOrigen,
-                CiudadOrigenNombre = vuelo.CiudadOrigen.Nombre,
-                IdCiudadDestino = vuelo.IdCiudadDestino,
-                CiudadDestinoNombre = vuelo.CiudadDestino.Nombre,
-                IdAvion = vuelo.IdAvion,
-                AvionDescripcion = vuelo.Avion.Descripcion,
-                AvionCapacidad = vuelo.Avion.Capacidad
+                CiudadOrigen = new CiudadDTO 
+                                { 
+                                    Id = vuelo.CiudadOrigen.Id,
+                                    Nombre = vuelo.CiudadOrigen.Nombre,
+                                    CodigoPostal = vuelo.CiudadOrigen.CodigoPostal,
+                                    CodigoAeropuerto = vuelo.CiudadOrigen.CodigoAeropuerto
+                                },
+                CiudadDestino = new CiudadDTO
+                                {
+                                    Id = vuelo.CiudadDestino.Id,
+                                    Nombre = vuelo.CiudadDestino.Nombre,
+                                    CodigoPostal = vuelo.CiudadDestino.CodigoPostal,
+                                    CodigoAeropuerto = vuelo.CiudadDestino.CodigoAeropuerto
+                                },
+                Avion = new AvionDTO
+                                {
+                                    Id = vuelo.Avion.Id,
+                                    Descripcion = vuelo.Avion.Descripcion,
+                                    Capacidad = vuelo.Avion.Capacidad,
+                                    EstadoDisponibilidad = vuelo.Avion.EstadoDisponibilidad
+                                }
             }).ToList();
         }
 
-        public async Task<VueloCargaDTO?> GetByIdAsync(int id)
+        public async Task<VueloDTO?> GetByIdAsync(int id)
         {
             var vuelo = await _vueloRepository.GetByIdAsync(id);
 
             if (vuelo == null) return null;
 
-            return new VueloCargaDTO
+            return new VueloDTO
             {
                 Id = vuelo.Id,
                 FechaHoraVuelo = vuelo.FechaHoraVuelo,
                 Aerolinea = vuelo.Aerolinea,
                 Precio = vuelo.Precio,
-                IdCiudadOrigen = vuelo.IdCiudadOrigen,
-                CiudadOrigenNombre = vuelo.CiudadOrigen.Nombre,
-                IdCiudadDestino = vuelo.IdCiudadDestino,
-                CiudadDestinoNombre = vuelo.CiudadDestino.Nombre,
-                IdAvion = vuelo.IdAvion
+                CiudadOrigen = new CiudadDTO
+                {
+                    Id = vuelo.CiudadOrigen.Id,
+                    Nombre = vuelo.CiudadOrigen.Nombre,
+                    CodigoPostal = vuelo.CiudadOrigen.CodigoPostal,
+                    CodigoAeropuerto = vuelo.CiudadOrigen.CodigoAeropuerto
+                },
+                CiudadDestino = new CiudadDTO
+                {
+                    Id = vuelo.CiudadDestino.Id,
+                    Nombre = vuelo.CiudadDestino.Nombre,
+                    CodigoPostal = vuelo.CiudadDestino.CodigoPostal,
+                    CodigoAeropuerto = vuelo.CiudadDestino.CodigoAeropuerto
+                },
+                Avion = new AvionDTO
+                {
+                    Id = vuelo.Avion.Id,
+                    Descripcion = vuelo.Avion.Descripcion,
+                    Capacidad = vuelo.Avion.Capacidad,
+                    EstadoDisponibilidad = vuelo.Avion.EstadoDisponibilidad
+                }
             };
         }
 

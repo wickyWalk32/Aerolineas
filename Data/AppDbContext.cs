@@ -307,6 +307,9 @@ namespace Data
                 entity.Property(e => e.FechaHoraVuelo)
                     .IsRequired();
 
+                entity.Property(e => e.Capacidad)
+                    .IsRequired();
+
                 entity.Property(e => e.Aerolinea)
                     .IsRequired()
                     .HasMaxLength(100);

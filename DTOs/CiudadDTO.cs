@@ -14,8 +14,8 @@ namespace DTOs
         public string Nombre { get; set; } = string.Empty;
         public string CodigoPostal { get; set; } = string.Empty;
         public string CodigoAeropuerto { get; set; } = string.Empty;
-        public int PaisId { get; set; }
-        public string PaisNombre { get; set; } = string.Empty;
+        public int? PaisId { get; set; }
+        public string? PaisNombre { get; set; } = string.Empty;
 
     }
     

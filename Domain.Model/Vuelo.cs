@@ -15,7 +15,7 @@ namespace Domain.Model
         public DateTime FechaHoraVuelo { get; private set; }
         public string Aerolinea { get; private set; } = string.Empty;
         public decimal Precio { get; private set; }
-
+        public int Capacidad { get; private set; }
 
         // <<< ATRIBUTOS DE NAVEGACIÓN >>>
 
@@ -42,7 +42,10 @@ namespace Domain.Model
 
         // <<< CONSTRUCTORES >>>
 
+        public Vuelo() // Constructor sin parametros para el EF. Para que no ejecute validaciones en los GET por ejemplo.
+        {
 
+        }
         public Vuelo(DateTime fechaHoraVuelo, string aerolinea, decimal precio, int idCiudadOrigen, int idCiudadDestino, int idAvion)
         {
             ValidarCiudades(idCiudadOrigen, idCiudadDestino);
@@ -55,52 +58,6 @@ namespace Domain.Model
             this.SetIdAvion(idAvion);
         }
 
-        // Para DbContext
-        public Vuelo(int id, DateTime fechaHoraVuelo, string aerolinea, decimal precio, int idCiudadOrigen, int idCiudadDestino, int idAvion)
-        {
-            ValidarCiudades(idCiudadOrigen, idCiudadDestino);
-
-            this.SetId(id);
-            this.SetFechaHoraVuelo(fechaHoraVuelo);
-            this.SetAerolinea(aerolinea);
-            this.SetPrecio(precio);
-            this.SetIdCiudadOrigen(idCiudadOrigen);
-            this.SetIdCiudadDestino(idCiudadDestino);
-            this.SetIdAvion(idAvion);
-        }
-
-        public Vuelo(DateTime fechaHoraVuelo, string aerolinea, decimal precio, Ciudad ciudadOrigen, int idCiudadOrigen,
-            Ciudad ciudadDestino, int idCiudadDestino, Avion avion, int idAvion)
-        {
-            ValidarCiudades(idCiudadOrigen, idCiudadDestino);
-
-            this.SetFechaHoraVuelo(fechaHoraVuelo);
-            this.SetAerolinea(aerolinea);
-            this.SetPrecio(precio);
-            this.SetIdCiudadOrigen(idCiudadOrigen);
-            this.SetCiudadOrigen(ciudadOrigen);
-            this.SetIdCiudadDestino(idCiudadDestino);
-            this.SetCiudadDestino(ciudadDestino);
-            this.SetIdAvion(idAvion);
-            this.SetAvion(avion);
-        }
-
-        public Vuelo(int id, DateTime fechaHoraVuelo, string aerolinea, decimal precio, Ciudad ciudadOrigen, int idCiudadOrigen,
-            Ciudad ciudadDestino, int idCiudadDestino, Avion avion, int idAvion)
-        {
-            ValidarCiudades(idCiudadOrigen, idCiudadDestino);
-
-            this.SetId(id);
-            this.SetFechaHoraVuelo(fechaHoraVuelo);
-            this.SetAerolinea(aerolinea);
-            this.SetPrecio(precio);
-            this.SetIdCiudadOrigen(idCiudadOrigen);
-            this.SetCiudadOrigen(ciudadOrigen);
-            this.SetIdCiudadDestino(idCiudadDestino);
-            this.SetCiudadDestino(ciudadDestino);
-            this.SetIdAvion(idAvion);
-            this.SetAvion(avion);
-        }
 
         // <<< MÉTODOS: SETTERS >>>
 

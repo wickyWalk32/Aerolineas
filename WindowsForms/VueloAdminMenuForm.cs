@@ -31,11 +31,11 @@ namespace WindowsForms
 
             try
             {
-                var listaVuelos = await Program.HttpClient.GetFromJsonAsync<List<VueloCargaDTO>>("vuelos");
+                var listaVuelos = await Program.HttpClient.GetFromJsonAsync<List<VueloDTO>>("vuelos");
 
                 if (listaVuelos != null)
                 {
-                    foreach (VueloCargaDTO unVuelo in listaVuelos)
+                    foreach (VueloDTO unVuelo in listaVuelos)
                     {
                         VueloItemControl item = new VueloItemControl();
                         item.CargarDatos(unVuelo);
