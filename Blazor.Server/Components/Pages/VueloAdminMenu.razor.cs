@@ -12,7 +12,7 @@ namespace Blazor.Server.Components.Pages
         [Inject] public NavigationManager Navigation { get; set; } = default!;
         [Inject] public IJSRuntime JS { get; set; } = default!;
 
-        public List<VueloCargaDTO> vuelos { get; set; } = new();
+        public List<VueloDTO> vuelos { get; set; } = new();
         public bool cargando { get; set; } = true;
         public string? mensajeError { get; set; }
 
@@ -28,7 +28,7 @@ namespace Blazor.Server.Components.Pages
                 cargando = true;
                 mensajeError = null;
 
-                var listaVuelos = await Http.GetFromJsonAsync<List<VueloCargaDTO>>("vuelos");
+                var listaVuelos = await Http.GetFromJsonAsync<List<VueloDTO>>("vuelos");
 
                 if (listaVuelos != null)
                 {
@@ -60,12 +60,12 @@ namespace Blazor.Server.Components.Pages
             Navigation.NavigateTo($"/admin/vuelos/editar/{id}");
         }
 
-        public async Task EliminarVuelo(VueloCargaDTO vuelo)
+        public async Task EliminarVuelo(VueloDTO vuelo)
         {
             try
             {
                 string mensaje = $"¿Está seguro de que desea eliminar el vuelo desde " +
-                                 $"{vuelo.CiudadOrigenNombre} a {vuelo.CiudadDestinoNombre} " +
+                                 $"{vuelo.CiudadOrigen.Nombre} a {vuelo.CiudadDestino.Nombre} " +
                                  $"del día: {vuelo.FechaHoraVuelo.ToString("dd/MM/yyyy")}, " +
                                  $"hora: {vuelo.FechaHoraVuelo.ToString("HH:mm")}, " +
                                  $"aerolínea: {vuelo.Aerolinea}?";

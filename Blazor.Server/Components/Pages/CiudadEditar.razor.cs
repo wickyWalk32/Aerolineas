@@ -48,7 +48,7 @@ namespace Blazor.Server.Components.Pages
                         Nombre = ciudadExistente.Nombre,
                         CodigoPostal = ciudadExistente.CodigoPostal,
                         CodigoAeropuerto = ciudadExistente.CodigoAeropuerto,
-                        PaisId = ciudadExistente.PaisId
+                        PaisId = (int)ciudadExistente.PaisId
                     };
                 }
                 else

@@ -42,17 +42,17 @@ namespace Blazor.Server.Components.Pages
                 var resAviones = await Http.GetFromJsonAsync<List<AvionDTO>>("aviones");
                 if (resAviones != null) aviones = resAviones;
 
-                var vueloExistente = await Http.GetFromJsonAsync<VueloCargaDTO>($"vuelos/{Id}");
+                var vueloExistente = await Http.GetFromJsonAsync<VueloDTO>($"vuelos/{Id}");
                 if (vueloExistente != null)
                 {
                     vueloDto = new VueloUpdateDTO
                     {
                         Id = vueloExistente.Id,
-                        IdCiudadOrigen = vueloExistente.IdCiudadOrigen,
-                        CiudadOrigenNombre = vueloExistente.CiudadOrigenNombre,
-                        IdCiudadDestino = vueloExistente.IdCiudadDestino,
-                        CiudadDestinoNombre = vueloExistente.CiudadDestinoNombre,
-                        IdAvion = vueloExistente.IdAvion,
+                        IdCiudadOrigen = vueloExistente.CiudadOrigen.Id,
+                        CiudadOrigenNombre = vueloExistente.CiudadOrigen.Nombre,
+                        IdCiudadDestino = vueloExistente.CiudadDestino.Id,
+                        CiudadDestinoNombre = vueloExistente.CiudadDestino.Nombre,
+                        IdAvion = vueloExistente.Avion.Id,
                         Precio = vueloExistente.Precio,
                         Aerolinea = vueloExistente.Aerolinea,
                         FechaHoraVuelo = vueloExistente.FechaHoraVuelo
