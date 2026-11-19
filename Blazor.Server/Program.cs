@@ -28,6 +28,9 @@ builder.Services.AddScoped(sp =>
     };
 });
 
+// 4. Registramos el servicio para ir guardando los datos de la reserva del vuelo
+builder.Services.AddScoped<Blazor.Server.Services.ReservaStateService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

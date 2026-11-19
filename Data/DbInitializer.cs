@@ -249,19 +249,39 @@ namespace Data
             await context.Set<Ciudad>().AddRangeAsync(ciudadesIniciales);
             await context.SaveChangesAsync();
 
+            /*
             // Insertar Aviones (10 ejemplos ficticios)
             var avionesIniciales = new List<Avion>
             {
                 new Avion("AeroJet 320"         , 16   , "Disponible"),
                 new Avion("Airbus A220-300"     , 12   , "Disponible"),
-                new Avion("Apex A380"           , 52   , "No disponible"),
-                new Avion("Breeze ATR72"        , 24    , "Disponible"),
-                new Avion("EcoJet Q400"         , 44    , "Disponible"),
+                new Avion("Apex A380"           , 52   , "Disponible"),
+                new Avion("Breeze ATR72"        , 24   , "No disponible"),
+                new Avion("EcoJet Q400"         , 44   , "Disponible"),
                 new Avion("MetroExpress E190"   , 40   , "Disponible"),
                 new Avion("Oceanic 350"         , 36   , "No disponible"),
                 new Avion("SkyLinx 737"         , 16   , "Disponible"),
                 new Avion("StratoCruiser 787"   , 24   , "Disponible"),
                 new Avion("Titan 777"           , 32   , "Disponible")
+            };
+
+            await context.Set<Avion>().AddRangeAsync(avionesIniciales);
+            await context.SaveChangesAsync();
+            */
+
+            // Insertar Aviones (10 ejemplos ficticios) con sus asientos
+            var avionesIniciales = new List<Avion>
+            {
+                CrearAvionConAsientos("AeroJet 320"       , 16 , "Disponible"),
+                CrearAvionConAsientos("Airbus A220-300"   , 12 , "Disponible"),
+                CrearAvionConAsientos("Apex A380"         , 52 , "Disponible"),
+                CrearAvionConAsientos("Breeze ATR72"      , 24 , "No disponible"),
+                CrearAvionConAsientos("EcoJet Q400"       , 44 , "Disponible"),
+                CrearAvionConAsientos("MetroExpress E190" , 40 , "Disponible"),
+                CrearAvionConAsientos("Oceanic 350"       , 36 , "No disponible"),
+                CrearAvionConAsientos("SkyLinx 737"       , 16 , "Disponible"),
+                CrearAvionConAsientos("StratoCruiser 787" , 24 , "Disponible"),
+                CrearAvionConAsientos("Titan 777"         , 32 , "Disponible")
             };
 
             await context.Set<Avion>().AddRangeAsync(avionesIniciales);
@@ -308,6 +328,22 @@ namespace Data
             await context.Set<Pasajero>().AddRangeAsync(pasajerosIniciales);
             await context.SaveChangesAsync();
 
+        }
+
+        private static Avion CrearAvionConAsientos(string descripcion, int capacidad, string estadoDisponibilidad)
+        {
+            var avion = new Avion(descripcion, capacidad, estadoDisponibilidad);
+
+            for (int i = 1; i <= capacidad; i++)
+            {
+                string codigo = i.ToString();
+                int columna = ((i - 1) % 4) + 1;
+                char fila = (char)('A' + ((i - 1) / 4));
+
+                avion.AddAsiento(new Asiento(avion.Id, codigo, fila, columna, "libre"));
+            }
+
+            return avion;
         }
 
     }

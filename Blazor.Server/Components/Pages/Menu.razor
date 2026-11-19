@@ -1,43 +1,215 @@
 ﻿@page "/menu"
-@attribute [Authorize(Roles = "usuario, admin")]
+@attribute [Authorize(Roles = "usuario")]
 @rendermode InteractiveServer
 
-<PageTitle>Menú Principal - AeroReservas.com</PageTitle>
+<PageTitle>Buscador de Vuelos - AeroReservas</PageTitle>
 
-<div class="container mt-4">
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h3 class="mb-0">Panel del Pasajero</h3>
-            <button class="btn btn-outline-light btn-sm" @onclick="CerrarSesion">Cerrar Sesión</button>
+<div class="container-fluid px-0" style="font-family: 'Segoe UI', sans-serif;">
+    <!-- Header Superior -->
+    <header class="bg-white border-bottom shadow-sm px-4 py-3 mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-4">
+                <h1 class="h3 fw-normal mb-0 text-primary fst-italic">AeroReservas.com</h1>
+                <AuthorizeView>
+                    <Authorized>
+                        <span class="text-secondary fw-medium" style="font-size: 1rem;">
+                            ¡Hola, @(context.User.Identity?.Name ?? "Usuario")!
+                        </span>
+                    </Authorized>
+                </AuthorizeView>
+            </div>
+
+            <div>
+                <button class="btn btn-light border text-dark px-3 py-1 shadow-sm"
+                        style="background-color: #fff; border-color: #ccc; font-size: 0.9rem;"
+                        @onclick="CerrarSesion">
+                    Salir del sistema
+                </button>
+            </div>
         </div>
-        <div class="card-body">
-            <AuthorizeView>
-                <Authorized>
-                    <h4>¡Bienvenido, @context.User.Identity?.Name!</h4>
-                    <p class="text-muted">Seleccioná una opción para gestionar tus pasajes y reservas.</p>
-                </Authorized>
-            </AuthorizeView>
+    </header>
 
-            <div class="row mt-4">
-                <div class="col-md-6 mb-3">
-                    <div class="card h-100">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Buscar Vuelos</h5>
-                            <p class="card-text">Consulta disponibilidad de destinos, horarios y tarifas.</p>
-                            <button class="btn btn-outline-primary" disabled>Próximamente</button>
-                        </div>
-                    </div>
+    <!-- Pestañas de Navegación Secundaria -->
+    <div class="container px-4 mb-4">
+        <div class="d-flex align-items-center gap-2 border-bottom pb-2">
+            <button class="btn px-4 py-1 shadow-sm"
+                    style="background-color: #d1e7dd; color: #0f5132; border-color: #badbcc; font-weight: 500;">
+                Buscador de Vuelos
+            </button>
+            <button class="btn btn-light border text-secondary px-4 py-1 shadow-sm"
+                    style="background-color: #fff; border-color: #ccc;"
+                    @onclick="IrAMisReservas">
+                Mis Reservas
+            </button>
+            <span class="ms-auto text-muted small">Seleccioná una opción para gestionar tus pasajes y reservas.</span>
+        </div>
+    </div>
+
+    <!-- Contenido Principal: Dos Columnas -->
+    <main class="container px-4">
+        <div class="row">
+            <!-- Columna Izquierda: Buscador y Listado de Vuelos (9 columnas) -->
+            <div class="col-lg-9">
+                <div class="mb-3">
+                    <h3 class="h4 fw-normal text-dark mb-1">Buscador de Vuelos</h3>
+                    <p class="text-muted small">Consulta disponibilidad de destinos, horarios y tarifas.</p>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <div class="card h-100">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Mis Reservas</h5>
-                            <p class="card-text">Revisa el estado de tus pasajes comprados y gestiona tu itinerario.</p>
-                            <button class="btn btn-outline-primary" disabled>Próximamente</button>
+
+                <!-- Estado de Carga -->
+                @if (cargando)
+                {
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando vuelos...</span>
                         </div>
+                        <p class="text-secondary mt-2">Buscando vuelos disponibles...</p>
+                    </div>
+                }
+                else if (vuelosPaginados == null || !vuelosPaginados.Any())
+                {
+                    <div class="alert alert-info shadow-sm text-center py-4" role="alert">
+                        No se encontraron vuelos disponibles con los filtros seleccionados.
+                    </div>
+                }
+                else
+                {
+                    <!-- Listado de Vuelos -->
+                    <div class="d-flex flex-column gap-2 mb-4">
+                        @foreach (var vuelo in vuelosPaginados)
+                        {
+                            <div class="card shadow-sm border bg-light p-2 px-3" style="border-radius: 4px; border-color: #666 !important;">
+                                <div class="d-flex align-items-center justify-content-between text-nowrap" style="font-size: 0.9rem; color: #000;">
+
+                                    <!-- Origen -->
+                                    <div style="width: 160px;" class="overflow-hidden">
+                                        <span class="text-muted d-block" style="font-size: 0.75rem;">Origen</span>
+                                        <strong class="text-truncate d-block" title="@vuelo.CiudadOrigen.Nombre">@vuelo.CiudadOrigen.Nombre</strong>
+                                    </div>
+
+                                    <!-- Destino -->
+                                    <div style="width: 160px;" class="overflow-hidden">
+                                        <span class="text-muted d-block" style="font-size: 0.75rem;">Destino</span>
+                                        <strong class="text-truncate d-block" title="@vuelo.CiudadDestino.Nombre">@vuelo.CiudadDestino.Nombre</strong>
+                                    </div>
+
+                                    <!-- Fecha y Hora -->
+                                    <div style="width: 150px;">
+                                        <span class="text-muted d-block" style="font-size: 0.75rem;">Fecha y Hora</span>
+                                        <span>@vuelo.FechaHoraVuelo.ToString("dd/MM/yyyy HH:mm")</span>
+                                    </div>
+
+                                    <!-- Aerolínea -->
+                                    <div style="width: 150px;" class="overflow-hidden">
+                                        <span class="text-muted d-block" style="font-size: 0.75rem;">Aerolínea</span>
+                                        <span class="text-truncate d-inline-block w-100" title="@vuelo.Aerolinea">@vuelo.Aerolinea</span>
+                                    </div>
+
+                                    <!-- Precio -->
+                                    <div style="width: 100px;" class="text-end">
+                                        <span class="text-muted d-block" style="font-size: 0.75rem;">Precio</span>
+                                        <span class="fw-bold text-success">$ @vuelo.Precio.ToString("N2")</span>
+                                    </div>
+
+                                    <!-- Botón Seleccionar -->
+                                    <div class="ms-3">
+                                        <button class="btn btn-sm btn-outline-primary px-3 shadow-sm"
+                                                style="font-size: 0.85rem;"
+                                                @onclick="() => SeleccionarVuelo(vuelo.Id)">
+                                            Seleccionar
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Controles de Paginación (10 vuelos por página) -->
+                    <div class="d-flex justify-content-center align-items-center gap-3 my-4">
+                        <button class="btn btn-outline-secondary btn-sm px-3"
+                                disabled="@(paginaActual == 0)"
+                                @onclick="PaginaAnterior">
+                            &lt; Anterior
+                        </button>
+
+                        <span class="text-secondary" style="font-size: 0.95rem;">
+                            Página <strong>@(paginaActual + 1)</strong> de <strong>@(totalPaginas == 0 ? 1 : totalPaginas)</strong>
+                        </span>
+
+                        <button class="btn btn-outline-secondary btn-sm px-3"
+                                disabled="@(paginaActual >= totalPaginas - 1)"
+                                @onclick="PaginaSiguiente">
+                            Siguiente &gt;
+                        </button>
+                    </div>
+                }
+            </div>
+
+            <!-- Columna Derecha: Panel de Filtros (3 columnas) -->
+            <div class="col-lg-3">
+                <div class="card shadow-sm border p-3 bg-white" style="border-radius: 6px;">
+                    <h5 class="text-center fw-bold border-bottom pb-2 mb-3" style="font-size: 1.1rem; color: #333;">Filtros</h5>
+
+                    <!-- País de Origen -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-secondary">País de Origen</label>
+                        <input class="form-control form-control-sm" list="lista-paises-origen" @bind="textoPaisOrigen" @bind:after="OnPaisOrigenInputChanged" placeholder="Escribe o selecciona..." />
+                        <datalist id="lista-paises-origen">
+                            @foreach (var pais in paises)
+                            {
+                                <option value="@pais.Nombre"></option>
+                            }
+                        </datalist>
+                    </div>
+
+                    <!-- Ciudad de Origen -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-secondary">Ciudad de Origen</label>
+                        <input class="form-control form-control-sm" list="lista-ciudades-origen" @bind="textoCiudadOrigen" @bind:after="OnCiudadOrigenInputChanged" placeholder="Escribe o selecciona..." />
+                        <datalist id="lista-ciudades-origen">
+                            @foreach (var ciudad in ciudadesOrigenDisponibles)
+                            {
+                                <option value="@ciudad.Nombre"></option>
+                            }
+                        </datalist>
+                    </div>
+
+                    <!-- País de Destino -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-secondary">País de Destino</label>
+                        <input class="form-control form-control-sm" list="lista-paises-destino" @bind="textoPaisDestino" @bind:after="OnPaisDestinoInputChanged" placeholder="Escribe o selecciona..." />
+                        <datalist id="lista-paises-destino">
+                            @foreach (var pais in paises)
+                            {
+                                <option value="@pais.Nombre"></option>
+                            }
+                        </datalist>
+                    </div>
+
+                    <!-- Ciudad de Destino -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-secondary">Ciudad de Destino</label>
+                        <input class="form-control form-control-sm" list="lista-ciudades-destino" @bind="textoCiudadDestino" @bind:after="OnCiudadDestinoInputChanged" placeholder="Escribe o selecciona..." />
+                        <datalist id="lista-ciudades-destino">
+                            @foreach (var ciudad in ciudadesDestinoDisponibles)
+                            {
+                                <option value="@ciudad.Nombre"></option>
+                            }
+                        </datalist>
+                    </div>
+
+                    <!-- Cantidad de Pasajeros (Máximo 10) -->
+                    <div class="mb-2">
+                        <label class="form-label small fw-semibold text-secondary">Cantidad de Pasajeros</label>
+                        <select class="form-select form-select-sm" @bind="filtroCantidadPasajeros" @bind:after="AplicarFiltros">
+                            @for (int i = 1; i <= 10; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 </div>

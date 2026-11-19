@@ -38,7 +38,7 @@ namespace Application.Services
             }).ToList();
         }
 
-        public async Task<AvionDTO> GetByIdAsync(int id)
+        public async Task<AvionDTO?> GetByIdAsync(int id)
         {
             var avion = await _repo.GetByIdAsync(id);
             if (avion == null) return null;
@@ -48,10 +48,18 @@ namespace Application.Services
                 Descripcion = avion.Descripcion,
                 Capacidad = avion.Capacidad,
                 EstadoDisponibilidad = avion.EstadoDisponibilidad,
+                Asientos = avion.Asientos.Select(asiento => new AsientoDTO
+                {
+                    AvionId = asiento.AvionId,
+                    Codigo = asiento.Codigo,
+                    Fila = asiento.Fila,
+                    Columna = asiento.Columna,
+                    Estado = asiento.Estado
+                }).ToList()
             };
         }
 
-        public async Task<AvionDTO> AddAsync(AvionCreateDTO dto)
+        /*public async Task<AvionDTO> AddAsync(AvionCreateDTO dto)
         {
             Avion avion = new Avion(dto.Descripcion, dto.Capacidad, dto.EstadoDisponibilidad);
             foreach (var asiento in dto.AsientosCreateDTO)
@@ -67,6 +75,48 @@ namespace Application.Services
                 EstadoDisponibilidad = avion.EstadoDisponibilidad,
             };
             return avionDTO;
+        }*/
+
+        public async Task<AvionDTO> AddAsync(AvionCreateDTO dto)
+        {
+            Avion avion = new Avion(dto.Descripcion, dto.Capacidad, dto.EstadoDisponibilidad);
+
+            if (dto.AsientosCreateDTO != null && dto.AsientosCreateDTO.Count > 0)
+            {
+                foreach (var asiento in dto.AsientosCreateDTO)
+                {
+                    avion.AddAsiento(new Asiento(avion.Id, asiento.Codigo, asiento.Fila, asiento.Columna, asiento.Estado));
+                }
+            }
+            else if (dto.Capacidad > 0)
+            {
+                for (int i = 1; i <= dto.Capacidad; i++)
+                {
+                    string codigo = i.ToString();
+                    int columna = ((i - 1) % 4) + 1;
+                    char fila = (char)('A' + ((i - 1) / 4));
+
+                    avion.AddAsiento(new Asiento(avion.Id, codigo, fila, columna, "libre"));
+                }
+            }
+
+            await _repo.AddAsync(avion);
+
+            return new AvionDTO
+            {
+                Id = avion.Id,
+                Descripcion = avion.Descripcion,
+                Capacidad = avion.Capacidad,
+                EstadoDisponibilidad = avion.EstadoDisponibilidad,
+                Asientos = avion.Asientos.Select(a => new AsientoDTO
+                {
+                    AvionId = a.AvionId,
+                    Codigo = a.Codigo,
+                    Fila = a.Fila,
+                    Columna = a.Columna,
+                    Estado = a.Estado
+                }).ToList()
+            };
         }
 
         public async Task<bool> UpdateAsync(int id, AvionUpdateDTO dto)

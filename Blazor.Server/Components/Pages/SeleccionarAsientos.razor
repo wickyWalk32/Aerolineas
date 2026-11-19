@@ -1,0 +1,204 @@
+﻿@page "/reserva/asientos/{VueloId:int}/{CantidadPasajeros:int}"
+@attribute [Authorize(Roles = "usuario")]
+@rendermode InteractiveServer
+
+<PageTitle>Selección de Asientos - AeroReservas</PageTitle>
+
+<div class="container-fluid px-0" style="font-family: 'Segoe UI', sans-serif;">
+    <!-- Header Superior -->
+    <header class="bg-white border-bottom shadow-sm px-4 py-3 mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-4">
+                <h1 class="h3 fw-normal mb-0 text-primary fst-italic">AeroReservas.com</h1>
+                <AuthorizeView>
+                    <Authorized>
+                        <span class="text-secondary fw-medium" style="font-size: 1rem;">
+                            ¡Hola, @(context.User.Identity?.Name ?? "Usuario")!
+                        </span>
+                    </Authorized>
+                </AuthorizeView>
+            </div>
+
+            <div>
+                <button class="btn btn-light border text-dark px-3 py-1 shadow-sm"
+                        style="background-color: #fff; border-color: #ccc; font-size: 0.9rem;"
+                        @onclick="CerrarSesion">
+                    Salir del sistema
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Pestañas de Navegación Secundaria -->
+    <div class="container px-4 mb-4">
+        <div class="d-flex align-items-center gap-2 border-bottom pb-2">
+            <button class="btn px-4 py-1 shadow-sm"
+                    style="background-color: #d1e7dd; color: #0f5132; border-color: #badbcc; font-weight: 500;"
+                    @onclick="VolverAlBuscador">
+                Buscador de Vuelos
+            </button>
+            <button class="btn btn-light border text-secondary px-4 py-1 shadow-sm"
+                    style="background-color: #fff; border-color: #ccc;"
+                    @onclick="IrAMisReservas">
+                Mis Reservas
+            </button>
+            <span class="ms-auto text-muted small">Seleccioná una opción para gestionar tus pasajes y reservas.</span>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <main class="container px-4 pb-5">
+        @if (cargando)
+        {
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="text-secondary mt-2">Cargando croquis del avión...</p>
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(mensajeError))
+        {
+            <div class="alert alert-danger shadow-sm">@mensajeError</div>
+        }
+        else
+        {
+            <div class="row g-4">
+                <!-- Columna Izquierda: Croquis del avión -->
+                <div class="col-lg-8">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <h3 class="h4 fw-normal text-dark mb-0">Selección de Asientos</h3>
+                        <span class="fw-semibold text-dark" style="font-size: 1rem;">
+                            Cantidad restante: @CantidadRestante
+                        </span>
+                    </div>
+                    <p class="text-muted small mb-3">Seleccione los asientos que desea reservar</p>
+
+                    <div class="border border-dark p-4 bg-white">
+                        <div class="text-muted small mb-2">Frente del avión</div>
+
+                        <!-- Fuselaje expansible con altura mínima -->
+                        <div class="mx-auto border border-2 border-dark px-4 py-4"
+                             style="max-width: 340px; min-height: 320px; border-radius: 90px; background-color: #fafafa;">
+
+                            <!-- Encabezado de Columnas: 1 2 3 4 -->
+                            <div class="d-flex align-items-center justify-content-center mb-2 fw-semibold text-secondary" style="font-size: 0.9rem;">
+                                <div style="width: 28px;"></div>
+                                <div class="d-flex gap-2">
+                                    <div style="width: 42px;" class="text-center">1</div>
+                                    <div style="width: 42px;" class="text-center">2</div>
+                                    <div style="width: 20px;"></div>
+                                    <div style="width: 42px;" class="text-center">3</div>
+                                    <div style="width: 42px;" class="text-center">4</div>
+                                </div>
+                            </div>
+
+                            <!-- Filas: A, B, C... -->
+                            @foreach (var grupoFila in filasOrdenadas)
+                            {
+                                <div class="d-flex align-items-center justify-content-center mb-2">
+                                    <!-- Etiqueta de fila (letra) -->
+                                    <div style="width: 28px;" class="fw-semibold text-secondary small">
+                                        @grupoFila.Key
+                                    </div>
+
+                                    <!-- Botones de asientos de la fila -->
+                                    <div class="d-flex gap-2">
+                                        @for (int col = 1; col <= 4; col++)
+                                        {
+                                            if (col == 3)
+                                            {
+                                                <div style="width: 20px;"></div>
+                                            }
+
+                                            var asiento = grupoFila.FirstOrDefault(a => a.Columna == col);
+                                            if (asiento != null)
+                                            {
+                                                bool estaOcupado = EsOcupado(asiento);
+                                                bool estaSeleccionado = EstaSeleccionado(asiento);
+
+                                                string bgColor = estaOcupado ? "#dc3545"
+                                                : estaSeleccionado ? "#0d6efd"
+                                                : "#198754";
+
+                                                <button type="button"
+                                                        class="btn btn-sm text-white fw-semibold border border-dark p-0"
+                                                        style="width: 42px; height: 34px; background-color: @bgColor; font-size: 0.8rem;"
+                                                        disabled="@estaOcupado"
+                                                        title="@($"{asiento.Fila}{asiento.Columna} (Cód. {asiento.Codigo}) - {(estaOcupado ? "Ocupado" : estaSeleccionado ? "Seleccionado" : "Libre")}")"
+                                                        @onclick="() => ToggleAsiento(asiento)">
+                                                    @($"{asiento.Fila}{asiento.Columna}")
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <div style="width: 42px; height: 34px;"></div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="text-muted small mt-3">Cola del avión</div>
+
+                        <!-- Leyenda -->
+                        <div class="d-flex align-items-center gap-4 mt-4 pt-2 border-top" style="font-size: 0.9rem;">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="d-inline-block border border-dark" style="width: 18px; height: 18px; background-color: #198754;"></span>
+                                <span>Libre</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="d-inline-block border border-dark" style="width: 18px; height: 18px; background-color: #dc3545;"></span>
+                                <span>Ocupado</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="d-inline-block border border-dark" style="width: 18px; height: 18px; background-color: #0d6efd;"></span>
+                                <span>Seleccionado</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Resumen del Vuelo y Siguiente -->
+                <div class="col-lg-4 border-start ps-lg-4">
+                    <h4 class="h5 fw-normal text-dark mb-4">Vuelo seleccionado:</h4>
+
+                    @if (vueloActual != null)
+                    {
+                        <div class="mb-3 bg-light p-2 rounded">
+                            <span class="text-muted small d-block">Origen</span>
+                            <strong>@vueloActual.CiudadOrigen.Nombre</strong>
+                        </div>
+
+                        <div class="mb-3 bg-light p-2 rounded">
+                            <span class="text-muted small d-block">Destino</span>
+                            <strong>@vueloActual.CiudadDestino.Nombre</strong>
+                        </div>
+
+                        <div class="mb-3 bg-light p-2 rounded">
+                            <span class="text-muted small d-block">Fecha y Hora</span>
+                            <span>@vueloActual.FechaHoraVuelo.ToString("dd/MM/yyyy HH:mm")</span>
+                        </div>
+
+                        <div class="mb-3 bg-light p-2 rounded">
+                            <span class="text-muted small d-block">Aerolínea</span>
+                            <span>@vueloActual.Aerolinea</span>
+                        </div>
+
+                        <div class="mb-4 bg-light p-2 rounded">
+                            <span class="text-muted small d-block">Precio</span>
+                            <span class="fw-bold text-success">$ @vueloActual.Precio.ToString("N2")</span>
+                        </div>
+                    }
+
+                    <button type="button"
+                            class="btn btn-light border border-2 border-dark px-5 py-2 fw-medium shadow-sm"
+                            style="border-radius: 14px;"
+                            disabled="@(CantidadRestante != 0)"
+                            @onclick="IrASiguiente">
+                        Siguiente
+                    </button>
+                </div>
+            </div>
+        }
+    </main>
+</div>
