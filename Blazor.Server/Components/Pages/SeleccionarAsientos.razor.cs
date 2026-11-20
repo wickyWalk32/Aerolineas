@@ -21,6 +21,7 @@ namespace Blazor.Server.Components.Pages
         private VueloDTO? vueloActual;
         private List<AsientoDTO> asientos = new();
         private List<IGrouping<char, AsientoDTO>> filasOrdenadas = new();
+        private HashSet<string> codigosAsientosOcupadosEnVuelo = new(StringComparer.OrdinalIgnoreCase);
 
         private bool cargando = true;
         private string? mensajeError;
@@ -32,6 +33,7 @@ namespace Blazor.Server.Components.Pages
             try
             {
                 cargando = true;
+                codigosAsientosOcupadosEnVuelo.Clear();
 
                 // Recupera el vuelo desde el servicio o desde la API si se recargó la página
                 if (ReservaState.VueloSeleccionado != null && ReservaState.VueloSeleccionado.Id == VueloId)
@@ -60,7 +62,24 @@ namespace Blazor.Server.Components.Pages
                     return;
                 }
 
-                var avionDto = await Http.GetFromJsonAsync<AvionDTO>($"aviones/{avionId.Value}");
+                var tareaAvion = Http.GetFromJsonAsync<AvionDTO>($"aviones/{avionId.Value}");
+                var tareaReservas = Http.GetFromJsonAsync<List<ReservaDTO>>("reservas");
+
+                await Task.WhenAll(tareaAvion, tareaReservas);
+
+                var avionDto = await tareaAvion;
+                var todasLasReservas = await tareaReservas ?? new List<ReservaDTO>();
+
+                // Asientos ocupados SOLO para este VueloId y en este AvionId
+                codigosAsientosOcupadosEnVuelo = todasLasReservas
+                    .Where(r => r.VueloId == VueloId)
+                    .SelectMany(r => r.Pasajes ?? new List<PasajeDTO>())
+                    .Where(p => p.IdAvion == avionId.Value
+                             && !string.Equals(p.Estado?.Trim(), "Cancelado", StringComparison.OrdinalIgnoreCase)
+                             && !string.IsNullOrWhiteSpace(p.CodigoAsiento))
+                    .Select(p => p.CodigoAsiento.Trim())
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
                 asientos = avionDto?.Asientos ?? new List<AsientoDTO>();
 
                 filasOrdenadas = asientos
@@ -81,7 +100,8 @@ namespace Blazor.Server.Components.Pages
 
         private bool EsOcupado(AsientoDTO asiento)
         {
-            return string.Equals(asiento.Estado?.Trim(), "ocupado", StringComparison.OrdinalIgnoreCase);
+            return !string.IsNullOrWhiteSpace(asiento.Codigo)
+                   && codigosAsientosOcupadosEnVuelo.Contains(asiento.Codigo.Trim());
         }
 
         private bool EstaSeleccionado(AsientoDTO asiento)
