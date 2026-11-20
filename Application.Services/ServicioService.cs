@@ -27,7 +27,7 @@ namespace Application.Services
             {
                 Id = servicio.Id,
                 Nombre = servicio.Nombre,
-                Descripcion = servicio.Descripción,
+                Descripcion = servicio.Descripcion,
                 Precio = servicio.Precio
             }).ToList();
         }
@@ -42,7 +42,7 @@ namespace Application.Services
             {
                 Id = servicio.Id,
                 Nombre = servicio.Nombre,
-                Descripcion = servicio.Descripción,
+                Descripcion = servicio.Descripcion,
                 Precio = servicio.Precio
             };
         }

@@ -137,6 +137,10 @@ namespace Data
                 entityCiudad.Property(ciudad => ciudad.Id)
                     .ValueGeneratedOnAdd();
 
+                entityCiudad.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
                 entityCiudad.Property(ciudad => ciudad.CodigoPostal)
                             .IsRequired()
                             .HasMaxLength(10);
@@ -281,7 +285,7 @@ namespace Data
                 entityServicio.HasIndex(e => e.Nombre)
                     .IsUnique();
 
-                entityServicio.Property(e => e.Descripción)
+                entityServicio.Property(e => e.Descripcion)
                     .IsRequired()
                     .HasMaxLength(200);
 
@@ -305,9 +309,6 @@ namespace Data
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 
                 entity.Property(e => e.FechaHoraVuelo)
-                    .IsRequired();
-
-                entity.Property(e => e.Capacidad)
                     .IsRequired();
 
                 entity.Property(e => e.Aerolinea)
@@ -355,6 +356,12 @@ namespace Data
                     .IsRequired()
                     .HasMaxLength(50);
 
+                // 1 Pasaje > 1 Reserva
+                entity.HasOne(e => e.Reserva)
+                    .WithMany(r => r.Pasajes)
+                    .HasForeignKey(e => e.IdReserva)
+                    .OnDelete(DeleteBehavior.Restrict);
+
                 // 1 Pasaje > 1 Pasajero
 
                 entity.HasOne(e => e.Pasajero)
@@ -395,6 +402,12 @@ namespace Data
                 entity.HasOne(e => e.TarjetaCliente)
                     .WithMany(t => t.Reservas)
                     .HasForeignKey(e => e.IdTarjetaCliente);
+
+                // 1 Reserva > 1 Vuelo
+
+                entity.HasOne(e => e.Vuelo)
+                    .WithMany(v => v.Reservas)
+                    .HasForeignKey(e => e.VueloId);
 
                 // 1 Reserva > Muchos Pasajes
 

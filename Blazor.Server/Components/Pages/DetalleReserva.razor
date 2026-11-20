@@ -1,0 +1,107 @@
+﻿@page "/reserva/detalle"
+@attribute [Authorize(Roles = "usuario")]
+@rendermode InteractiveServer
+
+<PageTitle>Detalle de Reserva - AeroReservas</PageTitle>
+
+<div class="container-fluid px-0" style="font-family: 'Segoe UI', sans-serif;">
+    <header class="bg-white border-bottom shadow-sm px-4 py-3 mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 fw-normal mb-0 text-primary fst-italic">AeroReservas.com</h1>
+            <button class="btn btn-light border text-dark px-3 py-1 shadow-sm"
+                    style="background-color: #fff; border-color: #ccc; font-size: 0.9rem;"
+                    @onclick="CerrarSesion">
+                Salir del sistema
+            </button>
+        </div>
+    </header>
+
+    <main class="container px-4 pb-5">
+        @if (ReservaState.VueloConfirmado == null)
+        {
+            <div class="alert alert-warning shadow-sm d-flex justify-content-between align-items-center">
+                <span>No hay una reserva confirmada para mostrar en esta sesión.</span>
+                <button class="btn btn-sm btn-primary" @onclick="VolverAlMenuInicial">Ir a buscar vuelos</button>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-success shadow-sm mb-4">
+                <strong>¡Reserva confirmada!</strong> Tu compra se registró correctamente en la base de datos.
+                @if (ReservaState.ReservaIdCreada.HasValue)
+                {
+                    <span class="ms-2">Número de reserva: <strong>#@ReservaState.ReservaIdCreada</strong></span>
+                }
+            </div>
+
+            <div class="card shadow-sm border p-4 mb-4" style="border-color: #888 !important; border-radius: 2px;">
+                <h4 class="h5 text-dark border-bottom pb-2 mb-3">Datos del Vuelo</h4>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <span class="text-muted small d-block">Origen - Destino</span>
+                        <strong>@ReservaState.VueloConfirmado.CiudadOrigen.Nombre - @ReservaState.VueloConfirmado.CiudadDestino.Nombre</strong>
+                    </div>
+                    <div class="col-md-4">
+                        <span class="text-muted small d-block">Fecha y Hora</span>
+                        <span>@ReservaState.VueloConfirmado.FechaHoraVuelo.ToString("dd/MM/yyyy HH:mm")</span>
+                    </div>
+                    <div class="col-md-4">
+                        <span class="text-muted small d-block">Aerolínea / Precio base</span>
+                        <span>@ReservaState.VueloConfirmado.Aerolinea ($ @ReservaState.VueloConfirmado.Precio.ToString("N2"))</span>
+                    </div>
+                </div>
+
+                <h4 class="h5 text-dark border-bottom pb-2 mb-3">Pasajeros, Asientos y Servicios</h4>
+                @foreach (var p in ReservaState.PasajerosConfirmados)
+                {
+                    var serviciosElegidos = ReservaState.ServiciosCatalogo
+                    .Where(s => p.ServicioIdsSeleccionados.Contains(s.Id))
+                    .ToList();
+
+                    <div class="border rounded p-3 mb-3 bg-light">
+                        <div class="d-flex justify-content-between flex-wrap gap-2 mb-1">
+                            <strong>@p.Nombre @p.Apellido (@p.Tipo)</strong>
+                            <span class="badge bg-primary">Asiento @p.Asiento.Fila@p.Asiento.Columna (Cód. @p.Asiento.Codigo)</span>
+                        </div>
+                        <div class="small text-secondary mb-2">
+                            Documento: @p.TipoDocumento @p.NroDocumento
+                        </div>
+                        <div class="small">
+                            <strong>Servicios adicionales:</strong>
+                            @if (serviciosElegidos.Count == 0)
+                            {
+                                <span class="text-muted">Sin servicios adicionales</span>
+                            }
+                            else
+                            {
+                                <span>@string.Join(", ", serviciosElegidos.Select(s => $"{s.Nombre} (+$ {s.Precio:N2})"))</span>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (ReservaState.PagoConfirmado != null)
+                {
+                    <h4 class="h5 text-dark border-bottom pb-2 mb-3 mt-4">Pago y Total</h4>
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div class="small text-secondary">
+                            Tarjeta @ReservaState.PagoConfirmado.TipoTarjeta terminada en <strong>**** @ReservaState.PagoConfirmado.Ultimos4Digitos</strong> · Titular: <strong>@ReservaState.PagoConfirmado.Titular</strong>
+                        </div>
+                        <div class="fs-5 fw-bold text-success">
+                            Total abonado: $ @ReservaState.TotalConfirmado.ToString("N2")
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="d-flex flex-wrap gap-3">
+                <button type="button" class="btn btn-outline-primary px-4 py-2" @onclick="DescargarComprobante">
+                    Descargar detalle de reserva
+                </button>
+                <button type="button" class="btn btn-primary px-4 py-2 fw-medium" @onclick="VolverAlMenuInicial">
+                    Volver al menú de búsqueda de vuelos
+                </button>
+            </div>
+        }
+    </main>
+</div>

@@ -14,7 +14,7 @@ namespace Domain.Model
         public int Id { get; private set; }
         public string Descripcion { get; private set; } = string.Empty;
         public int Capacidad { get; private set; }
-        public string EstadoDisponibilidad { get; private set; }
+        public string EstadoDisponibilidad { get; private set; } = string.Empty;
 
         // <<< ATRIBUTOS DE NAVEGACION >>>
 

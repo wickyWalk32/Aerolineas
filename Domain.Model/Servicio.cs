@@ -13,7 +13,7 @@ namespace Domain.Model
 
         public int Id { get; private set; }
         public string Nombre { get; private set; } = string.Empty;
-        public string Descripción { get; private set; } = string.Empty;
+        public string Descripcion { get; private set; } = string.Empty;
         public decimal Precio { get; private set; }
 
         // <<< ATRIBUTOS DE NAVEGACIÓN DEL MODELO >>>
@@ -64,7 +64,7 @@ namespace Domain.Model
         {
             if (string.IsNullOrWhiteSpace(descripcion))
                 throw new ArgumentException("Descripción de servicio inválida.");
-            this.Descripción = descripcion;
+            this.Descripcion = descripcion;
         }
 
         public void SetPrecio(decimal precio)

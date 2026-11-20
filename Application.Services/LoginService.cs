@@ -77,6 +77,7 @@ namespace Application.Services
 
             return new UsuarioLoginResultDTO
             {
+                Id = usuario.Id,
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Rol = usuario.Rol,

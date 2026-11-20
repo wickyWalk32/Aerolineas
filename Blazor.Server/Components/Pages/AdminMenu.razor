@@ -29,15 +29,15 @@
         </div>
     </header>
 
-    <!-- Contenido Principal -->
+    <!-- Contenido Principal: Dos Recuadros lado a lado -->
     <main class="container">
-        <div class="d-flex justify-content-center mt-4">
+        <div class="d-flex justify-content-center align-items-start flex-wrap gap-4 mt-4">
+            <!-- Recuadro 1: Acciones de Administración (ABM) -->
             <div class="card shadow-sm border" style="width: 100%; max-width: 380px; border-color: #888 !important; background-color: #fcfcfc;">
                 <div class="card-body p-4 text-center">
                     <h3 class="fw-normal mb-4" style="font-size: 1.35rem; color: #222;">Acciones</h3>
 
                     <div class="d-grid gap-2 col-11 mx-auto">
-                        <!-- AQUÍ se agrega ref="botonAdministrarVuelos" y el borde azul por defecto de foco -->
                         <button @ref="botonAdministrarVuelos"
                                 id="botonAdministrarVuelos"
                                 name="botonAdministrarVuelos"
@@ -75,6 +75,21 @@
                                 style="background-color: #fff; border-color: #ccc;"
                                 @onclick="IrAGestionPasajeros">
                             Administrar Pasajeros
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recuadro 2: Consultas -->
+            <div class="card shadow-sm border" style="width: 100%; max-width: 380px; border-color: #888 !important; background-color: #fcfcfc;">
+                <div class="card-body p-4 text-center">
+                    <h3 class="fw-normal mb-4" style="font-size: 1.35rem; color: #222;">Consultas</h3>
+
+                    <div class="d-grid gap-2 col-11 mx-auto">
+                        <button class="btn btn-light border text-dark py-2 shadow-sm"
+                                style="background-color: #fff; border-color: #ccc;"
+                                @onclick="IrAConsultaReservas">
+                            Consultar Reservas
                         </button>
                     </div>
                 </div>

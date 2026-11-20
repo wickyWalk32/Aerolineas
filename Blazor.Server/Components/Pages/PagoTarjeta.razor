@@ -1,0 +1,138 @@
+﻿@page "/reserva/pago/{VueloId:int}"
+@attribute [Authorize(Roles = "usuario")]
+@rendermode InteractiveServer
+
+<PageTitle>Pago con Tarjeta - AeroReservas</PageTitle>
+
+<div class="container-fluid px-0" style="font-family: 'Segoe UI', sans-serif;">
+    <header class="bg-white border-bottom shadow-sm px-4 py-3 mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 fw-normal mb-0 text-primary fst-italic">AeroReservas.com</h1>
+            <button class="btn btn-light border text-dark px-3 py-1 shadow-sm"
+                    style="background-color: #fff; border-color: #ccc; font-size: 0.9rem;"
+                    @onclick="CerrarSesion">
+                Salir del sistema
+            </button>
+        </div>
+    </header>
+
+    <main class="container px-4 pb-5">
+        @if (cargando)
+        {
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="text-secondary mt-2">Preparando resumen de pago...</p>
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(mensajeError) && ReservaState.VueloSeleccionado == null)
+        {
+            <div class="alert alert-danger shadow-sm d-flex justify-content-between align-items-center">
+                <span>@mensajeError</span>
+                <button class="btn btn-sm btn-outline-danger" @onclick="VolverAlBuscador">Ir al buscador</button>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                <!-- Formulario de Tarjeta -->
+                <div class="col-lg-7">
+                    <h3 class="h4 fw-normal text-dark mb-3">Pago con Tarjeta</h3>
+
+                    @if (!string.IsNullOrEmpty(mensajeError))
+                    {
+                        <div class="alert alert-danger shadow-sm mb-3">@mensajeError</div>
+                    }
+
+                    <div class="card shadow-sm border p-4" style="border-color: #888 !important; border-radius: 2px;">
+                        
+
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small text-secondary">Tipo de Tarjeta</label>
+                                <select class="form-select" @bind="ReservaState.Pago.TipoTarjeta">
+                                    <option value="Crédito">Crédito</option>
+                                    <option value="Débito">Débito</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small text-secondary">Nombre del Titular *</label>
+                                <input type="text" class="form-control" @bind="ReservaState.Pago.Titular" placeholder="Como figura en la tarjeta" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small text-secondary">Número de Tarjeta *</label>
+                            <input type="text" class="form-control" maxlength="19" @bind="ReservaState.Pago.NumeroTarjeta" placeholder="1234 5678 1234 5678" />
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label small text-secondary">Vencimiento (MM/AA) *</label>
+                                <input type="text" class="form-control" maxlength="5" @bind="ReservaState.Pago.Vencimiento" placeholder="12/28" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small text-secondary">Código de Seguridad (CVV) *</label>
+                                <input type="password" class="form-control" maxlength="4" @bind="ReservaState.Pago.CodigoSeguridad" placeholder="123" />
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-outline-secondary px-3 py-2"
+                                    disabled="@procesandoPago" @onclick="VolverAPasajeros">
+                                Atrás
+                            </button>
+                            <button type="button" class="btn btn-success px-4 py-2 flex-grow-1 fw-medium"
+                                    disabled="@procesandoPago" @onclick="ConfirmarPagoYReserva">
+                                @if (procesandoPago)
+                                {
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                    <span>Confirmando reserva...</span>
+                                }
+                                else
+                                {
+                                    <span>Confirmar Pago ($ @totalCalculado.ToString("N2"))</span>
+                                }
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen Lateral -->
+                <div class="col-lg-5 border-start ps-lg-4">
+                    <h4 class="h5 fw-normal text-dark mb-3">Detalle a abonar</h4>
+
+                    @if (ReservaState.VueloSeleccionado != null)
+                    {
+                        <div class="mb-2 bg-light p-2 rounded">
+                            <span class="text-muted small d-block">Vuelo</span>
+                            <strong>@ReservaState.VueloSeleccionado.CiudadOrigen.Nombre - @ReservaState.VueloSeleccionado.CiudadDestino.Nombre</strong>
+                            <div class="small text-secondary">@ReservaState.VueloSeleccionado.Aerolinea · @ReservaState.VueloSeleccionado.FechaHoraVuelo.ToString("dd/MM/yyyy HH:mm")</div>
+                        </div>
+                    }
+
+                    <div class="mb-3 bg-light p-2 rounded">
+                        <span class="text-muted small d-block mb-1">Pasajeros y servicios</span>
+                        @foreach (var p in ReservaState.Pasajeros)
+                        {
+                            var servs = serviciosDisponibles.Where(s => p.ServicioIdsSeleccionados.Contains(s.Id)).ToList();
+                            <div class="small border-bottom pb-1 mb-1">
+                                <div><strong>@p.Nombre @p.Apellido</strong> (@p.Tipo) - Asiento @p.Asiento.Fila@p.Asiento.Columna</div>
+                                <div class="text-muted">
+                                    Servicios: @(servs.Count > 0 ? string.Join(", ", servs.Select(s => $"{s.Nombre} (${s.Precio:N2})")) : "Ninguno")
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="p-3 border rounded bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-semibold">Total a pagar:</span>
+                            <span class="fs-4 fw-bold text-success">$ @totalCalculado.ToString("N2")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </main>
+</div>

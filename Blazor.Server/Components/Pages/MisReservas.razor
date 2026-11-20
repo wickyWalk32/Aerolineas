@@ -1,0 +1,212 @@
+﻿@page "/mis-reservas"
+@attribute [Authorize(Roles = "usuario")]
+@rendermode InteractiveServer
+
+<PageTitle>Mis Reservas - AeroReservas</PageTitle>
+
+<div class="container-fluid px-0" style="font-family: 'Segoe UI', sans-serif;">
+    <!-- Header Superior -->
+    <header class="bg-white border-bottom shadow-sm px-4 py-3 mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-4">
+                <h1 class="h3 fw-normal mb-0 text-primary fst-italic">AeroReservas.com</h1>
+                <AuthorizeView>
+                    <Authorized>
+                        <span class="text-secondary fw-medium" style="font-size: 1rem;">
+                            ¡Hola, @(context.User.Identity?.Name ?? "Usuario")!
+                        </span>
+                    </Authorized>
+                </AuthorizeView>
+            </div>
+
+            <div>
+                <button class="btn btn-light border text-dark px-3 py-1 shadow-sm"
+                        style="background-color: #fff; border-color: #ccc; font-size: 0.9rem;"
+                        @onclick="CerrarSesion">
+                    Salir del sistema
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Pestañas de Navegación Secundaria -->
+    <div class="container px-4 mb-4">
+        <div class="d-flex align-items-center gap-2 border-bottom pb-2">
+            <button class="btn btn-light border text-secondary px-4 py-1 shadow-sm"
+                    style="background-color: #fff; border-color: #ccc;"
+                    @onclick="IrABuscador">
+                Buscador de Vuelos
+            </button>
+            <button class="btn px-4 py-1 shadow-sm"
+                    style="background-color: #d1e7dd; color: #0f5132; border-color: #badbcc; font-weight: 500;">
+                Mis Reservas
+            </button>
+            <span class="ms-auto text-muted small">Consultá tus reservas realizadas y revisá su detalle.</span>
+        </div>
+    </div>
+
+    <!-- Contenido Principal: Dos Columnas -->
+    <main class="container px-4 pb-5">
+        <div class="mb-3">
+            <h3 class="h4 fw-normal text-dark mb-1">Mis Reservas</h3>
+            <p class="text-muted small">Historial de reservas asociadas a tu cuenta.</p>
+        </div>
+
+        @if (cargando)
+        {
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando reservas...</span>
+                </div>
+                <p class="text-secondary mt-2">Cargando tus reservas...</p>
+            </div>
+        }
+        else if (!string.IsNullOrWhiteSpace(mensajeError))
+        {
+            <div class="alert alert-danger shadow-sm">@mensajeError</div>
+        }
+        else if (todasMisReservas.Count == 0)
+        {
+            <div class="alert alert-info shadow-sm text-center py-4">
+                Aún no tenés reservas registradas.
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <!-- Columna Izquierda: Listado de Reservas (9 columnas) -->
+                <div class="col-lg-9">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted small">
+                            Mostrando <strong>@reservasPaginadas.Count</strong> de <strong>@reservasFiltradas.Count</strong> reservas
+                            @if (reservasFiltradas.Count != todasMisReservas.Count)
+                            {
+                                <span>(filtradas de <strong>@todasMisReservas.Count</strong> totales)</span>
+                            }
+                        </span>
+                    </div>
+
+                    @if (reservasPaginadas.Count == 0)
+                    {
+                        <div class="alert alert-info shadow-sm text-center py-4">
+                            No se encontraron reservas con los filtros aplicados.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex flex-column gap-2 mb-4">
+                            @foreach (var item in reservasPaginadas)
+                            {
+                                var esPendiente = string.Equals(item.EstadoCalculado, "Pendiente", StringComparison.OrdinalIgnoreCase);
+
+                                <div class="card shadow-sm border bg-light p-2 px-3" style="border-radius: 4px; border-color: #666 !important;">
+                                    <div class="d-flex align-items-center justify-content-between text-nowrap" style="font-size: 0.9rem; color: #000;">
+
+                                        <!-- Reserva # -->
+                                        <div style="width: 80px;">
+                                            <span class="text-muted d-block" style="font-size: 0.75rem;">Reserva</span>
+                                            <strong>#@item.ReservaId</strong>
+                                        </div>
+
+                                        <!-- Vuelo (Origen - Destino) -->
+                                        <div style="width: 240px;" class="overflow-hidden">
+                                            <span class="text-muted d-block" style="font-size: 0.75rem;">Vuelo (Origen - Destino)</span>
+                                            <strong class="text-truncate d-block" title="@item.Origen - @item.Destino (@item.Aerolinea)">
+                                                @item.Origen - @item.Destino
+                                            </strong>
+                                        </div>
+
+                                        <!-- Fecha del vuelo -->
+                                        <div style="width: 165px;">
+                                            <span class="text-muted d-block" style="font-size: 0.75rem;">Fecha del Vuelo</span>
+                                            <span>@(item.FechaVuelo.HasValue ? item.FechaVuelo.Value.ToString("dd/MM/yyyy HH:mm") : "Sin fecha")</span>
+                                        </div>
+
+                                        <!-- Estado calculado -->
+                                        <div style="width: 120px;">
+                                            <span class="text-muted d-block" style="font-size: 0.75rem;">Estado</span>
+                                            <span class="badge @(esPendiente ? "bg-warning text-dark" : "bg-secondary")">
+                                                @item.EstadoCalculado
+                                            </span>
+                                        </div>
+
+                                        <!-- Botón Ver -->
+                                        <div class="ms-3">
+                                            <button class="btn btn-sm btn-outline-primary px-3 shadow-sm"
+                                                    style="font-size: 0.85rem;"
+                                                    @onclick="() => VerReserva(item.ReservaId)">
+                                                Ver
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Controles de Paginación -->
+                        @if (totalPaginas > 1)
+                        {
+                            <div class="d-flex justify-content-center align-items-center gap-3 my-4">
+                                <button class="btn btn-outline-secondary btn-sm px-3"
+                                        disabled="@(paginaActual == 0)"
+                                        @onclick="PaginaAnterior">
+                                    &lt; Anterior
+                                </button>
+
+                                <span class="text-secondary" style="font-size: 0.95rem;">
+                                    Página <strong>@(paginaActual + 1)</strong> de <strong>@totalPaginas</strong>
+                                </span>
+
+                                <button class="btn btn-outline-secondary btn-sm px-3"
+                                        disabled="@(paginaActual >= totalPaginas - 1)"
+                                        @onclick="PaginaSiguiente">
+                                    Siguiente &gt;
+                                </button>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <!-- Columna Derecha: Panel de Filtros (3 columnas) -->
+                <div class="col-lg-3">
+                    <div class="card shadow-sm border p-3 bg-white" style="border-radius: 6px;">
+                        <h5 class="text-center fw-bold border-bottom pb-2 mb-3" style="font-size: 1.1rem; color: #333;">Filtros</h5>
+
+                        <!-- Filtro por Origen / Destino / Aerolínea -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-secondary">Destino / Vuelo</label>
+                            <input type="text"
+                                   class="form-control form-control-sm"
+                                   placeholder="Ciudad o aerolínea..."
+                                   @bind="filtroDestino"
+                                   @bind:event="oninput"
+                                   @bind:after="AplicarFiltros" />
+                        </div>
+
+                        <!-- Filtro por Estado -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-secondary">Estado</label>
+                            <select class="form-select form-select-sm"
+                                    @bind="filtroEstado"
+                                    @bind:after="AplicarFiltros">
+                                <option value="Todos">Todos</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Finalizada">Finalizada</option>
+                            </select>
+                        </div>
+
+                        <!-- Botón Limpiar Filtros -->
+                        <div class="d-grid mt-2">
+                            <button type="button"
+                                    class="btn btn-outline-secondary btn-sm"
+                                    @onclick="LimpiarFiltros">
+                                Limpiar filtros
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </main>
+</div>

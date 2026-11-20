@@ -17,6 +17,10 @@ namespace Domain.Model
 
         // <<< ATRIBUTOS DE NAVEGACIÓN DEL MODELO >>>
 
+        // 1 Pasaje > 1 Reserva
+        public int IdReserva { get; private set; }
+        public Reserva Reserva { get; private set; } = null!;
+
         // 1 Pasaje > 1 Pasajero
         public int IdPasajero { get; private set; }
         public Pasajero Pasajero { get; private set; } = null!;
@@ -31,26 +35,39 @@ namespace Domain.Model
         private readonly List<Servicio> _servicios = new();
         public IReadOnlyCollection<Servicio> Servicios => _servicios.AsReadOnly();
 
-
         // <<< CONSTRUCTORES >>>
 
         public Pasaje()
         {
         }
 
-        public Pasaje(string estado, int idPasajero, Pasajero pasajero, int idAvion, string codigoAsiento, Asiento asiento)
+        public Pasaje(string estado, int idReserva, int idPasajero, int idAvion, string codigoAsiento)
         {
             this.SetEstado(estado);
+            this.SetIdReserva(idReserva);
+            this.SetIdPasajero(idPasajero);
+            this.SetIdAvionCodigoAsiento(idAvion, codigoAsiento);
+        }
+
+        public Pasaje(string estado, int idReserva, Reserva reserva, int idPasajero, Pasajero pasajero, int idAvion, 
+            string codigoAsiento, Asiento asiento)
+        {
+            this.SetEstado(estado);
+            this.SetIdReserva(idReserva);
+            this.SetReserva(reserva);
             this.SetIdPasajero(idPasajero);
             this.SetPasajero(pasajero);
             this.SetIdAvionCodigoAsiento(idAvion, codigoAsiento);
             this.SetAsiento(asiento);
         }
 
-        public Pasaje(int id, string estado, int idPasajero, Pasajero pasajero, int idAvion, string codigoAsiento, Asiento asiento)
+        public Pasaje(int id, string estado, int idReserva, Reserva reserva, int idPasajero, Pasajero pasajero, int idAvion, 
+            string codigoAsiento, Asiento asiento)
         {
             this.SetId(id);
             this.SetEstado(estado);
+            this.SetIdReserva(idReserva);
+            this.SetReserva(reserva);
             this.SetIdPasajero(idPasajero);
             this.SetPasajero(pasajero);
             this.SetIdAvionCodigoAsiento(idAvion, codigoAsiento);
@@ -71,6 +88,20 @@ namespace Domain.Model
             if (string.IsNullOrWhiteSpace(estado))
                 throw new ArgumentException("Estado del pasaje es inválido.");
             this.Estado = estado;
+        }
+
+        public void SetIdReserva(int idReserva)
+        {
+            if (idReserva < 0)
+                throw new ArgumentException("Id de reserva asignada al pasaje inválida.");
+            this.IdReserva = idReserva;
+        }
+
+        public void SetReserva(Reserva reserva)
+        {
+            if (reserva == null)
+                throw new ArgumentException("Reserva asignada al pasaje es inválida.");
+            this.Reserva = reserva;
         }
 
         public void SetIdPasajero(int idPasajero)

@@ -20,7 +20,7 @@ namespace Domain.Model
 
         // 1 Asiento > 1 Avión
         public int AvionId { get; private set; }
-        public Avion Avion { get; private set; }
+        public Avion Avion { get; private set; } = null!;
 
         // 1 Asiento > Muchos Pasajes
 
@@ -36,11 +36,11 @@ namespace Domain.Model
 
         public Asiento(int idAvion,string codigo, char fila, int columna, string estado)
         {
+            this.SetIdAvion(idAvion);
             this.SetCodigo(codigo);
             this.SetFila(fila);
             this.SetColumna(columna);
             this.SetEstado(estado);
-            this.SetIdAvion(idAvion);
         }
 
         // <<< MÉTODOS: SETTERS >>>

@@ -1,0 +1,124 @@
+﻿@page "/admin/reservas/{reservaId:int}"
+@attribute [Authorize(Roles = "admin")]
+@rendermode InteractiveServer
+
+<PageTitle>Detalle de Reserva #@ReservaId - AeroReservas</PageTitle>
+
+<div class="container-fluid px-0" style="font-family: 'Segoe UI', sans-serif;">
+    <header class="bg-white border-bottom shadow-sm px-4 py-3 mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h3 fw-normal mb-0" style="color: #111;">Detalle de Reserva (Administrador)</h1>
+                <small class="text-secondary">Consulta completa de pasajeros, asientos, servicios y vuelo</small>
+            </div>
+            <button class="btn btn-light border text-dark px-3 py-1 shadow-sm"
+                    style="background-color: #fff; border-color: #ccc; font-size: 0.9rem;"
+                    @onclick="CerrarSesion">
+                Salir del sistema
+            </button>
+        </div>
+    </header>
+
+    <main class="container px-4 pb-5">
+        @if (cargando)
+        {
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="text-secondary mt-2">Cargando detalle de la reserva...</p>
+            </div>
+        }
+        else if (reserva == null)
+        {
+            <div class="alert alert-warning shadow-sm d-flex justify-content-between align-items-center">
+                <span>@(mensajeError ?? "No se encontró la reserva solicitada.")</span>
+                <button class="btn btn-sm btn-primary" @onclick="VolverAConsultaReservas">Volver a Consultar Reservas</button>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                <div>
+                    <h3 class="h4 fw-normal text-dark mb-0">Reserva <strong>#@reserva.Id</strong></h3>
+                    <small class="text-muted">
+                        Registrada el @reserva.FechaHoraReserva.ToString("dd/MM/yyyy HH:mm") ·
+                        Cliente: <strong>@nombreUsuario</strong>
+                    </small>
+                </div>
+                <span class="badge @(estadoCalculado == "Pendiente" ? "bg-warning text-dark" : "bg-secondary") fs-6">
+                    @estadoCalculado
+                </span>
+            </div>
+
+            <div class="card shadow-sm border p-4 mb-4" style="border-color: #888 !important; border-radius: 2px;">
+                <h4 class="h5 text-dark border-bottom pb-2 mb-3">Datos del Vuelo</h4>
+                @if (vuelo != null)
+                {
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <span class="text-muted small d-block">Origen - Destino</span>
+                            <strong>@vuelo.CiudadOrigen.Nombre - @vuelo.CiudadDestino.Nombre</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-muted small d-block">Fecha y Hora</span>
+                            <span>@vuelo.FechaHoraVuelo.ToString("dd/MM/yyyy HH:mm")</span>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-muted small d-block">Aerolínea / Precio base</span>
+                            <span>@vuelo.Aerolinea ($ @vuelo.Precio.ToString("N2"))</span>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted small mb-4">Vuelo #@reserva.VueloId</p>
+                }
+
+                <h4 class="h5 text-dark border-bottom pb-2 mb-3">Pasajeros, Asientos y Servicios</h4>
+                @foreach (var p in reserva.Pasajes)
+                {
+                    <div class="border rounded p-3 mb-3 bg-light">
+                        <div class="d-flex justify-content-between flex-wrap gap-2 mb-1">
+                            <strong>@(p.Pasajero?.Nombre) @(p.Pasajero?.Apellido) (@(p.Pasajero?.Tipo))</strong>
+                            <span class="badge bg-primary">Avión #@p.IdAvion · Asiento @p.CodigoAsiento</span>
+                        </div>
+                        <div class="small text-secondary mb-2">
+                            Documento: @(p.Pasajero?.TipoDocumento) @(p.Pasajero?.NroDocumento) · Estado: @p.Estado
+                        </div>
+                        <div class="small">
+                            <strong>Servicios adicionales:</strong>
+                            @if (p.Servicios == null || p.Servicios.Count == 0)
+                            {
+                                <span class="text-muted">Sin servicios adicionales</span>
+                            }
+                            else
+                            {
+                                <span>@string.Join(", ", p.Servicios.Select(s => $"{s.Nombre} (+$ {s.Precio:N2})"))</span>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 border-top pt-3 mt-3">
+                    <div class="small text-secondary">
+                        Tarjeta ID #@reserva.IdTarjetaCliente
+                    </div>
+                    <div class="fs-5 fw-bold text-success">
+                        Total: $ @CalcularTotal().ToString("N2")
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-3">
+                <button type="button" class="btn btn-outline-primary px-4 py-2" @onclick="DescargarComprobante">
+                    Descargar detalle de reserva
+                </button>
+                <button type="button" class="btn btn-secondary px-4 py-2" @onclick="VolverAConsultaReservas">
+                    Volver a Consultar Reservas
+                </button>
+                <button type="button" class="btn btn-primary px-4 py-2 fw-medium" @onclick="VolverAlMenuAdmin">
+                    Volver al menú de administrador
+                </button>
+            </div>
+        }
+    </main>
+</div>

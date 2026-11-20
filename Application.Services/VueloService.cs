@@ -28,27 +28,27 @@ namespace Application.Services
                 FechaHoraVuelo = vuelo.FechaHoraVuelo,
                 Aerolinea = vuelo.Aerolinea,
                 Precio = vuelo.Precio,
-                CiudadOrigen = new CiudadDTO 
-                                { 
-                                    Id = vuelo.CiudadOrigen.Id,
-                                    Nombre = vuelo.CiudadOrigen.Nombre,
-                                    CodigoPostal = vuelo.CiudadOrigen.CodigoPostal,
-                                    CodigoAeropuerto = vuelo.CiudadOrigen.CodigoAeropuerto
-                                },
+                CiudadOrigen = new CiudadDTO
+                {
+                    Id = vuelo.CiudadOrigen.Id,
+                    Nombre = vuelo.CiudadOrigen.Nombre,
+                    CodigoPostal = vuelo.CiudadOrigen.CodigoPostal,
+                    CodigoAeropuerto = vuelo.CiudadOrigen.CodigoAeropuerto
+                },
                 CiudadDestino = new CiudadDTO
-                                {
-                                    Id = vuelo.CiudadDestino.Id,
-                                    Nombre = vuelo.CiudadDestino.Nombre,
-                                    CodigoPostal = vuelo.CiudadDestino.CodigoPostal,
-                                    CodigoAeropuerto = vuelo.CiudadDestino.CodigoAeropuerto
-                                },
+                {
+                    Id = vuelo.CiudadDestino.Id,
+                    Nombre = vuelo.CiudadDestino.Nombre,
+                    CodigoPostal = vuelo.CiudadDestino.CodigoPostal,
+                    CodigoAeropuerto = vuelo.CiudadDestino.CodigoAeropuerto
+                },
                 Avion = new AvionDTO
-                                {
-                                    Id = vuelo.Avion.Id,
-                                    Descripcion = vuelo.Avion.Descripcion,
-                                    Capacidad = vuelo.Avion.Capacidad,
-                                    EstadoDisponibilidad = vuelo.Avion.EstadoDisponibilidad
-                                }
+                {
+                    Id = vuelo.Avion.Id,
+                    Descripcion = vuelo.Avion.Descripcion,
+                    Capacidad = vuelo.Avion.Capacidad,
+                    EstadoDisponibilidad = vuelo.Avion.EstadoDisponibilidad
+                }
             }).ToList();
         }
 
@@ -90,6 +90,8 @@ namespace Application.Services
 
         public async Task AddAsync(VueloCreateDTO vueloCreateDTO)
         {
+            ValidarFechaHoraVuelo(vueloCreateDTO.FechaHoraVuelo);
+
             // Aplicando validaciones de negocio mediante el constructor de la entidad Vuelo
             Vuelo vuelo = new Vuelo(
                 vueloCreateDTO.FechaHoraVuelo,
@@ -101,7 +103,6 @@ namespace Application.Services
             );
 
             await _vueloRepository.AddAsync(vuelo);
-            return;
         }
 
         public async Task<bool> UpdateAsync(int id, VueloUpdateDTO vueloUpdateDto)
@@ -112,6 +113,8 @@ namespace Application.Services
             {
                 return false;
             }
+
+            ValidarFechaHoraVuelo(vueloUpdateDto.FechaHoraVuelo);
 
             // Aquí se disparan las validaciones de los setters de Vuelo.
             vuelo.SetFechaHoraVuelo(vueloUpdateDto.FechaHoraVuelo);
@@ -135,6 +138,21 @@ namespace Application.Services
             await _vueloRepository.DeleteAsync(vuelo);
 
             return true;
+        }
+
+        private static void ValidarFechaHoraVuelo(DateTime fechaHoraVuelo)
+        {
+            // 1. Validar que no sea en el pasado o el momento exacto actual
+            if (fechaHoraVuelo <= DateTime.Now)
+            {
+                throw new ArgumentException("La fecha y hora del vuelo debe ser posterior al momento actual.");
+            }
+
+            // 2. Validar que no supere el año de anticipación
+            if (fechaHoraVuelo > DateTime.Now.AddYears(1))
+            {
+                throw new ArgumentException("La fecha y hora del vuelo no puede programarse a más de un año de distancia.");
+            }
         }
 
     }

@@ -25,12 +25,15 @@ namespace Domain.Model
         // 1 Reserva > 1 TarjetaCliente
         public int IdTarjetaCliente { get; private set; }
         public TarjetaCliente? TarjetaCliente { get; private set; }
-        
+
+        // 1 Reserva > 1 Vuelo
+        public int VueloId { get; private set; }
+        public Vuelo? Vuelo { get; private set; }
+
         // 1 Reserva > Muchos Pasajes
 
         private readonly List<Pasaje> _pasajes = new(); // new List<Pasaje>() ?
         public IReadOnlyCollection<Pasaje> Pasajes => _pasajes.AsReadOnly();
-
 
         // <<< CONSTRUCTORES >>>
 
@@ -44,15 +47,27 @@ namespace Domain.Model
             this.SetIdUsuario(idUsuario);
         }
 
-        public Reserva(DateTime fechaHoraReserva, Usuario usuario, int idUsuario, TarjetaCliente tarjetaCliente, int idTarjetaCliente)
+        public Reserva(DateTime fechaHoraReserva, int idUsuario, int idTarjetaCliente, int idVuelo)
+        {
+            this.SetFechaHoraReserva(fechaHoraReserva);
+            this.SetIdUsuario(idUsuario);
+            this.SetIdTarjetaCliente(idTarjetaCliente);
+            this.SetIdVuelo(idVuelo);
+        }
+
+        public Reserva(DateTime fechaHoraReserva, Usuario usuario, int idUsuario, TarjetaCliente tarjetaCliente
+            , int idTarjetaCliente, Vuelo vuelo, int idVuelo)
         {
             this.SetFechaHoraReserva(fechaHoraReserva);
             this.SetUsuario(usuario);
             this.SetIdUsuario(idUsuario);
             this.SetTarjetaCliente(tarjetaCliente);
             this.SetIdTarjetaCliente(idTarjetaCliente);
+            this.SetVuelo(vuelo);
+            this.SetIdVuelo(idVuelo);
         }
-        public Reserva(int id, DateTime fechaHoraReserva, Usuario usuario, int idUsuario, TarjetaCliente tarjetaCliente, int idTarjetaCliente)
+        public Reserva(int id, DateTime fechaHoraReserva, Usuario usuario, int idUsuario, TarjetaCliente tarjetaCliente, 
+            int idTarjetaCliente, int idVuelo)
         {
             this.SetId(id);
             this.SetFechaHoraReserva(fechaHoraReserva);
@@ -60,6 +75,7 @@ namespace Domain.Model
             this.SetIdUsuario(idUsuario);
             this.SetTarjetaCliente(tarjetaCliente);
             this.SetIdTarjetaCliente(idTarjetaCliente);
+            this.SetIdVuelo(idVuelo);
         }
 
 
@@ -103,6 +119,20 @@ namespace Domain.Model
             if (idTarjetaCliente < 0)
                 throw new ArgumentException("Id de tarjeta cliente para la reserva es inválido.");
             this.IdTarjetaCliente = idTarjetaCliente;
+        }
+
+        public void SetVuelo(Vuelo vuelo)
+        {
+            if (vuelo == null)
+                throw new ArgumentException("Vuelo de la reserva es inválido.");
+            this.Vuelo = vuelo;
+        }
+
+        public void SetIdVuelo(int vueloId)
+        {
+            if (vueloId < 0)
+                throw new ArgumentException("Id de vuelo de la reserva es inválido.");
+            this.VueloId = vueloId;
         }
 
         public void AddPasaje(Pasaje pasaje)

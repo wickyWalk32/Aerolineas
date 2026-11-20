@@ -15,8 +15,7 @@ namespace Domain.Model
         public DateTime FechaHoraVuelo { get; private set; }
         public string Aerolinea { get; private set; } = string.Empty;
         public decimal Precio { get; private set; }
-        public int Capacidad { get; private set; }
-
+       
         // <<< ATRIBUTOS DE NAVEGACIÓN >>>
 
         // 1 Vuelo > 1 Ciudad de origen
@@ -70,7 +69,7 @@ namespace Domain.Model
 
         public void SetFechaHoraVuelo(DateTime fechaHoraVuelo)
         {
-            // 1. Validar que no sea en el pasado o el momento exacto actual
+            /*// 1. Validar que no sea en el pasado o el momento exacto actual
             if (fechaHoraVuelo <= DateTime.Now)
             {
                 throw new ArgumentException("La fecha y hora del vuelo debe ser posterior al momento actual.");
@@ -80,7 +79,7 @@ namespace Domain.Model
             if (fechaHoraVuelo > DateTime.Now.AddYears(1))
             {
                 throw new ArgumentException("La fecha y hora del vuelo no puede programarse a más de un año de distancia.");
-            }
+            }*/
 
             this.FechaHoraVuelo = fechaHoraVuelo;
         }
@@ -110,19 +109,23 @@ namespace Domain.Model
 
         public void SetCiudadOrigen(Ciudad ciudadOrigen)
         {
-            ValidarCiudades(ciudadOrigen.Id, IdCiudadDestino);
-
+            
             if (ciudadOrigen == null)
                 throw new ArgumentException("Ciudad de origen del vuelo inválida.");
+
+            ValidarCiudades(ciudadOrigen.Id, IdCiudadDestino);
+
             this.CiudadOrigen = ciudadOrigen;
         }
 
         public void SetIdCiudadDestino(int idCiudadDestino)
         {
-            ValidarCiudades(IdCiudadOrigen, idCiudadDestino);
-
+            
             if (idCiudadDestino < 0)
                 throw new ArgumentException("Id de ciudad de destino del vuelo inválido.");
+
+            ValidarCiudades(IdCiudadOrigen, idCiudadDestino);
+
             this.IdCiudadDestino = idCiudadDestino;
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Domain.Model
 {
@@ -29,6 +30,12 @@ namespace Domain.Model
         {
         }
 
+        public TarjetaCliente(string ultimosCuatroDigitos, DateTime fechaVencimiento)
+        {
+            this.SetUltimosCuatroDigitos(ultimosCuatroDigitos);
+            this.SetFechaVencimiento(fechaVencimiento);
+        }
+
         public TarjetaCliente(int id, string ultimosCuatroDigitos, DateTime fechaVencimiento)
         {
             this.SetId(id);
@@ -47,6 +54,12 @@ namespace Domain.Model
 
         public void SetUltimosCuatroDigitos(string ultimosCuatroDigitos)
         {
+            if (string.IsNullOrWhiteSpace(ultimosCuatroDigitos))
+                throw new ArgumentException("Últimos cuatro dígitos inválidos.");
+            
+            if (ultimosCuatroDigitos.Length > 4)
+                throw new ArgumentException("Cantidad de dígitos debe ser 4.");
+
             this.UltimosCuatroDigitos = ultimosCuatroDigitos;
         }
 

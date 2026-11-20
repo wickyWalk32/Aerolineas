@@ -26,7 +26,7 @@ namespace WebApi
 
                     ReservaDTO reservaDTO = await reservaService.AddAsync(dto);
 
-                    return Results.Created($"/usuarios/{reservaDTO.Id}", reservaDTO);
+                    return Results.Created($"/reservas/{reservaDTO.Id}", reservaDTO);
                 }
                 catch (ArgumentException ex)
                 {
@@ -34,7 +34,7 @@ namespace WebApi
                 }
             })
             .WithName("AddReserva")
-            .Produces<UsuarioDTO>(StatusCodes.Status201Created)
+            .Produces<ReservaDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
             .RequireAuthorization();

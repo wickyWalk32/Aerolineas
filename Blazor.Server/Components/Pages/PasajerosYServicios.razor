@@ -1,0 +1,215 @@
+﻿@page "/reserva/pasajeros/{VueloId:int}"
+@attribute [Authorize(Roles = "usuario")]
+@rendermode InteractiveServer
+
+<PageTitle>Pasajeros y Servicios - AeroReservas</PageTitle>
+
+<div class="container-fluid px-0" style="font-family: 'Segoe UI', sans-serif;">
+    <!-- Header Superior -->
+    <header class="bg-white border-bottom shadow-sm px-4 py-3 mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-4">
+                <h1 class="h3 fw-normal mb-0 text-primary fst-italic">AeroReservas.com</h1>
+            </div>
+
+            <div>
+                <button class="btn btn-light border text-dark px-3 py-1 shadow-sm"
+                        style="background-color: #fff; border-color: #ccc; font-size: 0.9rem;"
+                        @onclick="CerrarSesion">
+                    Salir del sistema
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Pestañas de Navegación Secundaria -->
+    <div class="container px-4 mb-4">
+        <div class="d-flex align-items-center gap-2 border-bottom pb-2">
+            <button class="btn px-4 py-1 shadow-sm"
+                    style="background-color: #d1e7dd; color: #0f5132; border-color: #badbcc; font-weight: 500;"
+                    @onclick="VolverAlBuscador">
+                Buscador de Vuelos
+            </button>
+            <button class="btn btn-light border text-secondary px-4 py-1 shadow-sm"
+                    style="background-color: #fff; border-color: #ccc;"
+                    @onclick="IrAMisReservas">
+                Mis Reservas
+            </button>
+            <span class="ms-auto text-muted small">Completá los datos de cada pasajero y sus servicios adicionales.</span>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <main class="container px-4 pb-5">
+        @if (cargando)
+        {
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="text-secondary mt-2">Cargando servicios y datos de la reserva...</p>
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(mensajeError))
+        {
+            <div class="alert alert-danger shadow-sm d-flex justify-content-between align-items-center">
+                <span>@mensajeError</span>
+                <button class="btn btn-sm btn-outline-danger" @onclick="VolverAAsientos">Volver a asientos</button>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                <!-- Columna Izquierda: Formularios por Pasajero -->
+                <div class="col-lg-8">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="h4 fw-normal text-dark mb-0">Pasajeros y Servicios Adicionales</h3>
+                        <span class="badge bg-secondary">@ReservaState.Pasajeros.Count pasajero(s)</span>
+                    </div>
+
+                    @for (int idx = 0; idx < ReservaState.Pasajeros.Count; idx++)
+                    {
+                        var numeroPasajero = idx + 1;
+                        var item = ReservaState.Pasajeros[idx];
+
+                        <div class="card shadow-sm border mb-4" style="border-color: #888 !important; border-radius: 2px;">
+                            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                <strong>Pasajero #@numeroPasajero</strong>
+                                <span class="badge bg-primary">
+                                    Asiento: @item.Asiento.Fila@item.Asiento.Columna (Cód. @item.Asiento.Codigo)
+                                </span>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-secondary">Nombre *</label>
+                                        <input type="text" class="form-control" @bind="item.Nombre" placeholder="Ej: Juan" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small text-secondary">Apellido *</label>
+                                        <input type="text" class="form-control" @bind="item.Apellido" placeholder="Ej: Pérez" />
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-5">
+                                        <label class="form-label small text-secondary">Tipo de Documento *</label>
+                                        <select class="form-select" @bind="item.TipoDocumento">
+                                            @foreach (var tipoDoc in tiposDocumento)
+                                            {
+                                                <option value="@tipoDoc">@tipoDoc</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label small text-secondary">Nro. de Documento *</label>
+                                        <input type="text" class="form-control" @bind="item.NroDocumento" placeholder="Ej: 35123456" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small text-secondary">Tipo de Pasajero *</label>
+                                        <select class="form-select" @bind="item.Tipo">
+                                            <option value="Mayor">Mayor</option>
+                                            <option value="Menor">Menor</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Servicios Adicionales del Pasajero -->
+                                <div class="border-top pt-3">
+                                    <div class="fw-semibold small text-dark mb-2">Servicios adicionales para este pasajero:</div>
+
+                                    @if (serviciosDisponibles.Count == 0)
+                                    {
+                                        <p class="text-muted small mb-0">No hay servicios adicionales cargados.</p>
+                                    }
+                                    else
+                                    {
+                                        <div class="row g-2">
+                                            @foreach (var srv in serviciosDisponibles)
+                                            {
+                                                bool marcado = item.ServicioIdsSeleccionados.Contains(srv.Id);
+                                                <div class="col-md-6">
+                                                    <div class="form-check border rounded p-2 bg-light">
+                                                        <input class="form-check-input ms-0 me-2"
+                                                               type="checkbox"
+                                                               id="@($"srv_{idx}_{srv.Id}")"
+                                                               checked="@marcado"
+                                                               @onchange="e => ToggleServicioPasajero(item, srv.Id, e.Value is bool b && b)" />
+                                                        <label class="form-check-label small w-100" for="@($"srv_{idx}_{srv.Id}")">
+                                                            <div class="d-flex justify-content-between">
+                                                                <strong>@srv.Nombre</strong>
+                                                                <span class="text-success fw-semibold">+$ @srv.Precio.ToString("N2")</span>
+                                                            </div>
+                                                            @if (!string.IsNullOrWhiteSpace(srv.Descripcion))
+                                                            {
+                                                                <div class="text-muted" style="font-size: 0.78rem;">@srv.Descripcion</div>
+                                                            }
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Columna Derecha: Resumen del Vuelo y Total -->
+                <div class="col-lg-4 border-start ps-lg-4">
+                    <h4 class="h5 fw-normal text-dark mb-3">Resumen de la reserva</h4>
+
+                    @if (ReservaState.VueloSeleccionado != null)
+                    {
+                        <div class="mb-2 bg-light p-2 rounded">
+                            <span class="text-muted small d-block">Ruta</span>
+                            <strong>@ReservaState.VueloSeleccionado.CiudadOrigen.Nombre &rarr; @ReservaState.VueloSeleccionado.CiudadDestino.Nombre</strong>
+                        </div>
+
+                        <div class="mb-2 bg-light p-2 rounded">
+                            <span class="text-muted small d-block">Fecha y Hora</span>
+                            <span>@ReservaState.VueloSeleccionado.FechaHoraVuelo.ToString("dd/MM/yyyy HH:mm")</span>
+                        </div>
+
+                        <div class="mb-2 bg-light p-2 rounded">
+                            <span class="text-muted small d-block">Aerolínea</span>
+                            <span>@ReservaState.VueloSeleccionado.Aerolinea</span>
+                        </div>
+
+                        <div class="mb-2 bg-light p-2 rounded">
+                            <span class="text-muted small d-block">Precio unitario del vuelo</span>
+                            <span>$ @ReservaState.VueloSeleccionado.Precio.ToString("N2")</span>
+                        </div>
+
+                        <div class="mb-3 bg-light p-2 rounded">
+                            <span class="text-muted small d-block">Asientos elegidos</span>
+                            <span>@string.Join(", ", ReservaState.AsientosSeleccionados.Select(a => $"{a.Fila}{a.Columna}"))</span>
+                        </div>
+                    }
+
+                    <div class="p-3 border rounded bg-white mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-semibold">Total estimado:</span>
+                            <span class="fs-5 fw-bold text-success">
+                                $ @ReservaState.CalcularTotalParcial(serviciosDisponibles).ToString("N2")
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="button"
+                                class="btn btn-outline-secondary px-3 py-2"
+                                @onclick="VolverAAsientos">
+                            Atrás
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary px-4 py-2 flex-grow-1 fw-medium"
+                                @onclick="ContinuarAPago">
+                            Continuar al Pago
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </main>
+</div>

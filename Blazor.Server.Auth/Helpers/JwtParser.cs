@@ -19,6 +19,16 @@ namespace Blazor.Server.Auth.Helpers
 
             if (keyValuePairs != null)
             {
+                // Mapear el ID de usuario tanto a ClaimTypes.NameIdentifier como a 'nameid'
+                if (keyValuePairs.TryGetValue("nameid", out var nameId) && nameId != null)
+                {
+                    claims.Add(new Claim(ClaimTypes.NameIdentifier, nameId.ToString()!));
+                }
+                else if (keyValuePairs.TryGetValue(ClaimTypes.NameIdentifier, out var claimNameId) && claimNameId != null)
+                {
+                    claims.Add(new Claim(ClaimTypes.NameIdentifier, claimNameId.ToString()!));
+                }
+
                 // Buscar el rol por 'role', 'roles' o la URL completa de ClaimTypes.Role
                 keyValuePairs.TryGetValue("role", out var roles);
                 if (roles == null) keyValuePairs.TryGetValue("roles", out roles);

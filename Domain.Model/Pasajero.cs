@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Domain.Model
 {
@@ -17,7 +16,7 @@ namespace Domain.Model
         public string Apellido { get; private set; } = string.Empty;
         public string TipoDocumento { get; private set; } = string.Empty;
         public string NroDocumento { get; private set; } = string.Empty;
-        public string Tipo { get; set; }
+        public string Tipo { get; private set; }
 
         // <<< ATRIBUTOS DE NAVEGACIÓN DEL MODELO >>>
 
@@ -34,19 +33,19 @@ namespace Domain.Model
         
         public Pasajero(string nombre, string apellido, string tipoDocumento, string nroDocumento)
         {
-            this.Nombre = nombre;
-            this.Apellido = apellido;
-            this.TipoDocumento = tipoDocumento;
-            this.NroDocumento = nroDocumento;
+            this.SetNombre(nombre);
+            this.SetApellido(apellido);
+            this.SetTipoDocumento(tipoDocumento);
+            this.SetNroDocumento(nroDocumento);
         }
 
         public Pasajero(string nombre, string apellido, string tipoDocumento, string nroDocumento, string tipo)
         {
-            this.Nombre = nombre;
-            this.Apellido = apellido;
-            this.TipoDocumento = tipoDocumento;
-            this.NroDocumento = nroDocumento;
-            this.Tipo = tipo;
+            this.SetNombre(nombre);
+            this.SetApellido(apellido);
+            this.SetTipoDocumento(tipoDocumento);
+            this.SetNroDocumento(nroDocumento);
+            this.SetTipo(tipo);
         }
 
         // <<< MÉTODOS: SETTERS >>>
