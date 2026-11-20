@@ -11,7 +11,9 @@ namespace Data
     {
         Task<List<Reserva>> GetAllAsync();
         Task<Reserva?> GetByIdAsync(int id);
-        Task AddAsync(Reserva reserva);
+        Task<List<string>> GetAsientosOcupadosPorVueloAsync(int vueloId);
+        Task<bool> ExisteAsientoOcupadoEnVueloAsync(int vueloId, int idAvion, string codigoAsiento);
+        Task<Reserva> AddAsync(Reserva reserva);
         Task UpdateAsync(Reserva reserva);
         Task DeleteAsync(Reserva reserva);
     }

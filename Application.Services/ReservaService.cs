@@ -18,46 +18,19 @@ namespace Application.Services
 
         public async Task<List<ReservaDTO>> GetAllAsync()
         {
-            var reservas = await _context.Reservas
-                .Include(r => r.Pasajes)
-                    .ThenInclude(p => p.Pasajero)
-                .Include(r => r.Pasajes)
-                    .ThenInclude(p => p.Servicios)
-                .ToListAsync();
-
+            var reservas = await _repo.GetAllAsync();
             return reservas.Select(MapToDTO).ToList();
         }
 
         public async Task<ReservaDTO?> GetByIdAsync(int id)
         {
-            var reserva = await _context.Reservas
-                .Include(r => r.Pasajes)
-                    .ThenInclude(p => p.Pasajero)
-                .Include(r => r.Pasajes)
-                    .ThenInclude(p => p.Servicios)
-                .FirstOrDefaultAsync(r => r.Id == id);
-
+            var reserva = await _repo.GetByIdAsync(id);
             return reserva == null ? null : MapToDTO(reserva);
         }
 
         public async Task<List<string>> GetAsientosOcupadosPorVueloAsync(int vueloId)
         {
-            var vuelo = await _context.Vuelos
-                .AsNoTracking()
-                .FirstOrDefaultAsync(v => v.Id == vueloId);
-
-            if (vuelo == null)
-                throw new ArgumentException($"No existe un vuelo con Id {vueloId}.");
-
-            return await _context.Pasajes
-                .AsNoTracking()
-                .Where(p => p.Reserva.VueloId == vueloId
-                         && p.IdAvion == vuelo.IdAvion
-                         && p.Estado != "Cancelado"
-                         && p.CodigoAsiento != null && p.CodigoAsiento != "")
-                .Select(p => p.CodigoAsiento)
-                .Distinct()
-                .ToListAsync();
+            return await _repo.GetAsientosOcupadosPorVueloAsync(vueloId);
         }
 
         public async Task<ReservaDTO> AddAsync(ReservaCreateDTO dto)
@@ -72,23 +45,20 @@ namespace Application.Services
             if (ultimos4.Length != 4)
                 throw new ArgumentException("Los últimos 4 dígitos de la tarjeta son inválidos.");
 
-            var vuelo = await _context.Vuelos.FirstOrDefaultAsync(v => v.Id == dto.VueloId);
+            var vuelo = await _context.Vuelos
+                .Include(v => v.Avion)
+                .FirstOrDefaultAsync(v => v.Id == dto.VueloId);
+
             if (vuelo == null)
                 throw new ArgumentException($"No existe un vuelo con Id {dto.VueloId}.");
 
-            await using var transaction = await _context.Database.BeginTransactionAsync();
-
-            // 1. Crear y guardar TarjetaCliente
+            // 1. Crear TarjetaCliente
             var tarjeta = new TarjetaCliente();
             tarjeta.SetUltimosCuatroDigitos(ultimos4);
             tarjeta.SetFechaVencimiento(dto.FechaVencimientoTarjeta == default ? DateTime.UtcNow.AddYears(1) : dto.FechaVencimientoTarjeta);
 
-            _context.Tarjetas.Add(tarjeta);
-            await _context.SaveChangesAsync();
-
             // 2. Crear Reserva vinculada a Usuario, TarjetaCliente y Vuelo
             var reserva = new Reserva(dto.FechaHoraReserva == default ? DateTime.UtcNow : dto.FechaHoraReserva, dto.UsuarioId);
-            reserva.SetIdTarjetaCliente(tarjeta.Id);
             reserva.SetTarjetaCliente(tarjeta);
             reserva.SetIdVuelo(vuelo.Id);
             reserva.SetVuelo(vuelo);
@@ -103,7 +73,7 @@ namespace Application.Services
                 .Where(s => todosLosServicioIds.Contains(s.Id))
                 .ToDictionaryAsync(s => s.Id);
 
-            // 3. Procesar cada pasaje: validar ocupación por VueloId + Pasajero + Servicios
+            // 3. Procesar y validar cada pasaje
             foreach (var pasajeDto in dto.Pasajes)
             {
                 if (pasajeDto.Pasajero == null)
@@ -116,11 +86,10 @@ namespace Application.Services
                     throw new ArgumentException($"No existe el asiento {pasajeDto.CodigoAsiento} en el avión {pasajeDto.IdAvion}.");
 
                 // Ocupación específica para ESTE vuelo (no global del avión)
-                bool asientoOcupadoEnEsteVuelo = await _context.Pasajes
-                    .AnyAsync(p => p.IdAvion == pasajeDto.IdAvion
-                                && p.CodigoAsiento == pasajeDto.CodigoAsiento
-                                && p.Estado != "Cancelado"
-                                && p.Reserva.VueloId == vuelo.Id);
+                bool asientoOcupadoEnEsteVuelo = await _repo.ExisteAsientoOcupadoEnVueloAsync(
+                    vuelo.Id,
+                    pasajeDto.IdAvion,
+                    pasajeDto.CodigoAsiento);
 
                 if (asientoOcupadoEnEsteVuelo)
                     throw new ArgumentException($"El asiento {pasajeDto.CodigoAsiento} ya se encuentra ocupado en este vuelo.");
@@ -132,9 +101,6 @@ namespace Application.Services
                     pasajeDto.Pasajero.NroDocumento.Trim(),
                     pasajeDto.Pasajero.Tipo.Trim()
                 );
-
-                _context.Pasajeros.Add(pasajero);
-                await _context.SaveChangesAsync();
 
                 var estadoPasaje = string.IsNullOrWhiteSpace(pasajeDto.Estado) ? "Confirmado" : pasajeDto.Estado.Trim();
 
@@ -163,16 +129,13 @@ namespace Application.Services
                 reserva.AddPasaje(pasaje);
             }
 
-            _context.Reservas.Add(reserva);
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
-
-            return MapToDTO(reserva);
+            var reservaGuardada = await _repo.AddAsync(reserva);
+            return MapToDTO(reservaGuardada);
         }
 
         public async Task<bool> UpdateAsync(int id, ReservaUpdateDTO dto)
         {
-            var reserva = await _context.Reservas.FirstOrDefaultAsync(r => r.Id == id);
+            var reserva = await _repo.GetByIdAsync(id);
             if (reserva == null)
                 return false;
 
@@ -182,21 +145,17 @@ namespace Application.Services
             if (dto.FechaHoraReserva != default)
                 reserva.SetFechaHoraReserva(dto.FechaHoraReserva);
 
-            await _context.SaveChangesAsync();
+            await _repo.UpdateAsync(reserva);
             return true;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var reserva = await _context.Reservas
-                .Include(r => r.Pasajes)
-                .FirstOrDefaultAsync(r => r.Id == id);
-
+            var reserva = await _repo.GetByIdAsync(id);
             if (reserva == null)
                 return false;
 
-            _context.Reservas.Remove(reserva);
-            await _context.SaveChangesAsync();
+            await _repo.DeleteAsync(reserva);
             return true;
         }
 
