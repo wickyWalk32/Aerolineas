@@ -28,6 +28,38 @@ namespace Application.Services
             return reservas.Select(MapToDTO).ToList();
         }
 
+        public async Task<ReservaDTO?> GetByIdAsync(int id)
+        {
+            var reserva = await _context.Reservas
+                .Include(r => r.Pasajes)
+                    .ThenInclude(p => p.Pasajero)
+                .Include(r => r.Pasajes)
+                    .ThenInclude(p => p.Servicios)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            return reserva == null ? null : MapToDTO(reserva);
+        }
+
+        public async Task<List<string>> GetAsientosOcupadosPorVueloAsync(int vueloId)
+        {
+            var vuelo = await _context.Vuelos
+                .AsNoTracking()
+                .FirstOrDefaultAsync(v => v.Id == vueloId);
+
+            if (vuelo == null)
+                throw new ArgumentException($"No existe un vuelo con Id {vueloId}.");
+
+            return await _context.Pasajes
+                .AsNoTracking()
+                .Where(p => p.Reserva.VueloId == vueloId
+                         && p.IdAvion == vuelo.IdAvion
+                         && p.Estado != "Cancelado"
+                         && p.CodigoAsiento != null && p.CodigoAsiento != "")
+                .Select(p => p.CodigoAsiento)
+                .Distinct()
+                .ToListAsync();
+        }
+
         public async Task<ReservaDTO> AddAsync(ReservaCreateDTO dto)
         {
             if (dto.Pasajes == null || dto.Pasajes.Count == 0)
@@ -106,8 +138,6 @@ namespace Application.Services
 
                 var estadoPasaje = string.IsNullOrWhiteSpace(pasajeDto.Estado) ? "Confirmado" : pasajeDto.Estado.Trim();
 
-                // Constructor de 8 argumentos de Pasaje:
-                // (estado, idReserva, reserva, idPasajero, pasajero, idAvion, codigoAsiento, asiento)
                 var pasaje = new Pasaje(
                     estadoPasaje,
                     reserva.Id,
@@ -138,6 +168,36 @@ namespace Application.Services
             await transaction.CommitAsync();
 
             return MapToDTO(reserva);
+        }
+
+        public async Task<bool> UpdateAsync(int id, ReservaUpdateDTO dto)
+        {
+            var reserva = await _context.Reservas.FirstOrDefaultAsync(r => r.Id == id);
+            if (reserva == null)
+                return false;
+
+            if (dto.UsuarioId > 0)
+                reserva.SetIdUsuario(dto.UsuarioId);
+
+            if (dto.FechaHoraReserva != default)
+                reserva.SetFechaHoraReserva(dto.FechaHoraReserva);
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var reserva = await _context.Reservas
+                .Include(r => r.Pasajes)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (reserva == null)
+                return false;
+
+            _context.Reservas.Remove(reserva);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         private static ReservaDTO MapToDTO(Reserva reserva)

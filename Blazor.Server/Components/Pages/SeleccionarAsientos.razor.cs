@@ -3,7 +3,10 @@ using Blazor.Server.Services;
 using DTOs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using System.IO.Pipelines;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Blazor.Server.Components.Pages
 {
@@ -35,7 +38,10 @@ namespace Blazor.Server.Components.Pages
                 cargando = true;
                 codigosAsientosOcupadosEnVuelo.Clear();
 
-                // Recupera el vuelo desde el servicio o desde la API si se recargó la página
+                // Recupera el vuelo desde el servicio (sevicio creado en el back especificamente en Blazor.Server > Services para
+                // guardar datos de un vuelo (a modo de memoria del sitio web)) o desde la API si se recargó la página. Es decir:
+                // > Si venimos desde Menu.razor y ya tenemos el vuelo en ReservaState, lo reusamos;
+                // > si el usuario entró directo por URL o recargó (F5), lo pedimos a la API por VueloId.
                 if (ReservaState.VueloSeleccionado != null && ReservaState.VueloSeleccionado.Id == VueloId)
                 {
                     vueloActual = ReservaState.VueloSeleccionado;
@@ -51,10 +57,12 @@ namespace Blazor.Server.Components.Pages
                     return;
                 }
 
+                // Guarda en el servicio de estado de sesión cuántos pasajeros se van a reservar y cuál es el vuelo
                 ReservaState.CantidadPasajeros = CantidadPasajeros;
                 ReservaState.VueloSeleccionado = vueloActual;
                 ReservaState.AsientosSeleccionados.Clear();
 
+                // Obtiene el ID del avión asignado a este vuelo (ej. AvionId = 6)
                 int? avionId = vueloActual.Avion?.Id;
                 if (avionId == null || avionId <= 0)
                 {
@@ -62,22 +70,23 @@ namespace Blazor.Server.Components.Pages
                     return;
                 }
 
+                // Ahora se piden en paralelo los datos del avión(con su lista de AsientoDTO) y los asientos ocupados de este vuelo:
+
+                // 1.Dispara ambas peticiones HTTP sin esperar una a que termine la otra:
                 var tareaAvion = Http.GetFromJsonAsync<AvionDTO>($"aviones/{avionId.Value}");
-                var tareaReservas = Http.GetFromJsonAsync<List<ReservaDTO>>("reservas");
+                var tareaOcupados = Http.GetFromJsonAsync<List<string>>($"vuelos/{VueloId}/asientos-ocupados");
 
-                await Task.WhenAll(tareaAvion, tareaReservas);
+                // 2.Espera a que ambas terminen
+                await Task.WhenAll(tareaAvion, tareaOcupados);
 
+                // 3.Extrae los resultados resueltos
                 var avionDto = await tareaAvion;
-                var todasLasReservas = await tareaReservas ?? new List<ReservaDTO>();
+                var ocupadosLista = await tareaOcupados ?? new List<string>();
 
-                // Asientos ocupados SOLO para este VueloId y en este AvionId
-                codigosAsientosOcupadosEnVuelo = todasLasReservas
-                    .Where(r => r.VueloId == VueloId)
-                    .SelectMany(r => r.Pasajes ?? new List<PasajeDTO>())
-                    .Where(p => p.IdAvion == avionId.Value
-                             && !string.Equals(p.Estado?.Trim(), "Cancelado", StringComparison.OrdinalIgnoreCase)
-                             && !string.IsNullOrWhiteSpace(p.CodigoAsiento))
-                    .Select(p => p.CodigoAsiento.Trim())
+                // Asientos ocupados SOLO para este VueloId (filtrados en el backend)
+                codigosAsientosOcupadosEnVuelo = ocupadosLista
+                    .Where(c => !string.IsNullOrWhiteSpace(c))
+                    .Select(c => c.Trim())
                     .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
                 asientos = avionDto?.Asientos ?? new List<AsientoDTO>();

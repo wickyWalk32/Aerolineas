@@ -1,6 +1,5 @@
 ﻿using Application.Services;
 using DTOs;
-using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi
 {
@@ -18,15 +17,33 @@ namespace WebApi
             });
 
             // GET: Obtener por ID
-            group.MapGet("/{id}", async (int id, VueloService vueloService) =>
+            group.MapGet("/{id:int}", async (int id, VueloService vueloService) =>
             {
                 var vuelo = await vueloService.GetByIdAsync(id);
                 return vuelo is not null ? Results.Ok(vuelo) : Results.NotFound();
             });
 
+            // GET: Asientos ocupados de un vuelo puntual
+            group.MapGet("/{id:int}/asientos-ocupados", async (int id, ReservaService reservaService) =>
+            {
+                try
+                {
+                    var ocupados = await reservaService.GetAsientosOcupadosPorVueloAsync(id);
+                    return Results.Ok(ocupados);
+                }
+                catch (ArgumentException ex)
+                {
+                    return Results.NotFound(new { error = ex.Message });
+                }
+            })
+            .WithName("GetAsientosOcupadosPorVuelo")
+            .Produces<List<string>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .WithOpenApi();
+
             // POST: Crear
             group.MapPost("/", async (VueloCreateDTO dto, VueloService vueloService) =>
-            {   
+            {
                 try
                 {
                     await vueloService.AddAsync(dto);
@@ -34,44 +51,39 @@ namespace WebApi
                 }
                 catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException)
                 {
-                    // Unificamos las validaciones de negocio que devuelven un 400 Bad Request
                     return Results.BadRequest(ex.Message);
                 }
                 catch (Exception)
                 {
-                    // Para cualquier otro error grave o inesperado del sistema (fallo de base de datos, etc.)
                     return Results.Problem("Ocurrió un error interno en el servidor.", statusCode: 500);
                 }
             });
 
             // PUT: Actualizar
-            group.MapPut("/{id}", async (int id, VueloUpdateDTO dto, VueloService vueloService) =>
+            group.MapPut("/{id:int}", async (int id, VueloUpdateDTO dto, VueloService vueloService) =>
             {
                 try
                 {
-                    dto.Id = id; // Aseguramos que coincida
+                    dto.Id = id;
                     var resultado = await vueloService.UpdateAsync(id, dto);
                     return Results.Ok(resultado);
                 }
                 catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException)
                 {
-                    // Unificamos las validaciones de negocio que devuelven un 400 Bad Request
                     return Results.BadRequest(ex.Message);
                 }
                 catch (Exception)
                 {
-                    // Para cualquier otro error grave o inesperado del sistema (fallo de base de datos, etc.)
                     return Results.Problem("Ocurrió un error interno en el servidor.", statusCode: 500);
                 }
             });
 
             // DELETE: Eliminar
-            group.MapDelete("/{id}", async (int id, VueloService vueloService) =>
+            group.MapDelete("/{id:int}", async (int id, VueloService vueloService) =>
             {
                 await vueloService.DeleteAsync(id);
                 return Results.NoContent();
             });
-
         }
     }
 }
