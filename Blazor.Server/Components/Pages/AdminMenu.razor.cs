@@ -45,6 +45,7 @@ namespace Blazor.Server.Components.Pages
 
         protected void IrAGestionUsuarios() => Navigation.NavigateTo("/admin/usuarios");
         protected void IrAGestionVuelos() => Navigation.NavigateTo("/admin/vuelos");
+        protected void IrAGestionPaises() => Navigation.NavigateTo("/admin/paises");
         protected void IrAGestionCiudades() => Navigation.NavigateTo("/admin/ciudades");
         protected void IrAGestionAviones() => Navigation.NavigateTo("/admin/aviones");
         protected void IrAGestionServicios() => Navigation.NavigateTo("/admin/servicios");

@@ -23,7 +23,8 @@ namespace Data
 
             // ¡ESTA LÍNEA ES CLAVE! Le dice a EF Core que NO genere el ID automáticamente (se cargan en el seed inicial)
             builder.Property(pais => pais.Id)
-                .ValueGeneratedNever();
+                //.ValueGeneratedNever();
+                .ValueGeneratedOnAdd();
 
             builder.Property(pais => pais.Nombre)
                 .IsRequired()

@@ -62,7 +62,14 @@ builder.Services.AddScoped <LoginService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<UsuarioService>();
 
-builder.Services.AddScoped<IPaisRepository, PaisRepository>();
+builder.Services.AddScoped<IPaisRepository>(sp => 
+{
+    // IPaisRepository queda apuntando a PaisAdoRepository: para CRUD usando ADO.NET.
+    // Nota: en semilla inicial en DbInitializer los paises se cargan directamente usando EntityFramework: no se utiliza el CRUD.
+    var connString = builder.Configuration.GetConnectionString("DefaultConnection")
+                     ?? throw new InvalidOperationException("Falta DefaultConnection.");
+    return new PaisAdoRepository(connString);
+});
 builder.Services.AddScoped<PaisService>();
 
 builder.Services.AddScoped<ICiudadRepository, CiudadRepository>();

@@ -10,9 +10,9 @@ namespace Data
     public interface IPaisRepository
     {
         Task<List<Pais>> GetAllAsync();
-        Task<Pais> GetByIdAsync(int id);
-
+        Task<Pais?> GetByIdAsync(int id);
         Task AddAsync(Pais pais);
+        Task UpdateAsync(Pais pais);
         Task DeleteAsync(Pais pais);
     }
 }

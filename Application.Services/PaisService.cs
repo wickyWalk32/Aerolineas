@@ -1,50 +1,66 @@
 ﻿using Data;
 using Domain.Model;
 using DTOs;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Services
 {
     public class PaisService
     {
-        private readonly IPaisRepository _repo;
+        private readonly IPaisRepository _paisRepository;
 
-        public PaisService(IPaisRepository repo)
+        public PaisService(IPaisRepository paisRepository)
         {
-            _repo = repo;
+            _paisRepository = paisRepository;
         }
-
 
         public async Task<List<PaisDTO>> GetAllAsync()
         {
-            var paiss = await _repo.GetAllAsync();
-            return paiss.Select(pais => new PaisDTO
+            var paises = await _paisRepository.GetAllAsync();
+
+            return paises.Select(p => new PaisDTO
             {
-                Id = pais.Id,
-                Nombre = pais.Nombre,
+                Id = p.Id,
+                Nombre = p.Nombre
             }).ToList();
         }
-        public async Task<PaisDTO> AddAsync(PaisCreateDTO dto)
+
+        public async Task<PaisDTO?> GetByIdAsync(int id)
         {
-            Pais pais = new Pais(dto.Nombre);
-            await _repo.AddAsync(pais);
-            PaisDTO paisDTO = new PaisDTO
+            var pais = await _paisRepository.GetByIdAsync(id);
+            if (pais == null) return null;
+
+            return new PaisDTO
             {
                 Id = pais.Id,
                 Nombre = pais.Nombre
             };
-            return paisDTO;
         }
-        public async Task<bool> DeleteAsync(int id)
+
+        public async Task AddAsync(PaisCreateDTO dto)
         {
-            var pais = await _repo.GetByIdAsync(id);
+            var pais = new Pais(dto.Nombre);
+            await _paisRepository.AddAsync(pais);
+        }
+
+        public async Task<bool> UpdateAsync(int id, PaisUpdateDTO dto)
+        {
+            var pais = await _paisRepository.GetByIdAsync(id);
             if (pais == null) return false;
 
-            await _repo.DeleteAsync(pais);
+            pais.SetNombre(dto.Nombre);
+            await _paisRepository.UpdateAsync(pais);
+            return true;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var pais = await _paisRepository.GetByIdAsync(id);
+            if (pais == null) return false;
+
+            await _paisRepository.DeleteAsync(pais);
             return true;
         }
     }

@@ -1,62 +1,67 @@
 ﻿using Application.Services;
 using DTOs;
+using Microsoft.Data.SqlClient;
 
 namespace WebApi
 {
     public static class PaisEndpoints
     {
-        public static void MapPaisEndpoints(this WebApplication app)
+        public static void MapPaisEndpoints(this IEndpointRouteBuilder routes)
         {
-            app.MapGet("/paises", async (PaisService paisService) =>
+            var group = routes.MapGroup("paises").RequireAuthorization();
+
+            group.MapGet("/", async (PaisService paisService) =>
             {
+                var paises = await paisService.GetAllAsync();
+                return Results.Ok(paises);
+            });
 
-                var dtos = await paisService.GetAllAsync();
-                Console.WriteLine($"TYPE: {dtos.GetType()}");
-                return Results.Ok(dtos);
-            })
-            .WithName("GetAllPaises")
-            .Produces<List<PaisDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi()
-            .RequireAuthorization();
+            group.MapGet("/{id}", async (int id, PaisService paisService) =>
+            {
+                var paisDto = await paisService.GetByIdAsync(id);
+                return paisDto is not null ? Results.Ok(paisDto) : Results.NotFound();
+            });
 
-            app.MapPost("/paises", async (PaisCreateDTO dto, PaisService paisService) =>
+            group.MapPost("/", async (PaisCreateDTO dto, PaisService paisService) =>
             {
                 try
                 {
-
-                    PaisDTO paisDTO = await paisService.AddAsync(dto);
-
-                    return Results.Created($"/paises/{paisDTO.Id}", paisDTO);
+                    await paisService.AddAsync(dto);
+                    return Results.Ok();
                 }
                 catch (ArgumentException ex)
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
-            })
-            .WithName("AddPais")
-            .Produces<PaisDTO>(StatusCodes.Status201Created)
-            .Produces(StatusCodes.Status400BadRequest)
-            .WithOpenApi()
-            .RequireAuthorization();
+            });
 
-
-            app.MapDelete("/paises/{id}", async (int id, PaisService paisService) =>
+            group.MapPut("/{id}", async (int id, PaisUpdateDTO dto, PaisService paisService) =>
             {
-
-                var deleted = await paisService.DeleteAsync(id);
-
-                if (!deleted)
+                try
                 {
-                    return Results.NotFound();
+                    dto.Id = id;
+                    var actualizado = await paisService.UpdateAsync(id, dto);
+                    return actualizado ? Results.Ok(true) : Results.NotFound();
                 }
+                catch (ArgumentException ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            });
 
-                return Results.NoContent();
-            })
-            .WithName("DeletePais")
-            .Produces(StatusCodes.Status204NoContent)
-            .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi()
-            .RequireAuthorization();
+            group.MapDelete("/{id}", async (int id, PaisService paisService) =>
+            {
+                try
+                {
+                    var eliminado = await paisService.DeleteAsync(id);
+                    return eliminado ? Results.NoContent() : Results.NotFound();
+                }
+                catch (SqlException ex) when (ex.Number == 547)
+                {
+                    // Error 547 en SQL Server: violación de clave foránea (el país tiene ciudades asociadas)
+                    return Results.BadRequest(new { error = "No se puede eliminar el país porque tiene ciudades asociadas." });
+                }
+            });
         }
     }
 }
