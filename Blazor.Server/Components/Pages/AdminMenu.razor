@@ -29,7 +29,7 @@
         </div>
     </header>
 
-    <!-- Contenido Principal: Dos Recuadros lado a lado -->
+    <!-- Contenido Principal: Recuadros -->
     <main class="container">
         <div class="d-flex justify-content-center align-items-start flex-wrap gap-4 mt-4">
             <!-- Recuadro 1: Acciones de Administración (ABM) -->
@@ -86,7 +86,7 @@
                 </div>
             </div>
 
-            <!-- Recuadro 2: Consultas -->
+            <!-- Recuadro 2: Consultas y Reportes -->
             <div class="card shadow-sm border" style="width: 100%; max-width: 380px; border-color: #888 !important; background-color: #fcfcfc;">
                 <div class="card-body p-4 text-center">
                     <h3 class="fw-normal mb-4" style="font-size: 1.35rem; color: #222;">Consultas</h3>
@@ -96,6 +96,12 @@
                                 style="background-color: #fff; border-color: #ccc;"
                                 @onclick="IrAConsultaReservas">
                             Consultar Reservas
+                        </button>
+
+                        <button class="btn btn-light border text-dark py-2 shadow-sm"
+                                style="background-color: #fff; border-color: #ccc;"
+                                @onclick="IrAReporteEstadisticas">
+                            Reporte de Estadísticas y Recaudación
                         </button>
                     </div>
                 </div>

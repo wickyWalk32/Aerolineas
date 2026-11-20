@@ -69,18 +69,6 @@ namespace Domain.Model
 
         public void SetFechaHoraVuelo(DateTime fechaHoraVuelo)
         {
-            /*// 1. Validar que no sea en el pasado o el momento exacto actual
-            if (fechaHoraVuelo <= DateTime.Now)
-            {
-                throw new ArgumentException("La fecha y hora del vuelo debe ser posterior al momento actual.");
-            }
-
-            // 2. Validar que no supere el año de anticipación
-            if (fechaHoraVuelo > DateTime.Now.AddYears(1))
-            {
-                throw new ArgumentException("La fecha y hora del vuelo no puede programarse a más de un año de distancia.");
-            }*/
-
             this.FechaHoraVuelo = fechaHoraVuelo;
         }
 

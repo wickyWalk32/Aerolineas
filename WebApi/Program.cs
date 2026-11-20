@@ -90,6 +90,8 @@ builder.Services.AddScoped<VueloService>();
 builder.Services.AddScoped<IReservaRepository, ReservaRepository>();
 builder.Services.AddScoped<ReservaService>();
 
+builder.Services.AddScoped<ReporteService>();
+
 /* ----------------------------------
  * CONFIGURACIÓN DE AUTENTICACIÓN JWT
  */
@@ -196,6 +198,7 @@ app.MapServicioEndpoints();
 app.MapVueloEndpoints();
 app.MapReservaEndpoints();
 app.MapAvionEndpoints();
+app.MapReporteEndpoints();
 
 //app.MapGet("/", () => "Hello, World!"); // De prueba
 app.MapSwagger()/*.RequireAuthorization()*/;

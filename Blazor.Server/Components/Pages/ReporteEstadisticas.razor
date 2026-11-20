@@ -1,0 +1,313 @@
+﻿@page "/admin/reportes/estadisticas"
+@attribute [Authorize(Roles = "admin")]
+@rendermode InteractiveServer
+@using DTOs
+
+<PageTitle>Reporte de Estadísticas y Recaudación - AeroReservas</PageTitle>
+
+<style>
+    .reporte-wrapper {
+        max-width: 1250px;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .reporte-card {
+        background-color: #fff;
+        border: 1px solid #666;
+        border-radius: 2px;
+    }
+
+    .reporte-header-box {
+        background-color: #f8f9fa;
+        border: 1px solid #666;
+        border-left: 5px solid #0d6efd;
+        border-radius: 2px;
+    }
+
+    .barra-track {
+        background-color: #e9ecef;
+        height: 22px;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .barra-fill-origen {
+        background-color: #0d6efd;
+        height: 100%;
+    }
+
+    .barra-fill-destino {
+        background-color: #198754;
+        height: 100%;
+    }
+
+    @@media print {
+        .no-imprimir, nav, .navbar, .sidebar, footer {
+            display: none !important;
+        }
+
+        body {
+            background-color: #fff !important;
+        }
+
+        .reporte-wrapper {
+            max-width: 100% !important;
+            padding: 0 !important;
+        }
+
+        .reporte-card, .reporte-header-box {
+            box-shadow: none !important;
+            break-inside: avoid;
+        }
+    }
+</style>
+
+<div class="container-fluid px-4 py-3 reporte-wrapper">
+    <!-- Barra superior de acciones (no sale en el PDF) -->
+    <div class="d-flex justify-content-between align-items-center mb-3 no-imprimir">
+        <span class="text-secondary small">Panel de Administración — Reportes del Sistema</span>
+        <div class="d-flex gap-2">
+            <button class="btn btn-light border border-primary text-primary px-3 py-1 shadow-sm"
+                    style="background-color: #fff; font-size: 0.95rem;"
+                    @onclick="DescargarPdfAsync"
+                    disabled="@(cargando || reporte == null)">
+                Descargar PDF
+            </button>
+            <button class="btn btn-light border border-secondary text-secondary px-3 py-1 shadow-sm"
+                    style="background-color: #fff; font-size: 0.95rem;"
+                    @onclick="VolverAlMenuAdmin">
+                Volver al Menú Principal
+            </button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(mensajeError))
+    {
+        <div class="alert alert-danger shadow-sm mb-3" role="alert">
+            @mensajeError
+        </div>
+    }
+
+    @if (cargando)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Generando reporte...</span>
+            </div>
+            <p class="text-secondary mt-2">Calculando estadísticas y recaudación...</p>
+        </div>
+    }
+    else if (reporte == null)
+    {
+        <div class="alert alert-info text-center shadow-sm" role="alert">
+            No hay datos disponibles para generar el reporte.
+        </div>
+    }
+    else
+    {
+        <!-- Encabezado formal del reporte -->
+        <div class="reporte-header-box p-4 mb-4 shadow-sm">
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+                <div>
+                    <div class="text-uppercase small fw-semibold text-primary mb-1">AeroReservas — Informe Gerencial</div>
+                    <h1 class="h3 fw-normal mb-1" style="color: #111;">Reporte de Rutas, Reservas y Recaudación</h1>
+                    <p class="text-secondary mb-0" style="font-size: 0.92rem;">
+                        Consolidado de demanda por origen/destino, composición de reservas e ingresos generados.
+                    </p>
+                </div>
+                <div class="text-md-end" style="font-size: 0.9rem; color: #333;">
+                    <div><strong>Generado el:</strong> @reporte.FechaGeneracion.ToString("dd/MM/yyyy HH:mm")</div>
+                    <div class="text-secondary"><strong>Alcance:</strong> Histórico registrado</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Métricas clave -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="reporte-card p-3 shadow-sm h-100">
+                    <div class="text-secondary small">Recaudación Total</div>
+                    <div class="h4 fw-semibold text-success mt-1 mb-1">$ @reporte.RecaudacionTotal.ToString("N2")</div>
+                    <div class="small text-muted">
+                        Base: $ @reporte.IngresosPasajesBase.ToString("N2") · Extras: $ @reporte.IngresosServiciosAdicionales.ToString("N2")
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="reporte-card p-3 shadow-sm h-100">
+                    <div class="text-secondary small">Total de Reservas</div>
+                    <div class="h4 fw-semibold text-dark mt-1 mb-1">@reporte.TotalReservas</div>
+                    <div class="small text-muted">Operaciones registradas en el sistema</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="reporte-card p-3 shadow-sm h-100">
+                    <div class="text-secondary small">Total de Pasajes Emitidos</div>
+                    <div class="h4 fw-semibold text-primary mt-1 mb-1">@reporte.TotalPasajes</div>
+                    <div class="small text-muted">Pasajes asociados a reservas</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dos gráficos de barras: Orígenes y Destinos más elegidos -->
+        <div class="row g-3 mb-4">
+            <div class="col-lg-6">
+                <div class="reporte-card p-3 shadow-sm h-100">
+                    <h2 class="h6 fw-semibold mb-3" style="color: #111;">Orígenes más elegidos</h2>
+                    @if (!reporte.OrigenesMasElegidos.Any())
+                    {
+                        <p class="text-muted small mb-0">Sin datos de orígenes para mostrar.</p>
+                    }
+                    else
+                    {
+                        var maxOrigen = Math.Max(1, reporte.OrigenesMasElegidos.Max(x => x.Cantidad));
+                        <div class="d-flex flex-column gap-2">
+                            @foreach (var item in reporte.OrigenesMasElegidos)
+                            {
+                                var pct = (int)Math.Round(item.Cantidad * 100.0 / maxOrigen);
+                                <div>
+                                    <div class="d-flex justify-content-between small mb-1">
+                                        <span class="fw-medium">@item.Etiqueta</span>
+                                        <span><strong>@item.Cantidad</strong></span>
+                                    </div>
+                                    <div class="barra-track">
+                                        <div class="barra-fill-origen" style="width: @(pct)%;"></div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="reporte-card p-3 shadow-sm h-100">
+                    <h2 class="h6 fw-semibold mb-3" style="color: #111;">Destinos más elegidos</h2>
+                    @if (!reporte.DestinosMasElegidos.Any())
+                    {
+                        <p class="text-muted small mb-0">Sin datos de destinos para mostrar.</p>
+                    }
+                    else
+                    {
+                        var maxDestino = Math.Max(1, reporte.DestinosMasElegidos.Max(x => x.Cantidad));
+                        <div class="d-flex flex-column gap-2">
+                            @foreach (var item in reporte.DestinosMasElegidos)
+                            {
+                                var pct = (int)Math.Round(item.Cantidad * 100.0 / maxDestino);
+                                <div>
+                                    <div class="d-flex justify-content-between small mb-1">
+                                        <span class="fw-medium">@item.Etiqueta</span>
+                                        <span><strong>@item.Cantidad</strong></span>
+                                    </div>
+                                    <div class="barra-track">
+                                        <div class="barra-fill-destino" style="width: @(pct)%;"></div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico de torta interactivo (SVG puro, sin librerías externas) -->
+        <div class="reporte-card p-4 shadow-sm">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <h2 class="h6 fw-semibold mb-0" style="color: #111;">Análisis de Distribución (Gráfico de Torta)</h2>
+
+                <div class="btn-group btn-group-sm no-imprimir" role="group">
+                    <button type="button"
+                            class="btn @(tipoTorta == "ingresosBaseServicios" ? "btn-primary" : "btn-outline-primary")"
+                            @onclick='() => SeleccionarTorta("ingresosBaseServicios")'>
+                        Pasajes base vs. Servicios
+                    </button>
+                    <button type="button"
+                            class="btn @(tipoTorta == "pasajesReserva" ? "btn-primary" : "btn-outline-primary")"
+                            @onclick='() => SeleccionarTorta("pasajesReserva")'>
+                        Pasajes por reserva
+                    </button>
+                    <button type="button"
+                            class="btn @(tipoTorta == "ingresosDestino" ? "btn-primary" : "btn-outline-primary")"
+                            @onclick='() => SeleccionarTorta("ingresosDestino")'>
+                        Ingresos por destino
+                    </button>
+                </div>
+            </div>
+
+            @{
+                var segmentos = ObtenerSegmentosTorta();
+                var totalTorta = segmentos.Sum(s => s.Valor);
+            }
+
+            @if (!segmentos.Any() || totalTorta <= 0)
+            {
+                <p class="text-muted small mb-0">No hay valores suficientes para graficar esta distribución.</p>
+            }
+            else
+            {
+                <div class="row align-items-center g-4">
+                    <div class="col-md-5 text-center">
+                        <svg viewBox="0 0 200 200" width="220" height="220" aria-label="Gráfico de torta">
+                            @{
+                                double anguloAcumulado = 0;
+                                int idx = 0;
+                            }
+                            @foreach (var seg in segmentos)
+                            {
+                                double fraccion = (double)(seg.Valor / totalTorta);
+                                double barrido = fraccion * 360.0;
+                                string color = coloresTorta[idx % coloresTorta.Length];
+
+                                if (barrido >= 359.99)
+                                {
+                                    <circle cx="100" cy="100" r="80" fill="@color" />
+                                }
+                                else if (barrido > 0)
+                                {
+                                    string pathData = DescribirSectorTorta(100, 100, 80, anguloAcumulado, anguloAcumulado + barrido);
+                                    <path d="@pathData" fill="@color" stroke="#fff" stroke-width="1.5" />
+                                }
+
+                                anguloAcumulado += barrido;
+                                idx++;
+                            }
+                        </svg>
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered align-middle mb-0" style="font-size: 0.9rem;">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Categoría</th>
+                                        <th class="text-end">Valor</th>
+                                        <th class="text-end">%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int colorIdx = 0;
+                                    }
+                                    @foreach (var seg in segmentos)
+                                    {
+                                        decimal pct = totalTorta > 0 ? (seg.Valor / totalTorta) * 100m : 0m;
+                                        string color = coloresTorta[colorIdx % coloresTorta.Length];
+                                        <tr>
+                                            <td>
+                                                <span class="d-inline-block me-2" style="width: 12px; height: 12px; background-color: @color; border-radius: 2px;"></span>
+                                                @seg.Etiqueta
+                                            </td>
+                                            <td class="text-end fw-medium">@seg.ValorFormateado</td>
+                                            <td class="text-end">@pct.ToString("0.0")%</td>
+                                        </tr>
+                                        colorIdx++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

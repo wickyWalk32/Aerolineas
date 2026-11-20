@@ -10,6 +10,7 @@ namespace Data
     public interface IReservaRepository
     {
         Task<List<Reserva>> GetAllAsync();
+        Task<List<Reserva>> GetAllWithDetallesAsync();
         Task<Reserva?> GetByIdAsync(int id);
         Task<List<string>> GetAsientosOcupadosPorVueloAsync(int vueloId);
         Task<bool> ExisteAsientoOcupadoEnVueloAsync(int vueloId, int idAvion, string codigoAsiento);
