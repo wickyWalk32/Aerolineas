@@ -18,10 +18,12 @@ namespace WindowsForms
     {
         List<VueloDTO> _vuelos;
         List<VueloDTO> _vuelosFiltrados;
+        UsuarioLoginResultDTO _usuarioAutenticado;
 
         public MenuUsuarioBuscarVueloForm(UsuarioLoginResultDTO usuarioAutenticado)
         {
             InitializeComponent();
+            _usuarioAutenticado = usuarioAutenticado;
             lblNombreApellido.Text = $"¡Hola, {usuarioAutenticado.Nombre} {usuarioAutenticado.Apellido}!";
             CargarVuelos();
             CargarCiudades();
@@ -65,11 +67,25 @@ namespace WindowsForms
                 VueloItemControl vueloItem = new VueloItemControl();
                 vueloItem.CargarDatos(vuelo);
                 vueloItem.Seleccionable();
-                vueloItem.OnVueloSeleccionado += OnVueloSeleccionado =>
-                {
-                    VueloDTO vueloSeleccionado = OnVueloSeleccionado;
-                };
+                vueloItem.OnVueloSeleccionado += OnVueloSeleccionado;
                 flowLayoutPanelVuelos.Controls.Add(vueloItem);
+            }
+        }
+
+        private void OnVueloSeleccionado(object sender, VueloDTO vuelo)
+        {
+            if (comboBoxCantidadPasajeros.SelectedItem == null)
+            {
+                MessageBox.Show("Debe especificar la cantidad de Pasajeros");
+                return;
+            }
+            else
+            {
+                VueloDTO vueloSeleccionado = vuelo;
+                MenuUsuarioSeleccionarAsientoForm form2 = new MenuUsuarioSeleccionarAsientoForm(this,_usuarioAutenticado,vueloSeleccionado,
+                                                            Convert.ToInt32(comboBoxCantidadPasajeros.SelectedItem));
+                form2.Show();
+                this.Hide();
             }
         }
 
@@ -92,8 +108,8 @@ namespace WindowsForms
 
             _vuelosFiltrados = _vuelos.Where(v =>
                 (origen == null || v.CiudadOrigen.Nombre == origen) &&
-                (destino == null || v.CiudadDestino.Nombre == destino) &&
-                (capacidad == null || v.Capacidad >= capacidad)
+                (destino == null || v.CiudadDestino.Nombre == destino) //&&
+                //(capacidad == null || v.Capacidad >= capacidad)
             ).ToList();
 
             flowLayoutPanelVuelos.Controls.Clear();
@@ -110,6 +126,7 @@ namespace WindowsForms
                 VueloItemControl vueloItem = new VueloItemControl();
                 vueloItem.CargarDatos(vuelo);
                 vueloItem.Seleccionable();
+                vueloItem.OnVueloSeleccionado += OnVueloSeleccionado;
                 flowLayoutPanelVuelos.Controls.Add(vueloItem);
             }
         }

@@ -24,6 +24,7 @@ namespace DTOs
         public string TipoDocumento { get; set; }
         public string NroDocumento { get; set; }
         public string Tipo { get; set; }
+        public string? CodigoAsiento { get; set; }
 
     }
 

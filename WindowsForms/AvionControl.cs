@@ -18,7 +18,8 @@ namespace WindowsForms
     {
         string[] abc = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
         List<AsientoCreateDTO> asientosCreateDTO = new();
-
+        AvionAsientoItemControl _asientoControl;
+        string _codigoAsientoActual;
         public AvionControl()
         {
             InitializeComponent();
@@ -142,7 +143,55 @@ namespace WindowsForms
             var asiento = new AvionAsientoItemControl(codAsiento);
             asiento.Location = new Point(x, y);
             asiento.Size = new Size(30, 30);
+            asiento.OnClickGetCodigoAsiento += OnClickSelectAsiento;
             panelAvion.Controls.Add(asiento);
+        }
+
+        private void OnClickSelectAsiento(object sender, string codigoAsiento)
+        {
+            AvionAsientoItemControl asientoControl = sender as AvionAsientoItemControl;
+            if (_codigoAsientoActual!=null && _codigoAsientoActual != codigoAsiento &&
+                _asientoControl.IsBlocked == false)
+            {
+                _asientoControl.AsientoDisponible();
+            }
+            _asientoControl = asientoControl;
+           _codigoAsientoActual = _asientoControl.AsientoSeleccionado();
+        }
+        public void AsientoSeleccionado(string codigoAsiento)
+        {
+            foreach (AvionAsientoItemControl asiento in panelAvion.Controls
+                         .OfType<AvionAsientoItemControl>())
+            {
+                if (codigoAsiento == asiento.GetCodigoAsiento())
+                {
+                    asiento.AsientoDisponible(); 
+                    asiento.AsientoSeleccionado();
+                    asiento.OnClickGetCodigoAsiento += OnClickSelectAsiento;
+                    _asientoControl.IsBlocked = false;
+                    asiento.Cursor = Cursors.Hand;
+                }
+            }
+        }
+        public void SeleccionAsientoGuardado(string codigoAsiento)
+        {
+            foreach (AvionAsientoItemControl asiento in panelAvion.Controls
+                         .OfType<AvionAsientoItemControl>())
+            {
+                if (codigoAsiento == asiento.GetCodigoAsiento())
+                {
+                    asiento.AsientoSeleccionado();
+                    asiento.OnClickGetCodigoAsiento -= OnClickSelectAsiento;
+                    _asientoControl.IsBlocked = true;
+                    asiento.Cursor = Cursors.Default;
+                    //if (_pasajero!=null && _pasajero == pasajero) _asientoControl.IsBlocked = false ;
+                    //_pasajero = pasajero;
+                }
+            }
+        }
+        public string GetCodigoAsiento()
+        {
+            return _codigoAsientoActual;
         }
 
         private void comboBoxFilas_SelectedIndexChanged(object sender, EventArgs e)
@@ -154,6 +203,24 @@ namespace WindowsForms
                 int.TryParse(comboBox.Text, out int filas))
             {
                 AgregarAsientos(filas);
+            }
+        }
+
+        public void MarcarAsientosOcupados(List<string> asientosOcupados)
+        {
+            HashSet<string> ocupados = new HashSet<string>(
+                asientosOcupados,
+                StringComparer.OrdinalIgnoreCase
+            );
+
+            foreach (AvionAsientoItemControl asiento in panelAvion.Controls
+                         .OfType<AvionAsientoItemControl>())
+            {
+                if (ocupados.Contains(asiento.GetCodigoAsiento() ) )
+                {
+                    asiento.AsientoOcupado();
+                    asiento.OnClickGetCodigoAsiento -= OnClickSelectAsiento;
+                }
             }
         }
 

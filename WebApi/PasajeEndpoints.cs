@@ -1,6 +1,8 @@
-﻿namespace WebApi
+﻿using Application.Services;
+using DTOs;
+namespace WebApi
 {
-    public class PasajeEndpoints
+    public static class PasajeEndpoints
     {
     }
 }

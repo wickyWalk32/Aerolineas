@@ -40,15 +40,16 @@
             labelCodigoAsiento.TabIndex = 0;
             labelCodigoAsiento.Text = "AA";
             // 
-            // AvionItemControl
+            // AvionAsientoItemControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BorderStyle = BorderStyle.FixedSingle;
             Controls.Add(labelCodigoAsiento);
-            Name = "AvionItemControl";
+            Name = "AvionAsientoItemControl";
             Size = new Size(69, 54);
             Load += AvionItemControl_Load;
+            Click += AvionAsientoItemControl_Click;
             ResumeLayout(false);
             PerformLayout();
         }

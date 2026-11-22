@@ -36,6 +36,18 @@ namespace Data
                 .FirstOrDefaultAsync(v => v.Id == id);
         }
 
+        public async Task<List<Pasaje>> GetAllPasajesByVuelo(int vueloId)
+        {
+            return await (
+                from vuelo in _context.Vuelos
+                join reserva in _context.Reservas
+                    on vuelo.Id equals reserva.VueloId
+                from pasaje in reserva.Pasajes
+                where vuelo.Id == vueloId
+                select pasaje
+            ).ToListAsync();
+        }
+
         public async Task AddAsync(Vuelo vuelo)
         {
             await _context.Vuelos.AddAsync(vuelo);

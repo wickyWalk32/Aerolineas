@@ -155,5 +155,20 @@ namespace Application.Services
             }
         }
 
+        public async Task<List<PasajeDTO>> GetAllPasajesByVueloAsync(int vueloId)
+        {
+            var pasajes = await _vueloRepository.GetAllPasajesByVuelo(vueloId);
+
+            if (pasajes == null) return null;
+
+            return pasajes.Select(p => new PasajeDTO
+            { Id = p.Id,
+                Estado = p.Estado,
+                IdPasajero = p.IdPasajero,
+                IdAvion = p.IdAvion,
+                CodigoAsiento = p.CodigoAsiento
+            }).ToList();
+        }
+
     }
 }

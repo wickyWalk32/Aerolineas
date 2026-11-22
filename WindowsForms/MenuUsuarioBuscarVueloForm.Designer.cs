@@ -169,6 +169,7 @@
             // 
             // flowLayoutPanelVuelos
             // 
+            flowLayoutPanelVuelos.AutoScroll = true;
             flowLayoutPanelVuelos.FlowDirection = FlowDirection.TopDown;
             flowLayoutPanelVuelos.Location = new Point(44, 288);
             flowLayoutPanelVuelos.Name = "flowLayoutPanelVuelos";

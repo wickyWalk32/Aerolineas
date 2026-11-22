@@ -18,7 +18,7 @@ namespace WindowsForms
         public event EventHandler<VueloUpdateDTO>? OnEditarClicked;
         public event EventHandler<VueloDeleteDTO>? OnEliminarClicked;
 
-        public event Action<VueloDTO>? OnVueloSeleccionado;
+        public event EventHandler<VueloDTO>? OnVueloSeleccionado;
 
         private VueloDTO? _vueloActual;
 
@@ -68,7 +68,7 @@ namespace WindowsForms
         {
             if (_vueloActual == null) return;
 
-            OnVueloSeleccionado?.Invoke(_vueloActual);
+            OnVueloSeleccionado?.Invoke(this,_vueloActual);
         }
         private void AttachClickEvents(Control parent)
         {

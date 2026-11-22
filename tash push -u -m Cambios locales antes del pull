@@ -1,0 +1,17 @@
+ Application.Services/PasajeService.cs              |  7 [32m+[m[31m--[m
+ Application.Services/VueloService.cs               | 15 [32m+++++[m
+ DTOs/PasajeDTO.cs                                  |  4 [32m+[m[31m-[m
+ DTOs/PasajeroDTO.cs                                |  1 [32m+[m
+ Data/IVueloRepository.cs                           |  8 [32m+[m[31m--[m
+ Data/ReservaRepository.cs                          |  1 [32m+[m
+ Data/VueloRepository.cs                            | 12 [32m++++[m
+ WebApi/PasajeEndpoints.cs                          |  6 [32m+[m[31m-[m
+ WebApi/ReservaEndpoints.cs                         |  2 [32m+[m
+ WebApi/VueloEndpoints.cs                           | 13 [32m++++[m
+ WindowsForms/AvionAsientoItemControl.Designer.cs   |  5 [32m+[m[31m-[m
+ WindowsForms/AvionAsientoItemControl.cs            | 36 [32m++++++++++[m[31m-[m
+ WindowsForms/AvionControl.cs                       | 69 [32m+++++++++++++++++++++[m[31m-[m
+ .../MenuUsuarioBuscarVueloForm.Designer.cs         |  1 [32m+[m
+ WindowsForms/MenuUsuarioBuscarVueloForm.cs         | 29 [32m+++++++[m[31m--[m
+ WindowsForms/VueloItemControl.cs                   |  4 [32m+[m[31m-[m
+ 16 files changed, 187 insertions(+), 26 deletions(-)

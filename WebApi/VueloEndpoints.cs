@@ -84,7 +84,24 @@ namespace WebApi
                 await vueloService.DeleteAsync(id);
                 return Results.NoContent();
             });
+<<<<<<< Updated upstream
+=======
+
+
+            group.MapGet("/{vueloId}/reservas/pasajes", async (int vueloId, VueloService vueloService) =>
+            {
+
+                var dtos = await vueloService.GetAllPasajesByVueloAsync(vueloId);
+
+                return Results.Ok(dtos);
+            })
+            .WithName("GetPasajesXVuelo")
+            .Produces<List<PasajeDTO>>(StatusCodes.Status200OK)
+            .WithOpenApi()
+            .RequireAuthorization();
+>>>>>>> Stashed changes
         }
+   
     }
 }
 

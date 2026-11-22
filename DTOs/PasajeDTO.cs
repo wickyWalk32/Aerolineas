@@ -14,7 +14,7 @@ namespace DTOs
         public PasajeroDTO? Pasajero { get; set; }
         public int IdAvion { get; set; }
         public string CodigoAsiento { get; set; } = string.Empty;
-        public List<ServicioCargaDTO> Servicios { get; set; } = new();
+        public List<ServicioCargaDTO>? Servicios { get; set; } = new();
     }
 
     public class PasajeCreateDTO
@@ -23,6 +23,6 @@ namespace DTOs
         public int IdAvion { get; set; }
         public string CodigoAsiento { get; set; } = string.Empty;
         public PasajeroCreateDTO Pasajero { get; set; } = new();
-        public List<int> ServicioIds { get; set; } = new();
+        public List<int>? ServicioIds { get; set; } = new();
     }
 }
