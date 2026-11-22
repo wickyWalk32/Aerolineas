@@ -18,13 +18,8 @@ namespace WebApi
             })
             .WithName("GetAllReservas")
             .Produces<List<ReservaDTO>>(StatusCodes.Status200OK)
-<<<<<<< Updated upstream
-            .WithOpenApi();
-=======
             .WithOpenApi()
             .RequireAuthorization();
-           
->>>>>>> Stashed changes
 
             // GET: Consultar por clave primaria (id)
             group.MapGet("/{id:int}", async (int id, ReservaService reservaService) =>
