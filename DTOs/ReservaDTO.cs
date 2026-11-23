@@ -8,6 +8,7 @@ namespace DTOs
         public int Id { get; set; }
         public int UsuarioId { get; set; }
         public int VueloId { get; set; }
+        public VueloDTO? Vuelo { get; set; }
         public int IdTarjetaCliente { get; set; }
         public DateTime FechaHoraReserva { get; set; }
         public List<PasajeDTO> Pasajes { get; set; } = new();

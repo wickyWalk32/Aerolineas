@@ -42,6 +42,7 @@
             lblCiudadOrigen = new Label();
             flowLayoutPanelVuelos = new FlowLayoutPanel();
             labelSinVuelos = new Label();
+            buttonMisReservas = new Button();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -58,9 +59,10 @@
             // lblNombreApellido
             // 
             lblNombreApellido.AutoSize = true;
-            lblNombreApellido.Location = new Point(482, 28);
+            lblNombreApellido.Font = new Font("Times New Roman", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblNombreApellido.Location = new Point(423, 31);
             lblNombreApellido.Name = "lblNombreApellido";
-            lblNombreApellido.Size = new Size(166, 15);
+            lblNombreApellido.Size = new Size(164, 15);
             lblNombreApellido.TabIndex = 1;
             lblNombreApellido.Text = "Bienvenido Nombre Apellido !";
             // 
@@ -187,11 +189,22 @@
             labelSinVuelos.Text = "No se encontraron vuelos";
             labelSinVuelos.Visible = false;
             // 
+            // buttonMisReservas
+            // 
+            buttonMisReservas.Location = new Point(676, 27);
+            buttonMisReservas.Name = "buttonMisReservas";
+            buttonMisReservas.Size = new Size(99, 23);
+            buttonMisReservas.TabIndex = 8;
+            buttonMisReservas.Text = "Mis Reservas";
+            buttonMisReservas.UseVisualStyleBackColor = true;
+            buttonMisReservas.Click += buttonMisReservas_Click;
+            // 
             // MenuUsuarioBuscarVueloForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1118, 720);
+            Controls.Add(buttonMisReservas);
             Controls.Add(labelSinVuelos);
             Controls.Add(flowLayoutPanelVuelos);
             Controls.Add(panel1);
@@ -225,5 +238,6 @@
         private ComboBox comboBoxCantidadPasajeros;
         private FlowLayoutPanel flowLayoutPanelVuelos;
         private Label labelSinVuelos;
+        private Button buttonMisReservas;
     }
 }

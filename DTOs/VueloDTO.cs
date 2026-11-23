@@ -18,7 +18,7 @@ namespace DTOs
         public AvionDTO? Avion { get; set; }
         public int? Capacidad { get; set; }
 
-        private readonly List<Reserva> _reservas = new();
+        private readonly List<Reserva>? _reservas = new();
     }
 
     public class VueloCreateDTO

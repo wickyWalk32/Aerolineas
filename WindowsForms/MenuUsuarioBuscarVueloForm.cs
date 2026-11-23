@@ -82,7 +82,7 @@ namespace WindowsForms
             else
             {
                 VueloDTO vueloSeleccionado = vuelo;
-                MenuUsuarioSeleccionarAsientoForm form2 = new MenuUsuarioSeleccionarAsientoForm(this,_usuarioAutenticado,vueloSeleccionado,
+                MenuUsuarioSeleccionarAsientoForm form2 = new MenuUsuarioSeleccionarAsientoForm(this, _usuarioAutenticado, vueloSeleccionado,
                                                             Convert.ToInt32(comboBoxCantidadPasajeros.SelectedItem));
                 form2.Show();
                 this.Hide();
@@ -109,7 +109,7 @@ namespace WindowsForms
             _vuelosFiltrados = _vuelos.Where(v =>
                 (origen == null || v.CiudadOrigen.Nombre == origen) &&
                 (destino == null || v.CiudadDestino.Nombre == destino) //&&
-                //(capacidad == null || v.Capacidad >= capacidad)
+                                                                       //(capacidad == null || v.Capacidad >= capacidad)
             ).ToList();
 
             flowLayoutPanelVuelos.Controls.Clear();
@@ -131,5 +131,11 @@ namespace WindowsForms
             }
         }
 
+        private void buttonMisReservas_Click(object sender, EventArgs e)
+        {
+            MenuUsuarioReservaForm form = new MenuUsuarioReservaForm(this,_usuarioAutenticado);
+            form.Show();
+            this.Hide();
+        }
     }
 }

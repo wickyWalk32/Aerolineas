@@ -18,8 +18,7 @@ namespace WebApi
             })
             .WithName("GetAllReservas")
             .Produces<List<ReservaDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi()
-            .RequireAuthorization();
+            .WithOpenApi();
 
             // GET: Consultar por clave primaria (id)
             group.MapGet("/{id:int}", async (int id, ReservaService reservaService) =>
@@ -31,6 +30,18 @@ namespace WebApi
             .Produces<ReservaDTO>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi();
+
+
+            // GET: Consultar todas las reservar por usuario
+            group.MapGet("/usuarios/{usuarioId}", async (int usuarioId,ReservaService reservaService) =>
+            {
+                var dtos = await reservaService.GetAllByIdUsuarioAsync(usuarioId);
+                return Results.Ok(dtos);
+            })
+            .WithName("GetAllReservasByUsuario")
+            .Produces<List<ReservaDTO>>(StatusCodes.Status200OK)
+            .WithOpenApi();
+
 
             // POST: Crear reserva
             group.MapPost("/", async (ReservaCreateDTO dto, ReservaService reservaService) =>

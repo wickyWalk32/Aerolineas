@@ -35,10 +35,10 @@ namespace WindowsForms
             lblId.Text = vueloActual.Id.ToString();
             lblFecha.Text = vueloActual.FechaHoraVuelo.ToString("dd/MM/yyyy");
             lblHora.Text = vueloActual.FechaHoraVuelo.ToString("HH:mm");
-            lblAerolinea.Text = "Aerolínea: " + vueloActual.Aerolinea;
+            lblAerolinea.Text = vueloActual.Aerolinea;
             lblPrecio.Text = "$ " + Convert.ToString(vueloActual.Precio);
-            lblCiudadOrigen.Text = "Origen: " + vueloActual.CiudadOrigen.Nombre;
-            lblCiudadDestino.Text = "Destino: " + vueloActual.CiudadDestino.Nombre;
+            lblCiudadOrigen.Text = "Desde " + vueloActual.CiudadOrigen.Nombre;
+            lblCiudadDestino.Text = "a " + vueloActual.CiudadDestino.Nombre;
             lblAvionDescripcion.Text = "Avión: " + vueloActual.Avion.Descripcion;
             lblAvionCapacidad.Text = "Capacidad: " + vueloActual.Avion.Capacidad.ToString();
 

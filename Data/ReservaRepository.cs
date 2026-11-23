@@ -22,6 +22,23 @@ namespace Data
                 .ToListAsync();
         }
 
+        // datos completos de reservas por usuario
+        public async Task<List<Reserva>> GetAllByIdUsuarioAsync(int usuarioId)
+        {
+            return await _context.Reservas
+                .AsNoTracking()
+                .Where(r => r.UsuarioId == usuarioId)
+                .Include(r => r.Vuelo!)
+                    .ThenInclude(v => v.CiudadOrigen)
+                .Include(r => r.Vuelo!)
+                    .ThenInclude(v => v.CiudadDestino)
+                .Include(r => r.Pasajes)
+                    .ThenInclude(p => p.Pasajero)
+                .Include(r => r.Pasajes)
+                    .ThenInclude(p => p.Servicios)
+                .ToListAsync();
+        }
+
         // Para reporte gráfico del Admin
         public async Task<List<Reserva>> GetAllWithDetallesAsync()
         {

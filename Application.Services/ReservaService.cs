@@ -28,6 +28,12 @@ namespace Application.Services
             return reserva == null ? null : MapToDTO(reserva);
         }
 
+        public async Task<List<ReservaDTO>> GetAllByIdUsuarioAsync(int usuarioId)
+        {
+            var reservas = await _repo.GetAllByIdUsuarioAsync(usuarioId);
+            return reservas.Select(MapToDTO).ToList();
+        }
+
         public async Task<List<string>> GetAsientosOcupadosPorVueloAsync(int vueloId)
         {
             return await _repo.GetAsientosOcupadosPorVueloAsync(vueloId);
@@ -168,6 +174,27 @@ namespace Application.Services
                 VueloId = reserva.VueloId,
                 IdTarjetaCliente = reserva.IdTarjetaCliente,
                 FechaHoraReserva = reserva.FechaHoraReserva,
+                Vuelo = reserva.Vuelo == null ? null : new VueloDTO
+                {
+                    Id = reserva.Vuelo.Id,
+                    FechaHoraVuelo = reserva.Vuelo.FechaHoraVuelo,
+                    Aerolinea =reserva.Vuelo.Aerolinea,
+                    Precio = reserva.Vuelo.Precio,
+                    CiudadOrigen = new CiudadDTO
+                    {
+                        Id = reserva.Vuelo.CiudadOrigen.Id,
+                        Nombre = reserva.Vuelo.CiudadOrigen.Nombre,
+                        CodigoPostal = reserva.Vuelo.CiudadOrigen.CodigoPostal,
+                        CodigoAeropuerto = reserva.Vuelo.CiudadOrigen.CodigoAeropuerto,
+                    },
+                    CiudadDestino = new CiudadDTO
+                    {
+                        Id = reserva.Vuelo.CiudadDestino.Id,
+                        Nombre = reserva.Vuelo.CiudadDestino.Nombre,
+                        CodigoPostal = reserva.Vuelo.CiudadDestino.CodigoPostal,
+                        CodigoAeropuerto = reserva.Vuelo.CiudadDestino.CodigoAeropuerto,
+                    },
+                },
                 Pasajes = reserva.Pasajes.Select(p => new PasajeDTO
                 {
                     Id = p.Id,
