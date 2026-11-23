@@ -13,7 +13,7 @@
                 <AuthorizeView>
                     <Authorized>
                         <span class="text-secondary fw-medium" style="font-size: 1rem;">
-                            ¡Hola, @(context.User.Identity?.Name ?? "Usuario")!
+                            ¡Hola @(context.User.Identity?.Name ?? "")!
                         </span>
                     </Authorized>
                 </AuthorizeView>

@@ -1,139 +1,169 @@
-﻿using Domain.Model;
-using DTOs;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+﻿using DTOs;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
 
 namespace WindowsForms
 {
     public partial class MenuUsuarioBuscarVueloForm : Form
     {
-        List<VueloDTO> _vuelos;
-        List<VueloDTO> _vuelosFiltrados;
-        UsuarioLoginResultDTO _usuarioAutenticado;
+        private const string TextoOrigenDefault = "Seleccione ciudad origen";
+        private const string TextoDestinoDefault = "Seleccione ciudad destino";
+        private const string TextoPasajerosDefault = "Ingrese cantidad de pasajeros";
+
+        private List<VueloDTO> _vuelos = new();
+        private readonly UsuarioLoginResultDTO _usuarioAutenticado;
+        private bool _cargandoCombos = false;
 
         public MenuUsuarioBuscarVueloForm(UsuarioLoginResultDTO usuarioAutenticado)
         {
             InitializeComponent();
             _usuarioAutenticado = usuarioAutenticado;
             lblNombreApellido.Text = $"¡Hola, {usuarioAutenticado.Nombre} {usuarioAutenticado.Apellido}!";
-            CargarVuelos();
-            CargarCiudades();
-            //CargarPaisesConCiudades();
-        }
-        private async Task CargarPaisesConCiudades()
-        {
-            try
-            {
-                var paises = await Program.HttpClient.GetFromJsonAsync<List<PaisDTO>>("paises");
-            }
-            catch (Exception ex)
-            {
 
-            }
+            InicializarCombos();
+            _ = CargarDatosAsync();
         }
-        private async Task CargarCiudades()
+
+        private void InicializarCombos()
+        {
+            _cargandoCombos = true;
+
+            comboBoxCiudadOrigen.Items.Clear();
+            comboBoxCiudadOrigen.Items.Add(TextoOrigenDefault);
+            comboBoxCiudadOrigen.SelectedIndex = 0;
+
+            comboBoxCiudadDestino.Items.Clear();
+            comboBoxCiudadDestino.Items.Add(TextoDestinoDefault);
+            comboBoxCiudadDestino.SelectedIndex = 0;
+
+            comboBoxCantidadPasajeros.Items.Clear();
+            comboBoxCantidadPasajeros.Items.Add(TextoPasajerosDefault);
+            for (int i = 1; i <= 10; i++)
+            {
+                comboBoxCantidadPasajeros.Items.Add(i.ToString());
+            }
+            comboBoxCantidadPasajeros.SelectedIndex = 0;
+
+            _cargandoCombos = false;
+        }
+
+        private async Task CargarDatosAsync()
+        {
+            await CargarCiudadesAsync();
+            await CargarVuelosAsync();
+        }
+
+        private async Task CargarCiudadesAsync()
         {
             try
             {
                 var ciudades = await Program.HttpClient.GetFromJsonAsync<List<CiudadDTO>>("ciudades");
-                foreach (var ciudad in ciudades)
+                if (ciudades == null) return;
+
+                _cargandoCombos = true;
+                foreach (var ciudad in ciudades.OrderBy(c => c.Nombre))
                 {
                     comboBoxCiudadOrigen.Items.Add(ciudad.Nombre);
                     comboBoxCiudadDestino.Items.Add(ciudad.Nombre);
                 }
+                _cargandoCombos = false;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al conectar con la Web API: {ex.Message}");
+                MessageBox.Show($"Error al cargar ciudades: {ex.Message}");
             }
         }
 
-        private async Task CargarVuelos()
+        private async Task CargarVuelosAsync()
         {
-            var vuelos = await Program.HttpClient.GetFromJsonAsync<List<VueloDTO>>("/vuelos");
-            if (vuelos == null) { return; }
-            _vuelos = vuelos;
-            foreach (VueloDTO vuelo in vuelos)
+            try
             {
-                VueloItemControl vueloItem = new VueloItemControl();
+                var vuelos = await Program.HttpClient.GetFromJsonAsync<List<VueloDTO>>("/vuelos");
+                _vuelos = vuelos ?? new List<VueloDTO>();
+                MostrarVuelos(_vuelos);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar vuelos: {ex.Message}");
+            }
+        }
+
+        private void FiltrarVuelos(object? sender, EventArgs e)
+        {
+            if (_cargandoCombos || _vuelos.Count == 0) return;
+
+            string? origen = comboBoxCiudadOrigen.SelectedItem?.ToString();
+            string? destino = comboBoxCiudadDestino.SelectedItem?.ToString();
+            string? cantTexto = comboBoxCantidadPasajeros.SelectedItem?.ToString();
+
+            bool filtrarOrigen = !string.IsNullOrWhiteSpace(origen) && origen != TextoOrigenDefault;
+            bool filtrarDestino = !string.IsNullOrWhiteSpace(destino) && destino != TextoDestinoDefault;
+            int? cantidadPasajeros = int.TryParse(cantTexto, out int cant) ? cant : null;
+
+            var filtrados = _vuelos.Where(v =>
+                (!filtrarOrigen || v.CiudadOrigen?.Nombre == origen) &&
+                (!filtrarDestino || v.CiudadDestino?.Nombre == destino) &&
+                (!cantidadPasajeros.HasValue || (v.Avion?.Capacidad ?? v.Capacidad ?? 0) >= cantidadPasajeros.Value)
+            ).ToList();
+
+            labelSinVuelos.Visible = filtrados.Count == 0;
+            MostrarVuelos(filtrados);
+        }
+
+        private void MostrarVuelos(List<VueloDTO> vuelos)
+        {
+            flowLayoutPanelVuelos.SuspendLayout();
+            flowLayoutPanelVuelos.Controls.Clear();
+
+            foreach (var vuelo in vuelos)
+            {
+                var vueloItem = new VueloItemControl();
                 vueloItem.CargarDatos(vuelo);
                 vueloItem.Seleccionable();
                 vueloItem.OnVueloSeleccionado += OnVueloSeleccionado;
                 flowLayoutPanelVuelos.Controls.Add(vueloItem);
             }
+
+            flowLayoutPanelVuelos.ResumeLayout();
         }
 
-        private void OnVueloSeleccionado(object sender, VueloDTO vuelo)
+        private void OnVueloSeleccionado(object? sender, VueloDTO vuelo)
         {
-            if (comboBoxCantidadPasajeros.SelectedItem == null)
+            SeleccionarVuelo(vuelo);
+        }
+
+        private void SeleccionarVuelo(VueloDTO vuelo)
+        {
+            string? cantTexto = comboBoxCantidadPasajeros.SelectedItem?.ToString();
+            if (!int.TryParse(cantTexto, out int cantidadPasajeros) || cantidadPasajeros <= 0)
             {
-                MessageBox.Show("Debe especificar la cantidad de Pasajeros");
+                MessageBox.Show(
+                    "Por favor, ingrese la cantidad de pasajeros antes de continuar.",
+                    "Falta cantidad de pasajeros",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                comboBoxCantidadPasajeros.Focus();
                 return;
             }
-            else
-            {
-                VueloDTO vueloSeleccionado = vuelo;
-                MenuUsuarioSeleccionarAsientoForm form2 = new MenuUsuarioSeleccionarAsientoForm(this, _usuarioAutenticado, vueloSeleccionado,
-                                                            Convert.ToInt32(comboBoxCantidadPasajeros.SelectedItem));
-                form2.Show();
-                this.Hide();
-            }
-        }
 
-        private void btnBuscarVuelos_Click(object sender, EventArgs e)
-        {
-            // completar
+            var formAsientos = new MenuUsuarioSeleccionarAsientoForm(
+                this,
+                _usuarioAutenticado,
+                vuelo,
+                cantidadPasajeros
+            );
+            formAsientos.Show();
+            this.Hide();
         }
 
         private void btnSalirDelSistema_Click(object sender, EventArgs e)
         {
-            Application.Restart(); // Reinicia la aplicación y vuelve al Login
-        }
-
-
-        private void FiltrarVuelos(object sender, EventArgs e)
-        {
-            var origen = comboBoxCiudadOrigen.SelectedItem as string;
-            var destino = comboBoxCiudadDestino.SelectedItem as string;
-            int? capacidad = int.TryParse(comboBoxCantidadPasajeros.SelectedItem?.ToString(), out int valor) ? valor : null;
-
-            _vuelosFiltrados = _vuelos.Where(v =>
-                (origen == null || v.CiudadOrigen.Nombre == origen) &&
-                (destino == null || v.CiudadDestino.Nombre == destino) //&&
-                                                                       //(capacidad == null || v.Capacidad >= capacidad)
-            ).ToList();
-
-            flowLayoutPanelVuelos.Controls.Clear();
-
-            labelSinVuelos.Visible = _vuelosFiltrados.Count == 0;
-
-            CargarVuelosEspecificos(_vuelosFiltrados);
-        }
-
-        private void CargarVuelosEspecificos(List<VueloDTO> vuelos)
-        {
-            foreach (VueloDTO vuelo in vuelos)
-            {
-                VueloItemControl vueloItem = new VueloItemControl();
-                vueloItem.CargarDatos(vuelo);
-                vueloItem.Seleccionable();
-                vueloItem.OnVueloSeleccionado += OnVueloSeleccionado;
-                flowLayoutPanelVuelos.Controls.Add(vueloItem);
-            }
+            Application.Restart();
         }
 
         private void buttonMisReservas_Click(object sender, EventArgs e)
         {
-            MenuUsuarioReservaForm form = new MenuUsuarioReservaForm(this,_usuarioAutenticado);
+            var form = new MenuUsuarioReservaForm(this, _usuarioAutenticado);
             form.Show();
             this.Hide();
         }

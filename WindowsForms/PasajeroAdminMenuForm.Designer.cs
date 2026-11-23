@@ -86,6 +86,7 @@ namespace WindowsForms
             // PasajeroAdminMenuForm
             // 
             ClientSize = new Size(320, 316);
+            WindowState = FormWindowState.Maximized;
             Controls.Add(lblTitulo);
             Controls.Add(btnCrearPasajero);
             Controls.Add(btnModificarPasajero);

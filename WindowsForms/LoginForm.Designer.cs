@@ -42,9 +42,9 @@
             label6 = new Label();
             btnAutoregistroUsuario = new Button();
             panel2 = new Panel();
+            btnCargarDatosUsuario = new Button();
             lblInformacion = new Label();
             btnCargarDatosAdmin = new Button();
-            btnCargarDatosUsuario = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
@@ -68,7 +68,7 @@
             panel1.Controls.Add(label2);
             panel1.Controls.Add(label1);
             panel1.Controls.Add(lblTituloLogin);
-            panel1.Location = new Point(90, 66);
+            panel1.Location = new Point(384, 172);
             panel1.Name = "panel1";
             panel1.Size = new Size(487, 297);
             panel1.TabIndex = 7;
@@ -120,7 +120,7 @@
             // 
             // btnSalirSistema
             // 
-            btnSalirSistema.Location = new Point(90, 416);
+            btnSalirSistema.Location = new Point(384, 522);
             btnSalirSistema.Name = "btnSalirSistema";
             btnSalirSistema.Size = new Size(142, 29);
             btnSalirSistema.TabIndex = 8;
@@ -168,7 +168,7 @@
             // 
             // btnAutoregistroUsuario
             // 
-            btnAutoregistroUsuario.Location = new Point(1006, 416);
+            btnAutoregistroUsuario.Location = new Point(1300, 522);
             btnAutoregistroUsuario.Name = "btnAutoregistroUsuario";
             btnAutoregistroUsuario.Size = new Size(142, 29);
             btnAutoregistroUsuario.TabIndex = 13;
@@ -186,10 +186,20 @@
             panel2.Controls.Add(label6);
             panel2.Controls.Add(label3);
             panel2.Controls.Add(label5);
-            panel2.Location = new Point(661, 66);
+            panel2.Location = new Point(955, 172);
             panel2.Name = "panel2";
             panel2.Size = new Size(487, 297);
             panel2.TabIndex = 14;
+            // 
+            // btnCargarDatosUsuario
+            // 
+            btnCargarDatosUsuario.Location = new Point(51, 195);
+            btnCargarDatosUsuario.Name = "btnCargarDatosUsuario";
+            btnCargarDatosUsuario.Size = new Size(128, 29);
+            btnCargarDatosUsuario.TabIndex = 15;
+            btnCargarDatosUsuario.Text = "Cargar en Login";
+            btnCargarDatosUsuario.UseVisualStyleBackColor = true;
+            btnCargarDatosUsuario.Click += btnCargarDatosUsuario_Click;
             // 
             // lblInformacion
             // 
@@ -211,27 +221,18 @@
             btnCargarDatosAdmin.UseVisualStyleBackColor = true;
             btnCargarDatosAdmin.Click += btnCargarDatosAdmin_Click;
             // 
-            // btnCargarDatosUsuario
-            // 
-            btnCargarDatosUsuario.Location = new Point(51, 195);
-            btnCargarDatosUsuario.Name = "btnCargarDatosUsuario";
-            btnCargarDatosUsuario.Size = new Size(128, 29);
-            btnCargarDatosUsuario.TabIndex = 15;
-            btnCargarDatosUsuario.Text = "Cargar en Login";
-            btnCargarDatosUsuario.UseVisualStyleBackColor = true;
-            btnCargarDatosUsuario.Click += btnCargarDatosUsuario_Click;
-            // 
             // LoginForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1242, 503);
+            ClientSize = new Size(1734, 654);
             Controls.Add(panel2);
             Controls.Add(btnAutoregistroUsuario);
             Controls.Add(btnSalirSistema);
             Controls.Add(panel1);
             Name = "LoginForm";
             Text = "Login";
+            WindowState = FormWindowState.Maximized;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);

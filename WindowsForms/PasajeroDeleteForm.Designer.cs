@@ -63,6 +63,7 @@ namespace WindowsForms
             AcceptButton = btnEliminar;
             CancelButton = btnCancelar;
             ClientSize = new Size(318, 167);
+            WindowState = FormWindowState.Maximized;
             Controls.Add(lblInstruccion);
             Controls.Add(nudId);
             Controls.Add(btnEliminar);

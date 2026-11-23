@@ -176,15 +176,15 @@
             label7.TabIndex = 14;
             label7.Text = "Pasajeros\r\n";
             // 
-            // buttonContinuar
+            // buttonSiguiente
             // 
             buttonContinuar.Location = new Point(362, 584);
-            buttonContinuar.Name = "buttonContinuar";
+            buttonContinuar.Name = "buttonSiguiente";
             buttonContinuar.Size = new Size(106, 23);
             buttonContinuar.TabIndex = 15;
-            buttonContinuar.Text = "Continuar";
+            buttonContinuar.Text = "Siguiente";
             buttonContinuar.UseVisualStyleBackColor = true;
-            buttonContinuar.Click += buttonContinuar_Click;
+            buttonContinuar.Click += buttonSiguiente_Click;
             // 
             // buttonVolver
             // 
@@ -201,6 +201,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 749);
+            WindowState = FormWindowState.Maximized;
             Controls.Add(buttonVolver);
             Controls.Add(buttonContinuar);
             Controls.Add(label7);

@@ -1,20 +1,10 @@
 ﻿using DTOs;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace WindowsForms
 {
     public partial class VueloAdminMenuForm : Form
     {
-        
         private readonly MenuAdminForm _menuAdminForm;
 
         public VueloAdminMenuForm(MenuAdminForm menuAdminForm)
@@ -24,9 +14,9 @@ namespace WindowsForms
             CargarListaVuelosEnItems();
         }
 
-        // Al ingresar a la ventana o recargar
         public async void CargarListaVuelosEnItems()
         {
+            panelListaVuelos.SuspendLayout();
             panelListaVuelos.Controls.Clear();
 
             try
@@ -51,32 +41,37 @@ namespace WindowsForms
             {
                 MessageBox.Show($"Error al conectar con la Web API: {ex.Message}");
             }
+            finally
+            {
+                panelListaVuelos.ResumeLayout();
+            }
         }
 
-        // Abrir VueloDetalle para crear un nuevo vuelo
         private void btnNuevoVuelo_Click(object sender, EventArgs e)
         {
             VueloDetalleForm vueloDetalleForm = new VueloDetalleForm(this);
             this.Hide();
             vueloDetalleForm.ShowDialog();
+            this.Show();
+            CargarListaVuelosEnItems();
         }
 
-        // Abrir VueloDetalle pasando el vuelo seleccionado para editarlo
-        private void Item_OnEditarClicked(object sender, VueloUpdateDTO vueloUpdateDto)
+        private void Item_OnEditarClicked(object? sender, VueloUpdateDTO vueloUpdateDto)
         {
             VueloDetalleForm vueloDetalleForm = new VueloDetalleForm(this, vueloUpdateDto);
             this.Hide();
             vueloDetalleForm.ShowDialog();
+            this.Show();
+            CargarListaVuelosEnItems();
         }
 
-        // Eliminar vuelo seleccionado
-        private async void Item_OnEliminarClicked(object sender, VueloDeleteDTO vueloDeleteDto)
+        private async void Item_OnEliminarClicked(object? sender, VueloDeleteDTO vueloDeleteDto)
         {
             var confirmacion = MessageBox.Show(
-                $"¿Está seguro de que desea eliminar el vuelo desde " + 
-                $"{vueloDeleteDto.CiudadOrigenNombre } a {vueloDeleteDto.CiudadDestinoNombre} " +
-                $"del día: {vueloDeleteDto.FechaHoraVuelo.ToString("dd/MM/yyyy")}, " +
-                $"hora: {vueloDeleteDto.FechaHoraVuelo.ToString("HH:mm")}, " + 
+                $"¿Está seguro de que desea eliminar el vuelo desde " +
+                $"{vueloDeleteDto.CiudadOrigenNombre} a {vueloDeleteDto.CiudadDestinoNombre} " +
+                $"del día: {vueloDeleteDto.FechaHoraVuelo:dd/MM/yyyy}, " +
+                $"hora: {vueloDeleteDto.FechaHoraVuelo:HH:mm}, " +
                 $"aerolínea: {vueloDeleteDto.Aerolinea}?",
                 "Confirmar eliminación",
                 MessageBoxButtons.YesNo,
@@ -87,13 +82,12 @@ namespace WindowsForms
             {
                 try
                 {
-                    // HTTP DELETE a /vuelos/{id}
                     HttpResponseMessage response = await Program.HttpClient.DeleteAsync($"/vuelos/{vueloDeleteDto.Id}");
 
                     if (response.IsSuccessStatusCode)
                     {
                         MessageBox.Show("Vuelo eliminado exitosamente.");
-                        CargarListaVuelosEnItems(); // Recarga la lista desde la API (con vuelo eliminado sin incluir)
+                        CargarListaVuelosEnItems();
                     }
                     else
                     {
@@ -112,6 +106,5 @@ namespace WindowsForms
             _menuAdminForm.Show();
             this.Close();
         }
-
     }
 }

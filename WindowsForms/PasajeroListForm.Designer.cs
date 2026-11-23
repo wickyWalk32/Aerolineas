@@ -64,6 +64,7 @@ namespace WindowsForms
             Controls.Add(dgvPasajeros);
             Controls.Add(btnRefrescar);
             Controls.Add(btnCerrar);
+            WindowState = FormWindowState.Maximized;
             Name = "PasajeroListForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Listado de Pasajeros";

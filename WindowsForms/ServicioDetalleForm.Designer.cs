@@ -164,6 +164,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 677);
+            WindowState = FormWindowState.Maximized;
             Controls.Add(btnVolver);
             Controls.Add(panel1);
             Controls.Add(lblTituloNuevoEditarServicio);

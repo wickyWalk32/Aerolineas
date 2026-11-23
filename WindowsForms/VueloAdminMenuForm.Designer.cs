@@ -1,16 +1,13 @@
-﻿namespace WindowsForms
+﻿using System.Windows.Forms;
+using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace WindowsForms
 {
     partial class VueloAdminMenuForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,10 +19,6 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             btnNuevoVuelo = new Button();
@@ -34,57 +27,61 @@
             panelListaVuelos = new FlowLayoutPanel();
             SuspendLayout();
             // 
-            // btnNuevoVuelo
-            // 
-            btnNuevoVuelo.Location = new Point(1030, 40);
-            btnNuevoVuelo.Name = "btnNuevoVuelo";
-            btnNuevoVuelo.Size = new Size(140, 30);
-            btnNuevoVuelo.TabIndex = 0;
-            btnNuevoVuelo.Text = "Nuevo Vuelo";
-            btnNuevoVuelo.UseVisualStyleBackColor = true;
-            btnNuevoVuelo.Click += btnNuevoVuelo_Click;
-            // 
-            // btnVolver
-            // 
-            btnVolver.Location = new Point(70, 616);
-            btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(180, 30);
-            btnVolver.TabIndex = 1;
-            btnVolver.Text = "Volver al menú principal";
-            btnVolver.UseVisualStyleBackColor = true;
-            btnVolver.Click += btnVolver_Click;
-            // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 16F);
+            label1.Font = new System.Drawing.Font("Segoe UI", 16F);
             label1.Location = new Point(70, 30);
             label1.Name = "label1";
             label1.Size = new Size(240, 37);
             label1.TabIndex = 2;
             label1.Text = "Administrar Vuelos";
             // 
+            // btnNuevoVuelo
+            // 
+            btnNuevoVuelo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnNuevoVuelo.Location = new Point(1030, 36);
+            btnNuevoVuelo.Name = "btnNuevoVuelo";
+            btnNuevoVuelo.Size = new Size(140, 32);
+            btnNuevoVuelo.TabIndex = 0;
+            btnNuevoVuelo.Text = "Nuevo Vuelo";
+            btnNuevoVuelo.UseVisualStyleBackColor = true;
+            btnNuevoVuelo.Click += btnNuevoVuelo_Click;
+            // 
             // panelListaVuelos
             // 
+            panelListaVuelos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panelListaVuelos.AutoScroll = true;
             panelListaVuelos.FlowDirection = FlowDirection.TopDown;
-            panelListaVuelos.Location = new Point(70, 100);
+            panelListaVuelos.Location = new Point(70, 95);
             panelListaVuelos.Name = "panelListaVuelos";
-            panelListaVuelos.Size = new Size(1100, 477);
+            panelListaVuelos.Size = new Size(1100, 495);
             panelListaVuelos.TabIndex = 3;
             panelListaVuelos.WrapContents = false;
+            // 
+            // btnVolver
+            // 
+            btnVolver.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnVolver.Location = new Point(70, 616);
+            btnVolver.Name = "btnVolver";
+            btnVolver.Size = new Size(180, 32);
+            btnVolver.TabIndex = 1;
+            btnVolver.Text = "Volver al menú principal";
+            btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.Click += btnVolver_Click;
             // 
             // VueloAdminMenuForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1242, 688);
+            WindowState = FormWindowState.Maximized;
             Controls.Add(panelListaVuelos);
             Controls.Add(label1);
             Controls.Add(btnVolver);
             Controls.Add(btnNuevoVuelo);
             Name = "VueloAdminMenuForm";
-            Text = "VueloAdminMenuForm";
+            Text = "AeroReservas - Administrar Vuelos";
             ResumeLayout(false);
             PerformLayout();
         }

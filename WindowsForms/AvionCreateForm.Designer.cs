@@ -184,6 +184,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(651, 592);
+            WindowState = FormWindowState.Maximized;
             Controls.Add(panelAvion);
             Controls.Add(panel1);
             Controls.Add(lblTituloNuevoEditarAvion);

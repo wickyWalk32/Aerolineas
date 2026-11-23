@@ -35,6 +35,7 @@ namespace WindowsForms
         {
             lblTituloMenuAdmin = new Label();
             panel1 = new Panel();
+            btnAdministrarPaises = new Button();
             btnAdministrarServicios = new Button();
             btnAdministrarAviones = new Button();
             btnAdministrarVuelos = new Button();
@@ -61,6 +62,7 @@ namespace WindowsForms
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(btnAdministrarPaises);
             panel1.Controls.Add(btnAdministrarServicios);
             panel1.Controls.Add(btnAdministrarAviones);
             panel1.Controls.Add(btnAdministrarVuelos);
@@ -73,9 +75,19 @@ namespace WindowsForms
             panel1.Size = new Size(298, 409);
             panel1.TabIndex = 1;
             // 
+            // btnAdministrarPaises
+            // 
+            btnAdministrarPaises.Location = new Point(64, 121);
+            btnAdministrarPaises.Name = "btnAdministrarPaises";
+            btnAdministrarPaises.Size = new Size(165, 29);
+            btnAdministrarPaises.TabIndex = 8;
+            btnAdministrarPaises.Text = "Administrar Países";
+            btnAdministrarPaises.UseVisualStyleBackColor = true;
+            btnAdministrarPaises.Click += btnAdministrarPaises_Click;
+            // 
             // btnAdministrarServicios
             // 
-            btnAdministrarServicios.Location = new Point(65, 181);
+            btnAdministrarServicios.Location = new Point(64, 226);
             btnAdministrarServicios.Name = "btnAdministrarServicios";
             btnAdministrarServicios.Size = new Size(165, 29);
             btnAdministrarServicios.TabIndex = 5;
@@ -85,7 +97,7 @@ namespace WindowsForms
             // 
             // btnAdministrarAviones
             // 
-            btnAdministrarAviones.Location = new Point(65, 146);
+            btnAdministrarAviones.Location = new Point(64, 191);
             btnAdministrarAviones.Name = "btnAdministrarAviones";
             btnAdministrarAviones.Size = new Size(165, 29);
             btnAdministrarAviones.TabIndex = 7;
@@ -95,7 +107,7 @@ namespace WindowsForms
             // 
             // btnAdministrarVuelos
             // 
-            btnAdministrarVuelos.Location = new Point(65, 76);
+            btnAdministrarVuelos.Location = new Point(64, 86);
             btnAdministrarVuelos.Name = "btnAdministrarVuelos";
             btnAdministrarVuelos.Size = new Size(165, 29);
             btnAdministrarVuelos.TabIndex = 6;
@@ -105,7 +117,7 @@ namespace WindowsForms
             // 
             // btnAdministrarUsuarios
             // 
-            btnAdministrarUsuarios.Location = new Point(65, 216);
+            btnAdministrarUsuarios.Location = new Point(64, 261);
             btnAdministrarUsuarios.Name = "btnAdministrarUsuarios";
             btnAdministrarUsuarios.Size = new Size(165, 29);
             btnAdministrarUsuarios.TabIndex = 0;
@@ -115,7 +127,7 @@ namespace WindowsForms
             // 
             // btnAdministrarCiudades
             // 
-            btnAdministrarCiudades.Location = new Point(65, 111);
+            btnAdministrarCiudades.Location = new Point(64, 156);
             btnAdministrarCiudades.Name = "btnAdministrarCiudades";
             btnAdministrarCiudades.Size = new Size(165, 29);
             btnAdministrarCiudades.TabIndex = 2;
@@ -135,7 +147,7 @@ namespace WindowsForms
             // 
             // btnAdministrarPasajeros
             // 
-            btnAdministrarPasajeros.Location = new Point(65, 251);
+            btnAdministrarPasajeros.Location = new Point(64, 296);
             btnAdministrarPasajeros.Name = "btnAdministrarPasajeros";
             btnAdministrarPasajeros.Size = new Size(165, 29);
             btnAdministrarPasajeros.TabIndex = 4;
@@ -183,6 +195,7 @@ namespace WindowsForms
             Controls.Add(lblTituloMenuAdmin);
             Name = "MenuAdminForm";
             Text = "Administrador";
+            WindowState = FormWindowState.Maximized;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
@@ -205,5 +218,6 @@ namespace WindowsForms
         private Button btnAdministrarServicios;
         private Button btnAdministrarVuelos;
         private Button btnAdministrarAviones;
+        private Button btnAdministrarPaises;
     }
 }

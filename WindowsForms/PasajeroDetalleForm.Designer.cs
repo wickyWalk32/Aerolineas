@@ -149,6 +149,7 @@
             AcceptButton = btnGuardar;
             CancelButton = btnVolver;
             ClientSize = new Size(500, 305);
+            WindowState = FormWindowState.Maximized;
             Controls.Add(lblNombre);
             Controls.Add(txtNombre);
             Controls.Add(lblApellido);

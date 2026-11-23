@@ -29,6 +29,12 @@ namespace WindowsForms
             this.Hide();
         }
 
+        private void btnAdministrarPaises_Click(object sender, EventArgs e)
+        {
+            var ventanaAdminPaises = new PaisAdminMenuForm(this);
+            ventanaAdminPaises.Show();
+            this.Hide();
+        }
         private void btnAdministrarCiudades_Click(object sender, EventArgs e)
         {
             CiudadAdminMenuForm ventanaAdminCiudades = new CiudadAdminMenuForm(this);

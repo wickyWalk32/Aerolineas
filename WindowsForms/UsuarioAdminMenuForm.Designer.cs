@@ -79,6 +79,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1242, 688);
+            WindowState = FormWindowState.Maximized;
             Controls.Add(btnNuevoUsuario);
             Controls.Add(panelListaUsuarios);
             Controls.Add(btnVolver);

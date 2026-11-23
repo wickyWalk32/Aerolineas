@@ -53,6 +53,8 @@ namespace Application.Services
 
             var vuelo = await _context.Vuelos
                 .Include(v => v.Avion)
+                .Include(v => v.CiudadOrigen)
+                .Include(v => v.CiudadDestino)
                 .FirstOrDefaultAsync(v => v.Id == dto.VueloId);
 
             if (vuelo == null)
@@ -165,6 +167,7 @@ namespace Application.Services
             return true;
         }
 
+        // Arma la respuesta que se devuelve
         private static ReservaDTO MapToDTO(Reserva reserva)
         {
             return new ReservaDTO

@@ -184,6 +184,7 @@ namespace WindowsForms
             // AvionUpdateForm
             // 
             ClientSize = new Size(711, 749);
+            WindowState = FormWindowState.Maximized;
             Controls.Add(avionControl);
             Controls.Add(lblTitulo);
             Controls.Add(panel1);

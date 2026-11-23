@@ -2,15 +2,8 @@
 {
     partial class MenuUsuarioBuscarVueloForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,10 +15,6 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             lblTituloAeroReservas = new Label();
@@ -52,26 +41,22 @@
             lblTituloAeroReservas.Font = new Font("Segoe UI", 20F, FontStyle.Italic);
             lblTituloAeroReservas.Location = new Point(28, 13);
             lblTituloAeroReservas.Name = "lblTituloAeroReservas";
-            lblTituloAeroReservas.Size = new Size(228, 37);
-            lblTituloAeroReservas.TabIndex = 0;
             lblTituloAeroReservas.Text = "AeroReservas.com";
             // 
             // lblNombreApellido
             // 
             lblNombreApellido.AutoSize = true;
-            lblNombreApellido.Font = new Font("Times New Roman", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNombreApellido.Location = new Point(423, 31);
+            lblNombreApellido.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblNombreApellido.Location = new Point(340, 26);
             lblNombreApellido.Name = "lblNombreApellido";
-            lblNombreApellido.Size = new Size(164, 15);
-            lblNombreApellido.TabIndex = 1;
             lblNombreApellido.Text = "Bienvenido Nombre Apellido !";
             // 
             // btnSalirDelSistema
             // 
-            btnSalirDelSistema.Location = new Point(945, 25);
-            btnSalirDelSistema.Margin = new Padding(3, 2, 3, 2);
+            btnSalirDelSistema.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnSalirDelSistema.Location = new Point(960, 22);
             btnSalirDelSistema.Name = "btnSalirDelSistema";
-            btnSalirDelSistema.Size = new Size(118, 22);
+            btnSalirDelSistema.Size = new Size(125, 28);
             btnSalirDelSistema.TabIndex = 2;
             btnSalirDelSistema.Text = "Salir del sistema";
             btnSalirDelSistema.UseVisualStyleBackColor = true;
@@ -81,24 +66,22 @@
             // 
             panelLineaDivisoria.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             panelLineaDivisoria.BackColor = SystemColors.Desktop;
-            panelLineaDivisoria.Location = new Point(-9, 58);
-            panelLineaDivisoria.Margin = new Padding(3, 2, 3, 2);
+            panelLineaDivisoria.Location = new Point(0, 62);
             panelLineaDivisoria.Name = "panelLineaDivisoria";
-            panelLineaDivisoria.Size = new Size(1124, 1);
+            panelLineaDivisoria.Size = new Size(1118, 2);
             panelLineaDivisoria.TabIndex = 3;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F);
-            label1.Location = new Point(58, 98);
+            label1.Location = new Point(44, 82);
             label1.Name = "label1";
-            label1.Size = new Size(298, 21);
-            label1.TabIndex = 4;
             label1.Text = "Ingrese datos de búsqueda para su vuelo!";
             // 
             // panel1
             // 
+            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(comboBoxCantidadPasajeros);
             panel1.Controls.Add(comboBoxCiudadDestino);
@@ -106,94 +89,88 @@
             panel1.Controls.Add(lblCantidadPasajeros);
             panel1.Controls.Add(label3);
             panel1.Controls.Add(lblCiudadOrigen);
-            panel1.Location = new Point(44, 137);
-            panel1.Margin = new Padding(3, 2, 3, 2);
+            panel1.Location = new Point(44, 115);
             panel1.Name = "panel1";
-            panel1.Size = new Size(908, 67);
+            panel1.Size = new Size(1040, 70);
             panel1.TabIndex = 5;
-            // 
-            // comboBoxCantidadPasajeros
-            // 
-            comboBoxCantidadPasajeros.FormattingEnabled = true;
-            comboBoxCantidadPasajeros.Items.AddRange(new object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
-            comboBoxCantidadPasajeros.Location = new Point(771, 23);
-            comboBoxCantidadPasajeros.Name = "comboBoxCantidadPasajeros";
-            comboBoxCantidadPasajeros.Size = new Size(41, 23);
-            comboBoxCantidadPasajeros.TabIndex = 9;
-            comboBoxCantidadPasajeros.SelectedIndexChanged += FiltrarVuelos;
-            // 
-            // comboBoxCiudadDestino
-            // 
-            comboBoxCiudadDestino.FormattingEnabled = true;
-            comboBoxCiudadDestino.Location = new Point(437, 23);
-            comboBoxCiudadDestino.Margin = new Padding(3, 2, 3, 2);
-            comboBoxCiudadDestino.Name = "comboBoxCiudadDestino";
-            comboBoxCiudadDestino.Size = new Size(183, 23);
-            comboBoxCiudadDestino.TabIndex = 8;
-            comboBoxCiudadDestino.SelectedIndexChanged += FiltrarVuelos;
-            // 
-            // comboBoxCiudadOrigen
-            // 
-            comboBoxCiudadOrigen.FormattingEnabled = true;
-            comboBoxCiudadOrigen.Location = new Point(117, 23);
-            comboBoxCiudadOrigen.Margin = new Padding(3, 2, 3, 2);
-            comboBoxCiudadOrigen.Name = "comboBoxCiudadOrigen";
-            comboBoxCiudadOrigen.Size = new Size(183, 23);
-            comboBoxCiudadOrigen.TabIndex = 7;
-            comboBoxCiudadOrigen.SelectedIndexChanged += FiltrarVuelos;
-            // 
-            // lblCantidadPasajeros
-            // 
-            lblCantidadPasajeros.AutoSize = true;
-            lblCantidadPasajeros.Location = new Point(642, 26);
-            lblCantidadPasajeros.Name = "lblCantidadPasajeros";
-            lblCantidadPasajeros.Size = new Size(123, 15);
-            lblCantidadPasajeros.TabIndex = 2;
-            lblCantidadPasajeros.Text = "Cantidad de pasajeros";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(330, 26);
-            label3.Name = "label3";
-            label3.Size = new Size(103, 15);
-            label3.TabIndex = 1;
-            label3.Text = "Ciudad de destino";
             // 
             // lblCiudadOrigen
             // 
             lblCiudadOrigen.AutoSize = true;
-            lblCiudadOrigen.Location = new Point(13, 26);
+            lblCiudadOrigen.Location = new Point(15, 25);
             lblCiudadOrigen.Name = "lblCiudadOrigen";
-            lblCiudadOrigen.Size = new Size(98, 15);
-            lblCiudadOrigen.TabIndex = 0;
-            lblCiudadOrigen.Text = "Ciudad de origen";
+            lblCiudadOrigen.Text = "Origen";
             // 
-            // flowLayoutPanelVuelos
+            // comboBoxCiudadOrigen
             // 
-            flowLayoutPanelVuelos.AutoScroll = true;
-            flowLayoutPanelVuelos.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanelVuelos.Location = new Point(44, 288);
-            flowLayoutPanelVuelos.Name = "flowLayoutPanelVuelos";
-            flowLayoutPanelVuelos.Size = new Size(989, 398);
-            flowLayoutPanelVuelos.TabIndex = 6;
+            comboBoxCiudadOrigen.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxCiudadOrigen.FormattingEnabled = true;
+            comboBoxCiudadOrigen.Location = new Point(65, 22);
+            comboBoxCiudadOrigen.Name = "comboBoxCiudadOrigen";
+            comboBoxCiudadOrigen.Size = new Size(220, 23);
+            comboBoxCiudadOrigen.TabIndex = 1;
+            comboBoxCiudadOrigen.SelectedIndexChanged += FiltrarVuelos;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(305, 25);
+            label3.Name = "label3";
+            label3.Text = "Destino";
+            // 
+            // comboBoxCiudadDestino
+            // 
+            comboBoxCiudadDestino.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxCiudadDestino.FormattingEnabled = true;
+            comboBoxCiudadDestino.Location = new Point(360, 22);
+            comboBoxCiudadDestino.Name = "comboBoxCiudadDestino";
+            comboBoxCiudadDestino.Size = new Size(220, 23);
+            comboBoxCiudadDestino.TabIndex = 2;
+            comboBoxCiudadDestino.SelectedIndexChanged += FiltrarVuelos;
+            // 
+            // lblCantidadPasajeros
+            // 
+            lblCantidadPasajeros.AutoSize = true;
+            lblCantidadPasajeros.Location = new Point(600, 25);
+            lblCantidadPasajeros.Name = "lblCantidadPasajeros";
+            lblCantidadPasajeros.Text = "Pasajeros";
+            // 
+            // comboBoxCantidadPasajeros
+            // 
+            comboBoxCantidadPasajeros.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxCantidadPasajeros.FormattingEnabled = true;
+            comboBoxCantidadPasajeros.Location = new Point(665, 22);
+            comboBoxCantidadPasajeros.Name = "comboBoxCantidadPasajeros";
+            comboBoxCantidadPasajeros.Size = new Size(220, 23);
+            comboBoxCantidadPasajeros.TabIndex = 3;
+            comboBoxCantidadPasajeros.SelectedIndexChanged += FiltrarVuelos;
             // 
             // labelSinVuelos
             // 
             labelSinVuelos.AutoSize = true;
-            labelSinVuelos.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            labelSinVuelos.Location = new Point(344, 237);
+            labelSinVuelos.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            labelSinVuelos.Location = new Point(44, 205);
             labelSinVuelos.Name = "labelSinVuelos";
-            labelSinVuelos.Size = new Size(255, 28);
-            labelSinVuelos.TabIndex = 7;
             labelSinVuelos.Text = "No se encontraron vuelos";
             labelSinVuelos.Visible = false;
             // 
+            // flowLayoutPanelVuelos
+            // 
+            flowLayoutPanelVuelos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            flowLayoutPanelVuelos.AutoScroll = true;
+            flowLayoutPanelVuelos.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanelVuelos.WrapContents = false;
+            flowLayoutPanelVuelos.Location = new Point(44, 240);
+            flowLayoutPanelVuelos.Name = "flowLayoutPanelVuelos";
+            flowLayoutPanelVuelos.Size = new Size(1040, 450);
+            flowLayoutPanelVuelos.TabIndex = 6;
+            // 
             // buttonMisReservas
             // 
-            buttonMisReservas.Location = new Point(676, 27);
+            buttonMisReservas.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonMisReservas.Location = new Point(825, 22);
             buttonMisReservas.Name = "buttonMisReservas";
-            buttonMisReservas.Size = new Size(99, 23);
+            buttonMisReservas.Size = new Size(120, 28);
             buttonMisReservas.TabIndex = 8;
             buttonMisReservas.Text = "Mis Reservas";
             buttonMisReservas.UseVisualStyleBackColor = true;
@@ -204,6 +181,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1118, 720);
+            WindowState = FormWindowState.Maximized;
             Controls.Add(buttonMisReservas);
             Controls.Add(labelSinVuelos);
             Controls.Add(flowLayoutPanelVuelos);
@@ -213,9 +191,8 @@
             Controls.Add(btnSalirDelSistema);
             Controls.Add(lblNombreApellido);
             Controls.Add(lblTituloAeroReservas);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "MenuUsuarioBuscarVueloForm";
-            Text = "MenuUsuarioBuscarVueloForm";
+            Text = "AeroReservas - Buscar Vuelo";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
