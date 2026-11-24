@@ -32,7 +32,7 @@ namespace WindowsForms
                         avionItem.CargarDatos(avion);
                         avionItem.EditarAvionClicked += Item_OnEditarAvionClicked;
                         avionItem.EliminarAvionClicked += Item_OnEliminarAvionClicked;
-                        this.Controls.Add(avionItem);
+                        //this.Controls.Add(avionItem);
                         flowLayoutPanelAviones.Controls.Add(avionItem);
 
                     }
@@ -70,7 +70,7 @@ namespace WindowsForms
             }
                 try
             {
-                HttpResponseMessage response = await Program.HttpClient.DeleteAsync($"/aviones/{avion.Id}/");
+                HttpResponseMessage response = await Program.HttpClient.DeleteAsync($"/aviones/{avion.Id}");
                 if (response.IsSuccessStatusCode)
                 {
                     MessageBox.Show("Avion Eliminado junto con futuros vuelos");

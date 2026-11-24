@@ -27,8 +27,11 @@ namespace WindowsForms
             _usuarioAutenticado = usuarioAutenticado;
             _form1 = form1;
 
-            int filas = vuelo.Avion != null ? Math.Max(1, vuelo.Avion.Capacidad / 4) : 13;
-            avionControl.AgregarAsientos(filas);
+            int capacidad = vuelo.Avion?.Capacidad ?? 52;
+            int filas = Math.Max(1, (int)Math.Ceiling(capacidad / 4.0));
+
+            // Dibujamos exactamente 'capacidad' asientos distribuidos en filas de 4 (1A, 1B, 1C, 1D, 2A...)
+            avionControl.AgregarAsientos(filas, capacidad);
             _ = MarcarAsientosOcupados(vuelo);
 
             for (int i = 0; i < cantPasajeros; i++)
@@ -49,8 +52,10 @@ namespace WindowsForms
                     return;
 
                 List<string> codAsientosOcupados = pasajes
-                    .Where(p => int.TryParse(p.CodigoAsiento, out _))
-                    .Select(p => ConvertirCodigoAsiento(int.Parse(p.CodigoAsiento)))
+                    .Where(p => !string.IsNullOrWhiteSpace(p.CodigoAsiento))
+                    .Select(p => int.TryParse(p.CodigoAsiento, out int nroAsiento)
+                        ? ConvertirCodigoAsiento(nroAsiento)
+                        : p.CodigoAsiento.Trim())
                     .ToList();
 
                 avionControl.MarcarAsientosOcupados(codAsientosOcupados);
@@ -94,6 +99,7 @@ namespace WindowsForms
                 textBoxDocumento.Clear();
                 comboBoxTipoDocumento.SelectedIndex = -1;
                 _codigoAsiento = null;
+                avionControl.PrepararParaNuevoPasajero(null);
                 return;
             }
 
@@ -105,10 +111,8 @@ namespace WindowsForms
                 .Cast<string>()
                 .FirstOrDefault(x => x.EndsWith($"({pasajero.TipoDocumento})", StringComparison.OrdinalIgnoreCase));
 
-            if (!string.IsNullOrWhiteSpace(pasajero.CodigoAsiento))
-            {
-                avionControl.AsientoSeleccionado(pasajero.CodigoAsiento);
-            }
+            _codigoAsiento = pasajero.CodigoAsiento;
+            avionControl.PrepararParaNuevoPasajero(pasajero.CodigoAsiento);
         }
 
         private void buttonGuardar_Click(object? sender, EventArgs e)
@@ -118,7 +122,7 @@ namespace WindowsForms
             string apellido = textBoxApellido.Text.Trim();
             string nroDocumento = textBoxDocumento.Text.Trim();
             string? tipoDoc = comboBoxTipoDocumento.SelectedItem?.ToString();
-            string? codigoAsiento = avionControl.GetCodigoAsiento();
+            string? codigoAsiento = avionControl.GetCodigoAsiento() ?? _codigoAsiento;
 
             if (string.IsNullOrWhiteSpace(tipoEdad) ||
                 string.IsNullOrWhiteSpace(nombre) ||
@@ -167,10 +171,10 @@ namespace WindowsForms
                 Tipo = tipoNormalizado,
                 NroDocumento = nroDocumento,
                 TipoDocumento = tipoDocNormalizado,
-                CodigoAsiento = codigoAsiento
+                CodigoAsiento = codigoAsiento.Trim()
             };
 
-            avionControl.SeleccionAsientoGuardado(codigoAsiento);
+            avionControl.SeleccionAsientoGuardado(nuevoPasajero.CodigoAsiento);
             _pasajeroControlActual.SetPasajero(nuevoPasajero);
             _pasajeroActual = nuevoPasajero;
             _codigoAsiento = null;
@@ -178,10 +182,10 @@ namespace WindowsForms
 
         private string ConvertirCodigoAsiento(int codigo)
         {
-            int fila = (codigo - 1) / 4 + 1;
+            int nroFila = (codigo - 1) / 4 + 1;
             int columna = (codigo - 1) % 4;
             char letra = (char)('A' + columna);
-            return $"{letra}{fila}";
+            return $"{nroFila}{letra}"; // Patrón: 1A, 1B, 1C, 1D, 2A...
         }
 
         private void avionControl_Click(object? sender, EventArgs e)

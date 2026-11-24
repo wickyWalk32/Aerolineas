@@ -1,21 +1,14 @@
 ﻿using DTOs;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace WindowsForms
 {
     public partial class PasajeroDataItemControl : UserControl
     {
-        public event EventHandler<PasajeroCreateDTO> PasajeroData;
-        PasajeroCreateDTO _pasajeroCreateDTO;
-        public PasajeroDataItemControl( string nombrePlaceholder)
+        public event EventHandler<PasajeroCreateDTO?>? PasajeroData;
+        private PasajeroCreateDTO? _pasajeroCreateDTO;
+        private bool _tieneFoco;
+
+        public PasajeroDataItemControl(string nombrePlaceholder)
         {
             InitializeComponent();
             labelPasajero.Text = nombrePlaceholder;
@@ -28,35 +21,43 @@ namespace WindowsForms
         public void SetPasajero(PasajeroCreateDTO pasajeroCreateDTO)
         {
             _pasajeroCreateDTO = pasajeroCreateDTO;
-            this.BackColor = Color.LightGreen;
+            ActualizarColorVisual();
         }
-        public PasajeroCreateDTO GetPasajero()
+
+        public PasajeroCreateDTO? GetPasajero()
         {
             return _pasajeroCreateDTO;
         }
 
         public void Focus(bool isFocus)
         {
-            if (isFocus)
+            _tieneFoco = isFocus;
+            ActualizarColorVisual();
+        }
+
+        private void ActualizarColorVisual()
+        {
+            if (_pasajeroCreateDTO != null)
             {
-                this.BackColor = Color.Honeydew;
+                this.BackColor = _tieneFoco ? Color.MediumAquamarine : Color.LightGreen;
             }
             else
             {
-                this.BackColor = SystemColors.Control;
+                this.BackColor = _tieneFoco ? Color.Honeydew : SystemColors.Control;
             }
         }
-        private void PasajeroDataItemControl_Load(object sender, EventArgs e)
+
+        private void PasajeroDataItemControl_Load(object? sender, EventArgs e)
         {
             labelPasajero.Left = (this.ClientSize.Width - labelPasajero.Width) / 2;
             labelPasajero.Top = (this.ClientSize.Height - labelPasajero.Height) / 2;
         }
 
-        private void PasajeroDataItemControl_Click(object sender, EventArgs e)
+        private void PasajeroDataItemControl_Click(object? sender, EventArgs e)
         {
-            PasajeroCreateDTO pasajeroData = _pasajeroCreateDTO;
-            PasajeroData?.Invoke(this, pasajeroData);
+            PasajeroData?.Invoke(this, _pasajeroCreateDTO);
         }
+
         public void EjecutarClick()
         {
             PasajeroData?.Invoke(this, _pasajeroCreateDTO);

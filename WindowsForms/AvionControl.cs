@@ -1,78 +1,38 @@
 ﻿using DTOs;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Drawing;
-
 
 namespace WindowsForms
 {
     public partial class AvionControl : UserControl
     {
-        string[] abc = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
-        List<AsientoCreateDTO> asientosCreateDTO = new();
-        AvionAsientoItemControl _asientoControl;
-        string _codigoAsientoActual;
+        private static readonly char[] LetrasColumnas = { 'A', 'B', 'C', 'D' };
+        private readonly List<AsientoCreateDTO> asientosCreateDTO = new();
+        private AvionAsientoItemControl? _asientoSeleccionadoActual;
+        private string? _codigoAsientoActual;
+
         public AvionControl()
         {
             InitializeComponent();
         }
-        private void panelAvion_Paint(object sender, PaintEventArgs e)
-        {
 
+        private void panelAvion_Paint(object? sender, PaintEventArgs e)
+        {
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
             float x = panelAvion.Width * 0.05f;
             float y = 10;
             float w = panelAvion.Width * 0.90f;
-            float h = panelAvion.Height - 15;
+            float h = Math.Max(panelAvion.Height - 15, 200);
 
             using var path = new GraphicsPath();
 
-            // Nose
-            path.AddBezier(
-                x, y + 70,
-                x, y + 25,
-                x + w * 0.25f, y,
-                x + w / 2, y
-            );
-
-            path.AddBezier(
-                x + w / 2, y,
-                x + w * 0.75f, y,
-                x + w, y + 25,
-                x + w, y + 70
-            );
-
-            // Right side
+            path.AddBezier(x, y + 70, x, y + 25, x + w * 0.25f, y, x + w / 2, y);
+            path.AddBezier(x + w / 2, y, x + w * 0.75f, y, x + w, y + 25, x + w, y + 70);
             path.AddLine(x + w, y + 70, x + w, y + h - 70);
-
-            // Tail
-            path.AddBezier(
-                x + w, y + h - 70,
-                x + w, y + h - 25,
-                x + w * 0.75f, y + h,
-                x + w / 2, y + h
-            );
-
-            path.AddBezier(
-                x + w / 2, y + h,
-                x + w * 0.25f, y + h,
-                x, y + h - 25,
-                x, y + h - 70
-            );
-
-            // Left side
+            path.AddBezier(x + w, y + h - 70, x + w, y + h - 25, x + w * 0.75f, y + h, x + w / 2, y + h);
+            path.AddBezier(x + w / 2, y + h, x + w * 0.25f, y + h, x, y + h - 25, x, y + h - 70);
             path.AddLine(x, y + h - 70, x, y + 70);
-
             path.CloseFigure();
 
             using var fill = new SolidBrush(Color.LightGray);
@@ -80,65 +40,68 @@ namespace WindowsForms
 
             g.FillPath(fill, path);
             g.DrawPath(border, path);
-
-
         }
+
         public List<AsientoCreateDTO> AgregarAsientos(int filas)
+        {
+            return AgregarAsientos(filas, capacidadMaxima: null);
+        }
+
+        public List<AsientoCreateDTO> AgregarAsientos(int filas, int? capacidadMaxima)
         {
             LimpiarAsientos();
 
-            int columnas = 4;
-
+            int columnas = LetrasColumnas.Length;
             int seatSize = 30;
             int spacingX = 10;
-            int spacingY = 10;
+            int spacingY = 8;
 
             int gridWidth = columnas * seatSize + (columnas - 1) * spacingX;
-            int gridHeight = filas * seatSize + (filas - 1) * spacingY;
 
-            // Area available inside the plane
             int areaLeft = (int)(panelAvion.Width * 0.20f);
             int areaRight = (int)(panelAvion.Width * 0.80f);
-
-            int areaTop = 70;
-            int areaBottom = panelAvion.Height - 70;
-
+            int areaTop = 75;
             int areaWidth = areaRight - areaLeft;
-            int areaHeight = areaBottom - areaTop;
 
-            // Center the grid
             int startX = areaLeft + (areaWidth - gridWidth) / 2;
-            int startY = areaTop + (areaHeight - gridHeight) / 2;
+            int startY = areaTop;
 
-            for (int fila = 0; fila < filas; fila++)
+            int creados = 0;
+
+            for (int filaIdx = 0; filaIdx < filas; filaIdx++)
             {
-                for (int columna = 0; columna < columnas; columna++)
-                {
-                    int x = startX + columna * (seatSize + spacingX);
-                    int y = startY + fila * (seatSize + spacingY);
+                int nroFila = filaIdx + 1;
 
-                    string codigo = $"{abc[columna]}{fila + 1}";
+                for (int colIdx = 0; colIdx < columnas; colIdx++)
+                {
+                    if (capacidadMaxima.HasValue && creados >= capacidadMaxima.Value)
+                    {
+                        return asientosCreateDTO;
+                    }
+
+                    char letra = LetrasColumnas[colIdx];
+                    string codigo = $"{nroFila}{letra}";
+
+                    int x = startX + colIdx * (seatSize + spacingX);
+                    int y = startY + filaIdx * (seatSize + spacingY);
 
                     asientosCreateDTO.Add(new AsientoCreateDTO
                     {
                         Codigo = codigo,
-                        Fila = abc[columna][0],
-                        Columna = fila + 1,
+                        Fila = letra,
+                        Columna = nroFila,
                         Estado = "Habilitado"
                     });
 
-                    AgregarAsiento(x, y, fila, columna, codigo);
+                    AgregarAsiento(x, y, codigo);
+                    creados++;
                 }
             }
+
             return asientosCreateDTO;
         }
 
-        private void textBoxCapacidad_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void AgregarAsiento(int x, int y, int fila, int columna, string codAsiento)
+        private void AgregarAsiento(int x, int y, string codAsiento)
         {
             var asiento = new AvionAsientoItemControl(codAsiento);
             asiento.Location = new Point(x, y);
@@ -147,63 +110,79 @@ namespace WindowsForms
             panelAvion.Controls.Add(asiento);
         }
 
-        private void OnClickSelectAsiento(object sender, string codigoAsiento)
+        private void OnClickSelectAsiento(object? sender, string codigoAsiento)
         {
-            AvionAsientoItemControl asientoControl = sender as AvionAsientoItemControl;
-            if (_codigoAsientoActual!=null && _codigoAsientoActual != codigoAsiento &&
-                _asientoControl.IsBlocked == false)
+            if (sender is not AvionAsientoItemControl asientoControl || asientoControl.IsBlocked)
+                return;
+
+            // Si había otro asiento temporalmente seleccionado (no guardado), lo devolvemos a disponible
+            if (_asientoSeleccionadoActual != null &&
+                _asientoSeleccionadoActual != asientoControl &&
+                !_asientoSeleccionadoActual.IsBlocked)
             {
-                _asientoControl.AsientoDisponible();
+                _asientoSeleccionadoActual.AsientoDisponible();
             }
-            _asientoControl = asientoControl;
-           _codigoAsientoActual = _asientoControl.AsientoSeleccionado();
+
+            _asientoSeleccionadoActual = asientoControl;
+            _codigoAsientoActual = asientoControl.AsientoSeleccionado();
         }
+
+        public void PrepararParaNuevoPasajero(string? codigoAsientoPrevio)
+        {
+            // Limpiamos selección temporal no guardada
+            if (_asientoSeleccionadoActual != null && !_asientoSeleccionadoActual.IsBlocked)
+            {
+                _asientoSeleccionadoActual.AsientoDisponible();
+            }
+
+            _asientoSeleccionadoActual = null;
+            _codigoAsientoActual = null;
+
+            if (!string.IsNullOrWhiteSpace(codigoAsientoPrevio))
+            {
+                AsientoSeleccionado(codigoAsientoPrevio);
+            }
+        }
+
         public void AsientoSeleccionado(string codigoAsiento)
         {
             foreach (AvionAsientoItemControl asiento in panelAvion.Controls
                          .OfType<AvionAsientoItemControl>())
             {
-                if (codigoAsiento == asiento.GetCodigoAsiento())
+                if (string.Equals(codigoAsiento, asiento.GetCodigoAsiento(), StringComparison.OrdinalIgnoreCase))
                 {
-                    asiento.AsientoDisponible(); 
+                    asiento.IsBlocked = false;
                     asiento.AsientoSeleccionado();
+                    asiento.OnClickGetCodigoAsiento -= OnClickSelectAsiento;
                     asiento.OnClickGetCodigoAsiento += OnClickSelectAsiento;
-                    _asientoControl.IsBlocked = false;
-                    asiento.Cursor = Cursors.Hand;
+                    _asientoSeleccionadoActual = asiento;
+                    _codigoAsientoActual = asiento.GetCodigoAsiento();
                 }
             }
         }
+
         public void SeleccionAsientoGuardado(string codigoAsiento)
         {
             foreach (AvionAsientoItemControl asiento in panelAvion.Controls
                          .OfType<AvionAsientoItemControl>())
             {
-                if (codigoAsiento == asiento.GetCodigoAsiento())
+                if (string.Equals(codigoAsiento, asiento.GetCodigoAsiento(), StringComparison.OrdinalIgnoreCase))
                 {
                     asiento.AsientoSeleccionado();
-                    asiento.OnClickGetCodigoAsiento -= OnClickSelectAsiento;
-                    _asientoControl.IsBlocked = true;
+                    asiento.IsBlocked = true;
                     asiento.Cursor = Cursors.Default;
-                    //if (_pasajero!=null && _pasajero == pasajero) _asientoControl.IsBlocked = false ;
-                    //_pasajero = pasajero;
+                    asiento.OnClickGetCodigoAsiento -= OnClickSelectAsiento;
                 }
             }
-        }
-        public string GetCodigoAsiento()
-        {
-            return _codigoAsientoActual;
+
+            // Reseteamos la selección temporal para el siguiente pasajero
+            _asientoSeleccionadoActual = null;
+            _codigoAsientoActual = null;
         }
 
-        private void comboBoxFilas_SelectedIndexChanged(object sender, EventArgs e)
+        public string? GetCodigoAsiento()
         {
-            LimpiarAsientos();
-            float x = panelAvion.Width * 0.1f;
-            float y = 10;
-            if (sender is ComboBox comboBox &&
-                int.TryParse(comboBox.Text, out int filas))
-            {
-                AgregarAsientos(filas);
-            }
+            return _codigoAsientoActual;
         }
 
         public void MarcarAsientosOcupados(List<string> asientosOcupados)
@@ -216,9 +195,10 @@ namespace WindowsForms
             foreach (AvionAsientoItemControl asiento in panelAvion.Controls
                          .OfType<AvionAsientoItemControl>())
             {
-                if (ocupados.Contains(asiento.GetCodigoAsiento() ) )
+                if (ocupados.Contains(asiento.GetCodigoAsiento()))
                 {
                     asiento.AsientoOcupado();
+                    asiento.IsBlocked = true;
                     asiento.OnClickGetCodigoAsiento -= OnClickSelectAsiento;
                 }
             }
@@ -227,10 +207,12 @@ namespace WindowsForms
         public void LimpiarAsientos()
         {
             asientosCreateDTO.Clear();
+            _codigoAsientoActual = null;
+            _asientoSeleccionadoActual = null;
 
             foreach (var asiento in panelAvion.Controls
-            .OfType<AvionAsientoItemControl>()
-            .ToList())
+                .OfType<AvionAsientoItemControl>()
+                .ToList())
             {
                 panelAvion.Controls.Remove(asiento);
                 asiento.Dispose();
@@ -238,4 +220,3 @@ namespace WindowsForms
         }
     }
 }
-

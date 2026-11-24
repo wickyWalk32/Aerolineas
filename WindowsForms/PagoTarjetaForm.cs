@@ -123,12 +123,13 @@ namespace WindowsForms
             {
                 var pasajero = _estado.Pasajeros[i];
                 _estado.ServiciosPorPasajero.TryGetValue(i, out var idsSrv);
+                string codigoAsientoLimpio = (pasajero.CodigoAsiento ?? string.Empty).Trim();
 
                 pasajesDto.Add(new PasajeCreateDTO
                 {
                     Estado = "Emitido",
                     IdAvion = idAvion,
-                    CodigoAsiento = ConvertirCodigoAsiento(pasajero.CodigoAsiento).ToString(),
+                    CodigoAsiento = codigoAsientoLimpio,
                     Pasajero = new PasajeroCreateDTO
                     {
                         Nombre = pasajero.Nombre.Trim(),
@@ -136,7 +137,7 @@ namespace WindowsForms
                         Tipo = pasajero.Tipo,
                         NroDocumento = pasajero.NroDocumento.Trim(),
                         TipoDocumento = pasajero.TipoDocumento,
-                        CodigoAsiento = pasajero.CodigoAsiento
+                        CodigoAsiento = codigoAsientoLimpio
                     },
                     ServicioIds = idsSrv?.ToList() ?? new List<int>()
                 });
@@ -210,19 +211,6 @@ namespace WindowsForms
             return DateTime.UtcNow.AddYears(1);
         }
 
-        private static int ConvertirCodigoAsiento(string codigo)
-        {
-            if (string.IsNullOrWhiteSpace(codigo) || codigo.Length < 2)
-                return 0;
-
-            char letra = char.ToUpperInvariant(codigo[0]);
-            if (!int.TryParse(codigo.Substring(1), out int fila))
-                return 0;
-
-            int columna = letra - 'A';
-            return (fila - 1) * 4 + columna + 1;
-        }
-
         private void btnAtras_Click(object? sender, EventArgs e)
         {
             _formAnterior.Show();
@@ -230,24 +218,3 @@ namespace WindowsForms
         }
     }
 }
-
-/*using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace WindowsForms
-{
-    public partial class PagoTarjetaForm : Form
-    {
-        public PagoTarjetaForm()
-        {
-            InitializeComponent();
-        }
-    }
-}*/
