@@ -1,6 +1,7 @@
 ﻿using Application.Services;
 using Domain.Model;
 using DTOs;
+using Microsoft.AspNetCore.Authorization;
 using WebApi.Services;
 
 namespace WebApi
@@ -18,7 +19,7 @@ namespace WebApi
             .WithName("GetAllUsuarios")
             .Produces<List<UsuarioDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             // 2. OBTENER UN USUARIO POR ID (GET)
             app.MapGet("/usuarios/{id}", async (int id, UsuarioService usuarioService) =>
@@ -30,7 +31,7 @@ namespace WebApi
             .Produces<UsuarioDTO>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             // 3. CREAR UN NUEVO USUARIO (POST) - Para el Auto Registro está en LoginEndpoints.cs
             app.MapPost("/usuarios", async (UsuarioCreateDTO dto, UsuarioService usuarioService) =>
@@ -50,7 +51,7 @@ namespace WebApi
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
             //.AllowAnonymous();
-            .RequireAuthorization();
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             // 4. EDITAR UN USUARIO (PUT)
             app.MapPut("/usuarios/{id}", async (int id, UsuarioUpdateDTO dto, UsuarioService usuarioService) =>
@@ -68,7 +69,7 @@ namespace WebApi
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             // 5. ELIMINAR UN USUARIO (DELETE)
             app.MapDelete("/usuarios/{id}", async (int id, UsuarioService usuarioService) =>
@@ -79,8 +80,8 @@ namespace WebApi
             .WithName("DeleteUsuario")
             .Produces(StatusCodes.Status204NoContent)
             .WithOpenApi()
-            .RequireAuthorization();
-        
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
+
         }
     }
 }

@@ -7,7 +7,7 @@ namespace WebApi
     {
         public static void MapReporteEndpoints(this IEndpointRouteBuilder routes)
         {
-            var group = routes.MapGroup("reportes")/*.RequireAuthorization();*/
+            var group = routes.MapGroup("reportes")
             .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             group.MapGet("/estadisticas", async (ReporteService reporteService) =>

@@ -27,7 +27,6 @@ namespace WindowsForms
             lblCiudadOrigen.Text = "Desde " + (vueloActual.CiudadOrigen?.Nombre ?? "");
             lblCiudadDestino.Text = "a " + (vueloActual.CiudadDestino?.Nombre ?? "");
             lblAvionDescripcion.Text = "Avión: " + (vueloActual.Avion?.Descripcion ?? "");
-            //lblAvionCapacidad.Text = "Capacidad: " + (vueloActual.Avion?.Capacidad?.ToString() ?? "");
             lblAvionCapacidad.Text = "Capacidad: " + (vueloActual.Avion != null ? vueloActual.Avion.Capacidad.ToString() : "");
         }
 

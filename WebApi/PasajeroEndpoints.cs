@@ -1,5 +1,6 @@
 ﻿using Application.Services;
 using DTOs;
+using Microsoft.AspNetCore.Authorization;
 namespace WebApi
 {
     public static class PasajeroEndpoints
@@ -18,7 +19,7 @@ namespace WebApi
             }).WithName("GetAllPasajeros")
             .Produces<List<PasajeroDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             app.MapGet("/pasajeros/{id}", async (int id, PasajeroService pasajeroService) =>
             {
@@ -35,7 +36,7 @@ namespace WebApi
             .Produces<UsuarioDTO>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
 
             app.MapPost("/pasajeros", async (PasajeroCreateDTO dto, PasajeroService pasajeroService) =>
@@ -56,7 +57,7 @@ namespace WebApi
             .Produces<UsuarioDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             app.MapPut("/pasajeros/{id}", async (int id, PasajeroUpdateDTO dto, PasajeroService pasajeroService) =>
             {
@@ -82,7 +83,7 @@ namespace WebApi
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
 
             app.MapDelete("/pasajeros/{id}", async (int id, PasajeroService pasajeroService) =>
@@ -101,7 +102,7 @@ namespace WebApi
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
         }
     

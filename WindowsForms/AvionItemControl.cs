@@ -29,10 +29,9 @@ namespace WindowsForms
             _avionDTO = avion;
             toolTipAvion.SetToolTip(this, avion.Descripcion);
             labelId.Text = avion.Id.ToString();
+            labelModelo.Text = string.IsNullOrWhiteSpace(avion.Descripcion) ? "-" : avion.Descripcion;
             labelCapacidad.Text = avion.Capacidad.ToString();
-            //labelModelo.Text = _avionDTO.Modelo;
             labelEstado.Text = avion.EstadoDisponibilidad;
-            //buttonEliminar.FlatAppearance.MouseOverBackColor = Color.Red;
         }
 
         public void buttonEliminar_Click(object sender, EventArgs e)
@@ -56,10 +55,15 @@ namespace WindowsForms
         }
         private void button_MouseLeave(object sender, EventArgs e)
         {
-            if(sender is Button button)
+            if (sender is Button button)
             {
                 button.ForeColor = Color.Black;
             }
+
+        }
+
+        private void AvionItemControl_Load(object sender, EventArgs e)
+        {
 
         }
     }

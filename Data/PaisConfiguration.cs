@@ -21,9 +21,7 @@ namespace Data
 
             builder.HasKey(pais => pais.Id);
 
-            // ¡ESTA LÍNEA ES CLAVE! Le dice a EF Core que NO genere el ID automáticamente (se cargan en el seed inicial)
             builder.Property(pais => pais.Id)
-                //.ValueGeneratedNever();
                 .ValueGeneratedOnAdd();
 
             builder.Property(pais => pais.Nombre)
@@ -31,7 +29,7 @@ namespace Data
                 .HasMaxLength(100);
 
             // Nota: El Seed Data masivo se quitó de acá para evitar scripts SQL gigantescos 
-            // que causan timeouts en el arranque. Ahora se inicializa de forma controlada.
+            // que causan timeouts en el arranque. Ahora se inicializa de forma controlada en el DbInitializer.
 
         }
     }

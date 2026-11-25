@@ -10,6 +10,7 @@ namespace WindowsForms
         private const string TextoPasajerosDefault = "Ingrese cantidad de pasajeros";
 
         private List<VueloDTO> _vuelos = new();
+        private readonly Dictionary<int, int> _asientosOcupadosPorVuelo = new();
         private readonly UsuarioLoginResultDTO _usuarioAutenticado;
         private bool _cargandoCombos = false;
 
@@ -79,12 +80,53 @@ namespace WindowsForms
             {
                 var vuelos = await Program.HttpClient.GetFromJsonAsync<List<VueloDTO>>("/vuelos");
                 _vuelos = vuelos ?? new List<VueloDTO>();
+
+                _asientosOcupadosPorVuelo.Clear();
+
+                // Consultamos en paralelo los pasajes/ocupados de cada vuelo para calcular asientos libres reales
+                var tareasOcupados = _vuelos.Select(async v =>
+                {
+                    try
+                    {
+                        var pasajes = await Program.HttpClient
+                            .GetFromJsonAsync<List<PasajeDTO>>($"vuelos/{v.Id}/reservas/pasajes");
+
+                        int ocupados = pasajes?
+                            .Where(p => !string.IsNullOrWhiteSpace(p.CodigoAsiento))
+                            .Select(p => p.CodigoAsiento.Trim())
+                            .Distinct(StringComparer.OrdinalIgnoreCase)
+                            .Count() ?? 0;
+
+                        return (VueloId: v.Id, Ocupados: ocupados);
+                    }
+                    catch
+                    {
+                        return (VueloId: v.Id, Ocupados: 0);
+                    }
+                });
+
+                var resultados = await Task.WhenAll(tareasOcupados);
+                foreach (var res in resultados)
+                {
+                    _asientosOcupadosPorVuelo[res.VueloId] = res.Ocupados;
+                }
+
                 MostrarVuelos(_vuelos);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al cargar vuelos: {ex.Message}");
             }
+        }
+
+        private int ObtenerAsientosLibres(VueloDTO vuelo)
+        {
+            int capacidadTotal = vuelo.Avion?.Capacidad ?? vuelo.Capacidad ?? 0;
+            int ocupados = _asientosOcupadosPorVuelo.TryGetValue(vuelo.Id, out int cantOcupados)
+                ? cantOcupados
+                : 0;
+
+            return Math.Max(0, capacidadTotal - ocupados);
         }
 
         private void FiltrarVuelos(object? sender, EventArgs e)
@@ -102,7 +144,7 @@ namespace WindowsForms
             var filtrados = _vuelos.Where(v =>
                 (!filtrarOrigen || v.CiudadOrigen?.Nombre == origen) &&
                 (!filtrarDestino || v.CiudadDestino?.Nombre == destino) &&
-                (!cantidadPasajeros.HasValue || (v.Avion?.Capacidad ?? v.Capacidad ?? 0) >= cantidadPasajeros.Value)
+                (!cantidadPasajeros.HasValue || ObtenerAsientosLibres(v) >= cantidadPasajeros.Value)
             ).ToList();
 
             labelSinVuelos.Visible = filtrados.Count == 0;
@@ -143,6 +185,17 @@ namespace WindowsForms
                     MessageBoxIcon.Warning
                 );
                 comboBoxCantidadPasajeros.Focus();
+                return;
+            }
+
+            if (ObtenerAsientosLibres(vuelo) < cantidadPasajeros)
+            {
+                MessageBox.Show(
+                    "El vuelo seleccionado no tiene suficientes asientos libres para esa cantidad de pasajeros.",
+                    "Sin disponibilidad suficiente",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
                 return;
             }
 

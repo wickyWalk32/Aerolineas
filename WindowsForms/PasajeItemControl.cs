@@ -13,7 +13,6 @@ namespace WindowsForms
         {
             if (pasaje == null) return;
 
-            // Evitamos NullReferenceException si el objeto Pasajero viene nulo
             var pasajero = pasaje.Pasajero;
             string nombre = pasajero?.Nombre?.Trim() ?? "Pasajero";
             string apellido = pasajero?.Apellido?.Trim() ?? string.Empty;
@@ -27,7 +26,6 @@ namespace WindowsForms
             string nroDoc = pasajero?.NroDocumento ?? string.Empty;
             labelDNI.Text = $"{tipoDoc}  {nroDoc}".Trim();
 
-            // Si no tiene servicios adicionales, lo indicamos explícitamente
             var servicios = pasaje.Servicios;
             if (servicios == null || servicios.Count == 0)
             {
@@ -42,37 +40,24 @@ namespace WindowsForms
                 labelServicios.Text = $"Servicios: {detalleServicios}";
             }
 
-            labelAsiento.Text = $"Asiento: {pasaje.CodigoAsiento}";
+            labelAsiento.Text = $"Asiento: {FormatearEtiquetaAsiento(pasaje.CodigoAsiento)}";
+        }
+
+        private static string FormatearEtiquetaAsiento(string? codigo)
+        {
+            if (string.IsNullOrWhiteSpace(codigo))
+                return string.Empty;
+
+            string limpio = codigo.Trim();
+            if (int.TryParse(limpio, out int nro) && nro > 0)
+            {
+                int filaIdx = (nro - 1) / 4;
+                int colNum = ((nro - 1) % 4) + 1;
+                char filaLetra = (char)('A' + filaIdx);
+                return $"{filaLetra}{colNum}";
+            }
+
+            return limpio;
         }
     }
 }
-
-/*using DTOs;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace WindowsForms
-{
-    public partial class PasajeItemControl : UserControl
-    {
-        public PasajeItemControl()
-        {
-            InitializeComponent();
-        }
-
-        public void CargarDatos(PasajeDTO pasaje)
-        {
-            labelNombreYTipo.Text = $"{pasaje.Pasajero.Nombre}  {pasaje.Pasajero.Apellido}  ({pasaje.Pasajero.Tipo})";
-            labelDNI.Text = $"{pasaje.Pasajero.TipoDocumento}  {pasaje.Pasajero.NroDocumento}";
-            labelServicios.Text = string.Join(", ", pasaje.Servicios.Select(s => $"{s.Nombre} (+${s.Precio})"));
-            labelAsiento.Text = $"Asiento: #{pasaje.CodigoAsiento.ToString()}";
-        }
-    }
-}*/

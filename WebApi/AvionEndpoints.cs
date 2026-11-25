@@ -1,14 +1,17 @@
 ﻿using Application.Services;
 using DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi
 {
     public static class AvionEndpoints
     {
-        public static void MapAvionEndpoints(this WebApplication app)
+        public static void MapAvionEndpoints(this IEndpointRouteBuilder routes)
         {
+            var group = routes.MapGroup("aviones");
+
             // GET: /aviones (Obtener todos)
-            app.MapGet("/aviones", async (AvionService avionService) =>
+            group.MapGet("/", async (AvionService avionService) =>
             {
                 var dtos = await avionService.GetAllAsync();
                 return Results.Ok(dtos);
@@ -16,10 +19,11 @@ namespace WebApi
             .WithName("GetAllAviones")
             .Produces<List<AvionDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
+            
 
             // GET: /aviones/{id} (Obtener por ID)
-            app.MapGet("/aviones/{id:int}", async (int id, AvionService avionService) =>
+            group.MapGet("/{id:int}", async (int id, AvionService avionService) =>
             {
                 var dto = await avionService.GetByIdAsync(id);
 
@@ -37,12 +41,11 @@ namespace WebApi
             .RequireAuthorization();
 
             // POST: /aviones (Crear)
-            app.MapPost("/aviones", async (AvionCreateDTO dto, AvionService avionService) =>
+            group.MapPost("/", async (AvionCreateDTO dto, AvionService avionService) =>
             {
                 try
                 {
                     AvionDTO avionDTO = await avionService.AddAsync(dto);
-                    // Usa avionDTO.Id coincidiendo con tu propiedad de dominio
                     return Results.Created($"/aviones/{avionDTO.Id}", avionDTO);
                 }
                 catch (ArgumentException ex)
@@ -54,10 +57,10 @@ namespace WebApi
             .Produces<AvionDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             // PUT: /aviones/{id} (Actualizar)
-            app.MapPut("/aviones/{id:int}", async (int id, AvionUpdateDTO dto, AvionService avionService) =>
+            group.MapPut("/{id:int}", async (int id, AvionUpdateDTO dto, AvionService avionService) =>
             {
                 try
                 {
@@ -80,10 +83,10 @@ namespace WebApi
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             // DELETE: /aviones/{id} (Eliminar)
-            app.MapDelete("/aviones/{id:int}", async (int id, AvionService avionService) =>
+            group.MapDelete("/{id:int}", async (int id, AvionService avionService) =>
             {
                 var deleted = await avionService.DeleteAsync(id);
 
@@ -98,7 +101,8 @@ namespace WebApi
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
+
         }
     }
 }

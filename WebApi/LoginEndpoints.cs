@@ -24,7 +24,6 @@ namespace WebApi
                 }
             })
             .WithName("AddUsuarioRegister")
-            .Produces<UsuarioCreateDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi();
 

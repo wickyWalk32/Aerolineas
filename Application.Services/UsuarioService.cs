@@ -59,8 +59,8 @@ namespace Application.Services
 
             Usuario usuarioGuardado = await _repository.AddAsync(usuario);
             
-            // EF carga id autogenerado por la bd en 'usuario' xq es inteligente y lo tiene en memoria xq se paso al repositorio para
-            // hacer la operación en la bd.
+            // EF carga id autogenerado por la bd en 'usuario' xq es inteligente y lo tiene en memoria xq se paso al
+            // repositorio para hacer la operación en la bd.
             UsuarioDTO usuarioDTO = new UsuarioDTO
             {
                 Id = usuario.Id,

@@ -7,8 +7,12 @@ namespace WindowsForms
     {
         private static readonly char[] LetrasColumnas = { 'A', 'B', 'C', 'D' };
         private readonly List<AsientoCreateDTO> asientosCreateDTO = new();
+        private readonly Dictionary<string, AvionAsientoItemControl> _controlesPorCodigo = new(StringComparer.OrdinalIgnoreCase);
+
         private AvionAsientoItemControl? _asientoSeleccionadoActual;
         private string? _codigoAsientoActual;
+
+        public event EventHandler<string?>? AsientoCambiado;
 
         public AvionControl()
         {
@@ -66,48 +70,49 @@ namespace WindowsForms
             int startX = areaLeft + (areaWidth - gridWidth) / 2;
             int startY = areaTop;
 
-            int creados = 0;
+            int totalCapacidad = capacidadMaxima ?? (filas * columnas);
+            int numeroAsiento = 0;
 
             for (int filaIdx = 0; filaIdx < filas; filaIdx++)
             {
-                int nroFila = filaIdx + 1;
+                char letraFila = (char)('A' + filaIdx);
 
                 for (int colIdx = 0; colIdx < columnas; colIdx++)
                 {
-                    if (capacidadMaxima.HasValue && creados >= capacidadMaxima.Value)
-                    {
+                    if (numeroAsiento >= totalCapacidad)
                         return asientosCreateDTO;
-                    }
 
-                    char letra = LetrasColumnas[colIdx];
-                    string codigo = $"{nroFila}{letra}";
+                    numeroAsiento++;
+                    int nroColumna = colIdx + 1; // 1, 2, 3, 4
+                    string codigoBackend = numeroAsiento.ToString(); // "1", "2", "3"...
+                    string etiquetaVisible = $"{letraFila}{nroColumna}"; // "A1", "A2", "B1"...
 
                     int x = startX + colIdx * (seatSize + spacingX);
                     int y = startY + filaIdx * (seatSize + spacingY);
 
                     asientosCreateDTO.Add(new AsientoCreateDTO
                     {
-                        Codigo = codigo,
-                        Fila = letra,
-                        Columna = nroFila,
+                        Codigo = codigoBackend,
+                        Fila = letraFila,
+                        Columna = nroColumna,
                         Estado = "Habilitado"
                     });
 
-                    AgregarAsiento(x, y, codigo);
-                    creados++;
+                    AgregarAsiento(x, y, codigoBackend, etiquetaVisible);
                 }
             }
 
             return asientosCreateDTO;
         }
 
-        private void AgregarAsiento(int x, int y, string codAsiento)
+        private void AgregarAsiento(int x, int y, string codigoBackend, string etiquetaVisible)
         {
-            var asiento = new AvionAsientoItemControl(codAsiento);
+            var asiento = new AvionAsientoItemControl(codigoBackend, etiquetaVisible);
             asiento.Location = new Point(x, y);
             asiento.Size = new Size(30, 30);
             asiento.OnClickGetCodigoAsiento += OnClickSelectAsiento;
             panelAvion.Controls.Add(asiento);
+            _controlesPorCodigo[codigoBackend] = asiento;
         }
 
         private void OnClickSelectAsiento(object? sender, string codigoAsiento)
@@ -115,7 +120,6 @@ namespace WindowsForms
             if (sender is not AvionAsientoItemControl asientoControl || asientoControl.IsBlocked)
                 return;
 
-            // Si había otro asiento temporalmente seleccionado (no guardado), lo devolvemos a disponible
             if (_asientoSeleccionadoActual != null &&
                 _asientoSeleccionadoActual != asientoControl &&
                 !_asientoSeleccionadoActual.IsBlocked)
@@ -125,88 +129,67 @@ namespace WindowsForms
 
             _asientoSeleccionadoActual = asientoControl;
             _codigoAsientoActual = asientoControl.AsientoSeleccionado();
+            AsientoCambiado?.Invoke(this, _codigoAsientoActual);
         }
 
-        public void PrepararParaNuevoPasajero(string? codigoAsientoPrevio)
+        public void SincronizarCroquis(
+            IEnumerable<string> ocupadosEnVuelo,
+            IEnumerable<string> guardadosPorOtrosPasajeros,
+            string? asientoGuardadoPasajeroActual,
+            string? asientoTemporalPasajeroActual)
         {
-            // Limpiamos selección temporal no guardada
-            if (_asientoSeleccionadoActual != null && !_asientoSeleccionadoActual.IsBlocked)
-            {
-                _asientoSeleccionadoActual.AsientoDisponible();
-            }
+            var setOcupados = new HashSet<string>(ocupadosEnVuelo, StringComparer.OrdinalIgnoreCase);
+            var setOtrosGuardados = new HashSet<string>(guardadosPorOtrosPasajeros, StringComparer.OrdinalIgnoreCase);
 
             _asientoSeleccionadoActual = null;
             _codigoAsientoActual = null;
 
-            if (!string.IsNullOrWhiteSpace(codigoAsientoPrevio))
+            foreach (var (codigo, ctrl) in _controlesPorCodigo)
             {
-                AsientoSeleccionado(codigoAsientoPrevio);
-            }
-        }
+                ctrl.IsBlocked = false;
+                ctrl.AsientoDisponible();
 
-        public void AsientoSeleccionado(string codigoAsiento)
-        {
-            foreach (AvionAsientoItemControl asiento in panelAvion.Controls
-                         .OfType<AvionAsientoItemControl>())
-            {
-                if (string.Equals(codigoAsiento, asiento.GetCodigoAsiento(), StringComparison.OrdinalIgnoreCase))
+                if (setOcupados.Contains(codigo))
                 {
-                    asiento.IsBlocked = false;
-                    asiento.AsientoSeleccionado();
-                    asiento.OnClickGetCodigoAsiento -= OnClickSelectAsiento;
-                    asiento.OnClickGetCodigoAsiento += OnClickSelectAsiento;
-                    _asientoSeleccionadoActual = asiento;
-                    _codigoAsientoActual = asiento.GetCodigoAsiento();
+                    ctrl.AsientoOcupado();
+                    ctrl.IsBlocked = true;
                 }
-            }
-        }
-
-        public void SeleccionAsientoGuardado(string codigoAsiento)
-        {
-            foreach (AvionAsientoItemControl asiento in panelAvion.Controls
-                         .OfType<AvionAsientoItemControl>())
-            {
-                if (string.Equals(codigoAsiento, asiento.GetCodigoAsiento(), StringComparison.OrdinalIgnoreCase))
+                else if (setOtrosGuardados.Contains(codigo))
                 {
-                    asiento.AsientoSeleccionado();
-                    asiento.IsBlocked = true;
-                    asiento.Cursor = Cursors.Default;
-                    asiento.OnClickGetCodigoAsiento -= OnClickSelectAsiento;
+                    ctrl.AsientoSeleccionado();
+                    ctrl.IsBlocked = true;
                 }
             }
 
-            // Reseteamos la selección temporal para el siguiente pasajero
-            _asientoSeleccionadoActual = null;
-            _codigoAsientoActual = null;
-        }
+            string? codigoActivo = !string.IsNullOrWhiteSpace(asientoTemporalPasajeroActual)
+                ? asientoTemporalPasajeroActual.Trim()
+                : asientoGuardadoPasajeroActual?.Trim();
 
-        public string? GetCodigoAsiento()
-        {
-            return _codigoAsientoActual;
-        }
-
-        public void MarcarAsientosOcupados(List<string> asientosOcupados)
-        {
-            HashSet<string> ocupados = new HashSet<string>(
-                asientosOcupados,
-                StringComparer.OrdinalIgnoreCase
-            );
-
-            foreach (AvionAsientoItemControl asiento in panelAvion.Controls
-                         .OfType<AvionAsientoItemControl>())
+            if (!string.IsNullOrWhiteSpace(codigoActivo) &&
+                _controlesPorCodigo.TryGetValue(codigoActivo, out var ctrlActivo) &&
+                !setOcupados.Contains(codigoActivo))
             {
-                if (ocupados.Contains(asiento.GetCodigoAsiento()))
-                {
-                    asiento.AsientoOcupado();
-                    asiento.IsBlocked = true;
-                    asiento.OnClickGetCodigoAsiento -= OnClickSelectAsiento;
-                }
+                ctrlActivo.IsBlocked = false;
+                ctrlActivo.AsientoSeleccionado();
+                _asientoSeleccionadoActual = ctrlActivo;
+                _codigoAsientoActual = codigoActivo;
             }
+        }
+
+        public string? GetCodigoAsiento() => _codigoAsientoActual;
+
+        public string? GetEtiquetaPorCodigo(string? codigo)
+        {
+            if (string.IsNullOrWhiteSpace(codigo)) return null;
+            return _controlesPorCodigo.TryGetValue(codigo.Trim(), out var ctrl)
+                ? ctrl.GetEtiqueta()
+                : codigo;
         }
 
         public void LimpiarAsientos()
         {
             asientosCreateDTO.Clear();
+            _controlesPorCodigo.Clear();
             _codigoAsientoActual = null;
             _asientoSeleccionadoActual = null;
 

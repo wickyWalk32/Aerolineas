@@ -10,7 +10,6 @@ namespace Data
     public interface IPasajeRepository
     {
         Task<List<Pasaje>> GetAllAsync();
-        // Task<List<Pasaje>> GetAllByUserAsync();
         Task<Pasaje?> GetByIdAsync(int id);
         Task AddAsync(Pasaje pasaje);
         Task UpdateAsync(Pasaje pasaje);

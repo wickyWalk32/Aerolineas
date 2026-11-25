@@ -42,7 +42,7 @@ namespace WindowsForms
         {
             try
             {
-                // Abrir listado; implementar eliminación dentro de `PasajeroListForm` si se desea.
+                
                 var ventana = new PasajeroDeleteForm();
                 ventana.ShowDialog(this);
             }

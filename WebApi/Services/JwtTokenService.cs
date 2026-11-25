@@ -12,9 +12,9 @@ using DTOs;
 
 namespace WebApi.Services
 {
-    // Este archivo es fundamental en la API porque contiene la clave secreta (Secret) y la lógica criptográfica para armar el JWT con
-    // los Claims (los datos del usuario como su ID, email y rol). El cliente de Windows Forms jamás debe conocer la clave secreta; solo
-    // recibe el token ya firmado.
+    // Este archivo es fundamental en la API porque contiene la clave secreta (Secret) y la lógica criptográfica para
+    // armar el JWT con los Claims (los datos del usuario como su ID, email y rol). El cliente de Windows Forms jamás
+    // debe conocer la clave secreta; solo recibe el token ya firmado.
 
     public class JwtTokenService
     {

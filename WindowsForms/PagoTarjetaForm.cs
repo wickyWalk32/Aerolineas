@@ -63,7 +63,9 @@ namespace WindowsForms
                     ? string.Join(", ", servsElegidos.Select(s => $"{s.Nombre} (${s.Precio:N2})"))
                     : "Ninguno";
 
-                sb.AppendLine($"• {p.Nombre} {p.Apellido} ({p.Tipo}) - Asiento {p.CodigoAsiento}");
+                string etiquetaAsiento = FormatearEtiquetaAsiento(p.CodigoAsiento);
+
+                sb.AppendLine($"• {p.Nombre} {p.Apellido} ({p.Tipo}) - Asiento {etiquetaAsiento}");
                 sb.AppendLine($"  Servicios: {textoServicios}");
                 sb.AppendLine();
             }
@@ -196,6 +198,23 @@ namespace WindowsForms
                     btnAtras.Enabled = true;
                 }
             }
+        }
+
+        private static string FormatearEtiquetaAsiento(string? codigo)
+        {
+            if (string.IsNullOrWhiteSpace(codigo))
+                return "";
+
+            string limpio = codigo.Trim();
+            if (int.TryParse(limpio, out int nro) && nro > 0)
+            {
+                int filaIdx = (nro - 1) / 4;
+                int colNum = ((nro - 1) % 4) + 1;
+                char filaLetra = (char)('A' + filaIdx);
+                return $"{filaLetra}{colNum}";
+            }
+
+            return limpio;
         }
 
         private static DateTime ParsearVencimientoUtc(string vencimiento)

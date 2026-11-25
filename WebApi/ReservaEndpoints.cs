@@ -1,6 +1,7 @@
 ﻿using Application.Services;
 using Domain.Model;
 using DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi
 {
@@ -8,7 +9,7 @@ namespace WebApi
     {
         public static void MapReservaEndpoints(this WebApplication app)
         {
-            var group = app.MapGroup("/reservas").RequireAuthorization();
+            var group = app.MapGroup("/reservas");
 
             // GET: Consultar todas
             group.MapGet("/", async (ReservaService reservaService) =>
@@ -18,9 +19,10 @@ namespace WebApi
             })
             .WithName("GetAllReservas")
             .Produces<List<ReservaDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization(); // Tmbm se le da acceso al rol 'usuario' para la sección "Mis reservas" (se filtran por su id).
 
-            // GET: Consultar por clave primaria (id)
+            // GET: Consultar una reserva por clave primaria (id)
             group.MapGet("/{id:int}", async (int id, ReservaService reservaService) =>
             {
                 var dto = await reservaService.GetByIdAsync(id);
@@ -29,8 +31,8 @@ namespace WebApi
             .WithName("GetReservaById")
             .Produces<ReservaDTO>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
-
+            .WithOpenApi()
+            .RequireAuthorization(); // Ambos roles tienen acceso a este endpoint
 
             // GET: Consultar todas las reservar por usuario
             group.MapGet("/usuarios/{usuarioId}", async (int usuarioId,ReservaService reservaService) =>
@@ -40,8 +42,8 @@ namespace WebApi
             })
             .WithName("GetAllReservasByUsuario")
             .Produces<List<ReservaDTO>>(StatusCodes.Status200OK)
-            .WithOpenApi();
-
+            .WithOpenApi()
+            .RequireAuthorization(); // Ambos roles tienen acceso a este endpoint
 
             // POST: Crear reserva
             group.MapPost("/", async (ReservaCreateDTO dto, ReservaService reservaService) =>
@@ -59,7 +61,8 @@ namespace WebApi
             .WithName("AddReserva")
             .Produces<ReservaDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization(); // Ambos roles tienen acceso a este endpoint
 
             // PUT: Actualizar reserva por id
             group.MapPut("/{id:int}", async (int id, ReservaUpdateDTO dto, ReservaService reservaService) =>
@@ -79,7 +82,8 @@ namespace WebApi
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             // DELETE: Eliminar reserva por id
             group.MapDelete("/{id:int}", async (int id, ReservaService reservaService) =>
@@ -90,7 +94,9 @@ namespace WebApi
             .WithName("DeleteReserva")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
+
         }
     }
 }

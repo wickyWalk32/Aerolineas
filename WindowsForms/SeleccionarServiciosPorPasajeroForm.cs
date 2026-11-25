@@ -177,39 +177,10 @@ namespace WindowsForms
 
         private void btnSiguiente_Click(object? sender, EventArgs e)
         {
-            /*
-            // Siguiente paso: ventana de datos de pago (la armamos en el próximo mensaje)
-            MessageBox.Show(
-                "Servicios guardados por pasajero. Pasemos ahora a la ventana de datos de pago.",
-                "Listo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
-            */
+            
             var formPago = new PagoTarjetaForm(this, _estado);
             formPago.Show();
             this.Hide();
         }
     }
 }
-
-/*using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace WindowsForms
-{
-    public partial class SeleccionarServiciosPorPasajeroForm : Form
-    {
-        public SeleccionarServiciosPorPasajeroForm()
-        {
-            InitializeComponent();
-        }
-    }
-}*/

@@ -1,5 +1,6 @@
 ﻿using Application.Services;
 using DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi
 {
@@ -7,21 +8,23 @@ namespace WebApi
     {
         public static void MapVueloEndpoints(this IEndpointRouteBuilder routes)
         {
-            var group = routes.MapGroup("vuelos").RequireAuthorization(); // Protegidos con JWT
+            var group = routes.MapGroup("vuelos");
 
             // GET: Listar todos
             group.MapGet("/", async (VueloService vueloService) =>
             {
                 var vuelos = await vueloService.GetAllAsync();
                 return Results.Ok(vuelos);
-            });
+            })
+            .RequireAuthorization(); // Protegido con JWT;
 
             // GET: Obtener por ID
             group.MapGet("/{id:int}", async (int id, VueloService vueloService) =>
             {
                 var vuelo = await vueloService.GetByIdAsync(id);
                 return vuelo is not null ? Results.Ok(vuelo) : Results.NotFound();
-            });
+            })
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" }); // Protegidos con JWT;
 
             // GET: Asientos ocupados de un vuelo puntual
             group.MapGet("/{id:int}/asientos-ocupados", async (int id, ReservaService reservaService) =>
@@ -39,7 +42,8 @@ namespace WebApi
             .WithName("GetAsientosOcupadosPorVuelo")
             .Produces<List<string>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization(); // Protegido con JWT
 
             // POST: Crear
             group.MapPost("/", async (VueloCreateDTO dto, VueloService vueloService) =>
@@ -57,7 +61,8 @@ namespace WebApi
                 {
                     return Results.Problem("Ocurrió un error interno en el servidor.", statusCode: 500);
                 }
-            });
+            })
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" }); // Protegidos con JWT;
 
             // PUT: Actualizar
             group.MapPut("/{id:int}", async (int id, VueloUpdateDTO dto, VueloService vueloService) =>
@@ -76,16 +81,18 @@ namespace WebApi
                 {
                     return Results.Problem("Ocurrió un error interno en el servidor.", statusCode: 500);
                 }
-            });
+            })
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" }); // Protegidos con JWT;
 
             // DELETE: Eliminar
             group.MapDelete("/{id:int}", async (int id, VueloService vueloService) =>
             {
                 await vueloService.DeleteAsync(id);
                 return Results.NoContent();
-            });
+            })
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" }); // Protegidos con JWT;
 
-
+            // Para saber que asientos estan ocupados al cargar el kroquis de asientos de windows forms
             group.MapGet("/{vueloId}/reservas/pasajes", async (int vueloId, VueloService vueloService) =>
             {
 
@@ -96,7 +103,7 @@ namespace WebApi
             .WithName("GetPasajesXVuelo")
             .Produces<List<PasajeDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization();
+            .RequireAuthorization(); // Protegidos con JWT;
         }
    
     }

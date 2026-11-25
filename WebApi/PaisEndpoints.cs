@@ -1,5 +1,6 @@
 ﻿using Application.Services;
 using DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Data.SqlClient;
 
 namespace WebApi
@@ -8,19 +9,21 @@ namespace WebApi
     {
         public static void MapPaisEndpoints(this IEndpointRouteBuilder routes)
         {
-            var group = routes.MapGroup("paises").RequireAuthorization();
+            var group = routes.MapGroup("paises");
 
             group.MapGet("/", async (PaisService paisService) =>
             {
                 var paises = await paisService.GetAllAsync();
                 return Results.Ok(paises);
-            });
+            })
+            .RequireAuthorization();
 
             group.MapGet("/{id}", async (int id, PaisService paisService) =>
             {
                 var paisDto = await paisService.GetByIdAsync(id);
                 return paisDto is not null ? Results.Ok(paisDto) : Results.NotFound();
-            });
+            })
+            .RequireAuthorization();
 
             group.MapPost("/", async (PaisCreateDTO dto, PaisService paisService) =>
             {
@@ -33,7 +36,8 @@ namespace WebApi
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
-            });
+            })
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             group.MapPut("/{id}", async (int id, PaisUpdateDTO dto, PaisService paisService) =>
             {
@@ -47,7 +51,8 @@ namespace WebApi
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
-            });
+            })
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             group.MapDelete("/{id}", async (int id, PaisService paisService) =>
             {
@@ -61,7 +66,9 @@ namespace WebApi
                     // Error 547 en SQL Server: violación de clave foránea (el país tiene ciudades asociadas)
                     return Results.BadRequest(new { error = "No se puede eliminar el país porque tiene ciudades asociadas." });
                 }
-            });
+            })
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
+        
         }
     }
 }

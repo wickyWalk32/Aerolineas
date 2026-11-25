@@ -14,7 +14,7 @@ namespace WindowsForms
     public partial class ServicioItemControl : UserControl
     {
         
-        // Eventos que escuchará el formulario padre (ServicioDetalleF.cs)
+        // Eventos que escuchará el formulario padre (ServicioDetalleForm.cs)
         public event EventHandler<ServicioUpdateDTO>? OnEditarClicked;
         public event EventHandler<ServicioDeleteDTO>? OnEliminarClicked;
 

@@ -1,7 +1,8 @@
 ﻿using Application.Services;
 using DTOs;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApi
 {
@@ -18,7 +19,7 @@ namespace WebApi
             .WithName("GetAllCiudades")
             .Produces<List<CiudadDTO>>(StatusCodes.Status200OK)
             .WithOpenApi()
-            .RequireAuthorization(/*"CiudadesLeer"*/);
+            .RequireAuthorization();
 
             app.MapGet("/ciudades/{id}", async (int id, CiudadService ciudadService) =>
             {
@@ -35,7 +36,7 @@ namespace WebApi
             .Produces<CiudadDTO>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi()
-            .RequireAuthorization(/*"CiudadesLeer"*/);
+            .RequireAuthorization();
 
             app.MapPost("/ciudades", async (CiudadCreateDTO dto, CiudadService ciudadService) =>
             {
@@ -55,7 +56,7 @@ namespace WebApi
             .Produces<CiudadDTO>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
-            .RequireAuthorization(/*"CiudadesAgregar"*/);
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             app.MapPut("/ciudades/{id}", async (int id, CiudadUpdateDTO dto, CiudadService ciudadService) =>
             {
@@ -81,7 +82,7 @@ namespace WebApi
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status400BadRequest)
             .WithOpenApi()
-            .RequireAuthorization(/*"CiudadesActualizar"*/);
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
 
             app.MapDelete("/ciudades/{id}", async (int id, CiudadService ciudadService) =>
             {
@@ -99,7 +100,8 @@ namespace WebApi
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .WithOpenApi()
-            .RequireAuthorization(/*"CiudadesEliminar"*/);
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "admin" });
+
         }
     }
 }

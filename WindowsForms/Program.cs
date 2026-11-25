@@ -11,7 +11,6 @@ namespace WindowsForms
     {
         public static IConfiguration Configuration { get; private set; } = null!;
 
-        // Mantenemos una propiedad pública o accedemos directamente a UserSession.HttpClient y UserSession.TokenJwt
         public static HttpClient HttpClient => UserSession.HttpClient;
         public static string? TokenJwt => UserSession.TokenJwt;
 
@@ -41,13 +40,7 @@ namespace WindowsForms
                 MessageBox.Show("No se encontró la URL de la API en el archivo de configuración.", "Error de configuración", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            // AvionDTO avion = await Program.HttpClient.GetFromJsonAsync<AvionDTO>("/aviones/1");
-            //AvionDTO avion = new AvionDTO {Id=1,EstadoDisponibilidad="Disponible" , Capacidad =20,Descripcion = "avion de condado"};
-            //Application.Run(new AvionUpdateForm(avion));
-            //Application.Run(new AvionCreateForm());
-
-
-
+            
             // 3. Flujo de Login y redirección según el rol: se utiliza ShowDialog() para validar credenciales y destruye el formulario
             // de login antes de lanzar la ventana principal según el rol.
             

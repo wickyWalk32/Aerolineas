@@ -50,9 +50,6 @@ namespace DTOs
 
     public class VueloDeleteDTO
     {
-        // Si se borra un vuelo, se necesita el avión para navegar hasta sus asientos y también borrarlos. ¿??? > NO! Xq asientos son
-        // del avión, y tienen un estado actual simplemente.
-        // Si se borra un vuelo se necesita su listado de reservas para también borrarlas.
 
         public int Id { get; set; }
         public DateTime FechaHoraVuelo { get; set; }

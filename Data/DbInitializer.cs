@@ -697,10 +697,9 @@ namespace Data
             //  (/* 5,*/ "EcoJet Q400"       , 42 , "Disponible"),     > v8:10,11,12(max=42)
             //  (/* 6,*/ "MetroExpress E190" , 9  , "Disponible"),     > v7:1,2,3,4,5,6,7,8,9:LLENO - v12:1,2,3,4,5,6(max=9) - SE SOLAPAN 1,2,3,4,5,6
             //  (/* 7,*/ "Oceanic 350"       , 36 , "No disponible"),  > NO DISPONIBLE
-            //  (/* 8,*/ "SkyLinx 737"       , 10 , "Disponible"),     > DISPONIBLE PERO NO ASIGNADO A NINGÚN VUELO
+            //  (/* 8,*/ "SkyLinx 737"       , 10 , "Disponible"),     > Asignado al vuelo 11, que incialmente no tiene reservas
             //  (/* 9,*/ "StratoCruiser 787" , 21 , "Disponible"),     > v1:2,3,4,5,6,7,8,9,11,12 - v10:5,6,7,8,9,10,11,12,13,15,16,19,20,21(max=21) - TAMBIÉN HAY SOLAPAMIENTOS:5,6,7,8,9,11,12
             //  (/*10,*/ "Titan 777"         , 29 , "Disponible")      > v9:4,5,6,22,23(max = 29)   
-
 
             await context.Set<Pasaje>().AddRangeAsync(pasajesIniciales);
             await context.SaveChangesAsync();
@@ -712,11 +711,6 @@ namespace Data
 
             for (int pasajeId = 1; pasajeId <= 83; pasajeId++)
             {
-                // Distribución aproximada:
-                // 0 servicios: 15% (0..14)
-                // 1 servicio : 45% (15..59)
-                // 2 servicios: 30% (60..89)
-                // 3 servicios: 10% (90..99)
                 int roll = random.Next(100);
                 int cantidadServicios = roll switch
                 {

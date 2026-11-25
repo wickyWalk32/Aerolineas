@@ -8,11 +8,14 @@ namespace WindowsForms
         private readonly VueloDTO _vueloActual;
         private readonly UsuarioLoginResultDTO _usuarioAutenticado;
         private readonly MenuUsuarioBuscarVueloForm _form1;
+        private readonly int _cantPasajeros;
+
+        private readonly HashSet<string> _codigosOcupadosEnVuelo = new(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<PasajeroDataItemControl, string> _asientoGuardadoPorControl = new();
 
         private PasajeroDataItemControl? _pasajeroControlActual;
         private PasajeroCreateDTO? _pasajeroActual;
-        private string? _codigoAsiento;
-        private readonly int _cantPasajeros;
+        private string? _codigoAsientoBorrador;
 
         public MenuUsuarioSeleccionarAsientoForm(
             MenuUsuarioBuscarVueloForm form1,
@@ -30,40 +33,68 @@ namespace WindowsForms
             int capacidad = vuelo.Avion?.Capacidad ?? 52;
             int filas = Math.Max(1, (int)Math.Ceiling(capacidad / 4.0));
 
-            // Dibujamos exactamente 'capacidad' asientos distribuidos en filas de 4 (1A, 1B, 1C, 1D, 2A...)
             avionControl.AgregarAsientos(filas, capacidad);
-            _ = MarcarAsientosOcupados(vuelo);
+            avionControl.AsientoCambiado += AvionControl_AsientoCambiado;
 
             for (int i = 0; i < cantPasajeros; i++)
             {
                 string nombre = $"P{i + 1}";
                 AgregarPasajeros(nombre);
             }
+
+            _ = CargarAsientosOcupadosAsync(vuelo);
         }
 
-        private async Task MarcarAsientosOcupados(VueloDTO vuelo)
+        private async Task CargarAsientosOcupadosAsync(VueloDTO vuelo)
         {
             try
             {
                 var pasajes = await Program.HttpClient
                     .GetFromJsonAsync<List<PasajeDTO>>($"vuelos/{vuelo.Id}/reservas/pasajes");
 
-                if (pasajes == null)
-                    return;
+                _codigosOcupadosEnVuelo.Clear();
 
-                List<string> codAsientosOcupados = pasajes
-                    .Where(p => !string.IsNullOrWhiteSpace(p.CodigoAsiento))
-                    .Select(p => int.TryParse(p.CodigoAsiento, out int nroAsiento)
-                        ? ConvertirCodigoAsiento(nroAsiento)
-                        : p.CodigoAsiento.Trim())
-                    .ToList();
+                if (pasajes != null)
+                {
+                    foreach (var p in pasajes)
+                    {
+                        if (string.IsNullOrWhiteSpace(p.CodigoAsiento)) continue;
+                        string cod = NormalizarCodigoAsiento(p.CodigoAsiento.Trim());
+                        _codigosOcupadosEnVuelo.Add(cod);
+                    }
+                }
 
-                avionControl.MarcarAsientosOcupados(codAsientosOcupados);
+                RefrescarCroquisSegunEstadoActual();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al cargar los asientos: {ex.Message}");
             }
+        }
+
+        // Si en BD el código viene como "7" queda "7"; si alguna vez viniera como "B3", lo convierte a "7"
+        private static string NormalizarCodigoAsiento(string valor)
+        {
+            if (int.TryParse(valor, out int nro) && nro > 0)
+                return nro.ToString();
+
+            if (valor.Length >= 2)
+            {
+                char letra = char.ToUpperInvariant(valor[0]);
+                if (letra is >= 'A' and <= 'Z' && int.TryParse(valor[1..], out int col) && col is >= 1 and <= 4)
+                {
+                    int filaIdx = letra - 'A';
+                    int codigoCalculado = filaIdx * 4 + col;
+                    return codigoCalculado.ToString();
+                }
+            }
+
+            return valor;
+        }
+
+        private void AvionControl_AsientoCambiado(object? sender, string? nuevoCodigo)
+        {
+            _codigoAsientoBorrador = nuevoCodigo;
         }
 
         private void AgregarPasajeros(string nombre)
@@ -78,7 +109,10 @@ namespace WindowsForms
 
         private void PasajeroControl_PasajeroData(object? sender, PasajeroCreateDTO? pasajero)
         {
-            if (_pasajeroControlActual != null && _pasajeroControlActual != sender as PasajeroDataItemControl)
+            if (sender is not PasajeroDataItemControl nuevoControl)
+                return;
+
+            if (_pasajeroControlActual != null && _pasajeroControlActual != nuevoControl)
             {
                 _pasajeroControlActual.Focus(false);
                 if (_pasajeroActual != null)
@@ -87,9 +121,12 @@ namespace WindowsForms
                 }
             }
 
-            _pasajeroControlActual = sender as PasajeroDataItemControl;
+            _pasajeroControlActual = nuevoControl;
             _pasajeroActual = pasajero;
-            _pasajeroControlActual?.Focus(true);
+            _pasajeroControlActual.Focus(true);
+
+            _asientoGuardadoPorControl.TryGetValue(nuevoControl, out string? asientoGuardado);
+            _codigoAsientoBorrador = asientoGuardado ?? pasajero?.CodigoAsiento;
 
             if (pasajero == null)
             {
@@ -98,31 +135,55 @@ namespace WindowsForms
                 textBoxApellido.Clear();
                 textBoxDocumento.Clear();
                 comboBoxTipoDocumento.SelectedIndex = -1;
-                _codigoAsiento = null;
-                avionControl.PrepararParaNuevoPasajero(null);
-                return;
+            }
+            else
+            {
+                comboBoxEdad.SelectedItem = pasajero.Tipo == "mayor" ? "Mayor (+16)" : "Menor";
+                textBoxNombre.Text = pasajero.Nombre;
+                textBoxApellido.Text = pasajero.Apellido;
+                textBoxDocumento.Text = pasajero.NroDocumento;
+                comboBoxTipoDocumento.SelectedItem = comboBoxTipoDocumento.Items
+                    .Cast<string>()
+                    .FirstOrDefault(x => x.EndsWith($"({pasajero.TipoDocumento})", StringComparison.OrdinalIgnoreCase));
             }
 
-            comboBoxEdad.SelectedItem = pasajero.Tipo == "mayor" ? "Mayor (+16)" : "Menor";
-            textBoxNombre.Text = pasajero.Nombre;
-            textBoxApellido.Text = pasajero.Apellido;
-            textBoxDocumento.Text = pasajero.NroDocumento;
-            comboBoxTipoDocumento.SelectedItem = comboBoxTipoDocumento.Items
-                .Cast<string>()
-                .FirstOrDefault(x => x.EndsWith($"({pasajero.TipoDocumento})", StringComparison.OrdinalIgnoreCase));
+            RefrescarCroquisSegunEstadoActual();
+        }
 
-            _codigoAsiento = pasajero.CodigoAsiento;
-            avionControl.PrepararParaNuevoPasajero(pasajero.CodigoAsiento);
+        private void RefrescarCroquisSegunEstadoActual()
+        {
+            string? asientoActualGuardado = null;
+            if (_pasajeroControlActual != null)
+            {
+                _asientoGuardadoPorControl.TryGetValue(_pasajeroControlActual, out asientoActualGuardado);
+            }
+
+            var asientosDeOtros = _asientoGuardadoPorControl
+                .Where(kvp => kvp.Key != _pasajeroControlActual && !string.IsNullOrWhiteSpace(kvp.Value))
+                .Select(kvp => kvp.Value);
+
+            avionControl.SincronizarCroquis(
+                _codigosOcupadosEnVuelo,
+                asientosDeOtros,
+                asientoActualGuardado,
+                _codigoAsientoBorrador
+            );
         }
 
         private void buttonGuardar_Click(object? sender, EventArgs e)
         {
+            if (_pasajeroControlActual == null)
+            {
+                MessageBox.Show("Debe seleccionar un pasajero (P1, P2, etc.).");
+                return;
+            }
+
             string? tipoEdad = comboBoxEdad.SelectedItem?.ToString();
             string nombre = textBoxNombre.Text.Trim();
             string apellido = textBoxApellido.Text.Trim();
             string nroDocumento = textBoxDocumento.Text.Trim();
             string? tipoDoc = comboBoxTipoDocumento.SelectedItem?.ToString();
-            string? codigoAsiento = avionControl.GetCodigoAsiento() ?? _codigoAsiento;
+            string? codigoAsiento = (avionControl.GetCodigoAsiento() ?? _codigoAsientoBorrador)?.Trim();
 
             if (string.IsNullOrWhiteSpace(tipoEdad) ||
                 string.IsNullOrWhiteSpace(nombre) ||
@@ -150,9 +211,19 @@ namespace WindowsForms
                 return;
             }
 
-            if (_pasajeroControlActual == null)
+            if (_codigosOcupadosEnVuelo.Contains(codigoAsiento))
             {
-                MessageBox.Show("Debe seleccionar un pasajero (P1, P2, etc.).");
+                MessageBox.Show("Ese asiento ya se encuentra ocupado en este vuelo.");
+                return;
+            }
+
+            bool tomadoPorOtro = _asientoGuardadoPorControl
+                .Any(kvp => kvp.Key != _pasajeroControlActual &&
+                             string.Equals(kvp.Value, codigoAsiento, StringComparison.OrdinalIgnoreCase));
+
+            if (tomadoPorOtro)
+            {
+                MessageBox.Show("Ese asiento ya fue asignado a otro pasajero de esta reserva.");
                 return;
             }
 
@@ -171,26 +242,20 @@ namespace WindowsForms
                 Tipo = tipoNormalizado,
                 NroDocumento = nroDocumento,
                 TipoDocumento = tipoDocNormalizado,
-                CodigoAsiento = codigoAsiento.Trim()
+                CodigoAsiento = codigoAsiento
             };
 
-            avionControl.SeleccionAsientoGuardado(nuevoPasajero.CodigoAsiento);
+            _asientoGuardadoPorControl[_pasajeroControlActual] = codigoAsiento;
             _pasajeroControlActual.SetPasajero(nuevoPasajero);
             _pasajeroActual = nuevoPasajero;
-            _codigoAsiento = null;
-        }
+            _codigoAsientoBorrador = null;
 
-        private string ConvertirCodigoAsiento(int codigo)
-        {
-            int nroFila = (codigo - 1) / 4 + 1;
-            int columna = (codigo - 1) % 4;
-            char letra = (char)('A' + columna);
-            return $"{nroFila}{letra}"; // Patrón: 1A, 1B, 1C, 1D, 2A...
+            RefrescarCroquisSegunEstadoActual();
         }
 
         private void avionControl_Click(object? sender, EventArgs e)
         {
-            _codigoAsiento = avionControl.GetCodigoAsiento();
+            _codigoAsientoBorrador = avionControl.GetCodigoAsiento();
         }
 
         private void buttonSiguiente_Click(object? sender, EventArgs e)
@@ -231,7 +296,6 @@ namespace WindowsForms
                 Pasajeros = pasajerosCompletos
             };
 
-            // Pasamos al Paso 2: cargar servicios por pasajero
             var formServicios = new SeleccionarServiciosPorPasajeroForm(this, estado);
             formServicios.Show();
             this.Hide();
